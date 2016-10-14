@@ -16,7 +16,10 @@ require_once(VENDOR_PATH . 'autoload.php');
 require_once(VENDOR_PATH . 'alkemann/h2l/src/bootstrap.php');
 // ***********
 
-define('DEBUG', 0);
+require_once(CONFIG_PATH . 'defines.php');
+require_once(CONFIG_PATH . 'routes.php');
+
+if (DEBUG) dbp(['_config', '_classes']);
 
 // Default error handler
 set_exception_handler ( 'alkemann\h2l\handleError' );
