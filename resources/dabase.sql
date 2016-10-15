@@ -66,8 +66,8 @@ CREATE TABLE IF NOT EXISTS `people` (
   `address` varchar(256) COLLATE utf8_bin NOT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '1',
   `freetext` text COLLATE utf8_bin,
-  `loc_long` float NOT NULL,
-  `loc_lat` float NOT NULL,
+  `loc_long` float NULL DEFAULT NULL,
+  `loc_lat` float NULL DEFAULT NULL,
   `vists` tinyint(4) NOT NULL DEFAULT '0',
   `updated` datetime NOT NULL,
   `created` datetime NOT NULL
