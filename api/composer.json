@@ -1,6 +1,7 @@
 {
     "require": {
         "silex/silex": "~2.0",
-        "Doctrine/DBAL": "^2.5"
+        "Doctrine/DBAL": "^2.5",
+        "willdurand/geocoder": "@stable"
     }
 }
