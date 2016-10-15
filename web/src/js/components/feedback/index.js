@@ -37,9 +37,11 @@ export default class Feedback extends React.Component {
             return null;
         }
 
-        return <div className="input-field">
-            <label className="input-header" htmlFor="food_concerns">{this.context.translate('Er det noe mat du ikke spiser?')}:</label><br />
-            <input type="text" placeholder="Fyll inn" id="food_concerns" ref={(c) => this.form.food_concerns = c} required />
+        return <div className="form-group">
+            <div className="input-field col-1-1">
+                <label className="input-header" htmlFor="food_concerns">{this.context.translate('Er det noe mat du ikke spiser?')}:</label><br />
+                <input type="text" placeholder="Fyll inn" id="food_concerns" ref={(c) => this.form.food_concerns = c} required />
+            </div>
         </div>
     }
 
@@ -77,72 +79,93 @@ export default class Feedback extends React.Component {
 
                 <p>{translate('Du finner mer informasjon på')} <a href="http://www.kom-inn.org">www.kom-inn.org.</a></p>
                 <form onSubmit={this.submit}>
-                    <div className="radio-field">
-                        <label className="input-header" htmlFor="type">{translate('Hva vil du?')}</label> <br />
-                        <label htmlFor="type-guest"><input type="radio" name="type" id="type-guest" onChange={() => this.setState({type: 'guest' })} required /> {translate('Komme til noen på middagsbesøk?')}</label> <br />
-                        <label htmlFor="type-host"><input type="radio" name="type" id="type-host" onChange={() => this.setState({type: 'host' })} required /> {translate('Invitere noen på middagsbesøk?')}</label>
-                    </div>
-                    <div className="input-field">
-                        <label htmlFor="name">{translate('Hva er navnet ditt?')}</label> <br />
-                        <input type="text" placeholder="Fyll inn" id="name" ref={(c) => this.form.name = c} required />
+                    <h2>{translate('Hva vil du?')}</h2>
+                    <div className="form-group">
+                        <div className="radio-field">
+                            <label htmlFor="type-guest"><input type="radio" name="type" id="type-guest" onChange={() => this.setState({type: 'guest' })} required /> {translate('Komme til noen på middagsbesøk?')}</label> <br />
+                            <label htmlFor="type-host"><input type="radio" name="type" id="type-host" onChange={() => this.setState({type: 'host' })} required /> {translate('Invitere noen på middagsbesøk?')}</label>
+                        </div>
                     </div>
 
-                    <div className="input-field">
-                        <label className="input-header" htmlFor="email">{translate('Hva er e-postadressen din?')}</label> <br />
-                        <input type="email" placeholder="Fyll inn" id="email" ref={(c) => this.form.email = c} required />
+                    <h2>Hvem er du?</h2>
+                    <div className="form-group">
+                        <div className="input-field col-1-3">
+                            <label className="input-header" htmlFor="name">{translate('Hva er navnet ditt?')}</label>
+                            <input type="text" placeholder="Fyll inn" id="name" ref={(c) => this.form.name = c} required />
+                        </div>
+
+                        <div className="input-field col-1-3">
+                            <label className="input-header" htmlFor="age">{translate('Alder')}:</label>
+                            <input type="number" placeholder="Fyll inn et tall" max="120" id="age" ref={(c) => this.form.age = c} required />
+                        </div>
+
+                        <div className="radio-field col-1-3">
+                            <label className="input-header">{translate('Kjønn')}</label>
+                            <label htmlFor="gender-male"><input type="radio" name="gender" id="gender-male" onChange={() => this.setState({gender: 'male' })} />  {translate('Mann')}</label>
+                            <label htmlFor="gender-female"><input type="radio" name="gender" id="gender-female" onChange={() => this.setState({gender: 'female' })} />  {translate('Kvinne')}</label>
+                        </div>
                     </div>
 
-                    <div className="input-field">
-                        <label className="input-header" htmlFor="phone">{translate('Hva er telefonnummeret ditt?')}</label> <br />
-                        <input type="phone" placeholder="Fyll inn" id="phone" ref={(c) => this.form.phone = c} required />
+                    <div className="form-group">
+                        <div className="input-field col-1-1">
+                            <label className="input-header" htmlFor="email">{translate('Hva er e-postadressen din?')}</label>
+                            <input type="email" placeholder="Fyll inn" id="email" ref={(c) => this.form.email = c} required />
+                        </div>
                     </div>
 
-                    <div className="radio-field">
-                        <label className="input-header">{translate('Er du')}</label> <br />
-                        <label htmlFor="gender-male"><input type="radio" name="gender" id="gender-male" onChange={() => this.setState({gender: 'male' })} />  {translate('Mann')}</label> <br />
-                        <label htmlFor="gender-female"><input type="radio" name="gender" id="gender-female" onChange={() => this.setState({gender: 'female' })} />  {translate('Kvinne')}</label>
+                    <div className="form-group">
+                        <div className="input-field col-1-1">
+                            <label className="input-header" htmlFor="phone">{translate('Hva er telefonnummeret ditt?')}</label>
+                            <input type="phone" placeholder="Fyll inn" id="phone" ref={(c) => this.form.phone = c} required />
+                        </div>
                     </div>
 
-                    <div className="input-field">
-                        <label className="input-header" htmlFor="age">{translate('Alder')}:</label><br />
-                        <input type="number" placeholder="Fyll inn et tall" max="120" id="age" ref={(c) => this.form.age = c} required />
+                    <h2>Hvor mange er dere?</h2>
+                    <div className="form-group">
+                        <div className="input-field col-1-3">
+                            <label className="input-header" htmlFor="adults_female">{translate('Kvinner')}</label>
+                            <input type="number" placeholder="Fyll inn et tall" max="100" id="adults_female" ref={(c) => this.form.adults_female = c} required />
+                        </div>
+
+                        <div className="input-field col-1-3">
+                            <label className="input-header" htmlFor="adults_male">{translate('Menn')}</label>
+                            <input type="number" placeholder="Fyll inn et tall" max="100" id="adults_male" ref={(c) => this.form.adults_male = c} required />
+                        </div>
+
+                        <div className="input-field col-1-3">
+                            <label className="input-header" htmlFor="children">{translate('Barn')} (0-18 {translate('År').toLowerCase()})</label>
+                            <input type="number" placeholder="Fyll inn et tall" max="100" id="children" ref={(c) => this.form.children = c} required />
+                        </div>
                     </div>
 
-                    <div className="input-field">
-                        <label className="input-header" htmlFor="children">{translate('Antall barn')}:</label><br />
-                        <input type="number" placeholder="Fyll inn et tall" max="100" id="children" ref={(c) => this.form.children = c} required />
-                    </div>
-
-                    <div className="input-field">
-                        <label className="input-header" htmlFor="adults_male">{translate('Antall voksne menn')}:</label><br />
-                        <input type="number" placeholder="Fyll inn et tall" max="100" id="adults_male" ref={(c) => this.form.adults_male = c} required />
-                    </div>
-
-                    <div className="input-field">
-                        <label className="input-header" htmlFor="adults_female">{translate('Antall voksne kvinner')}:</label><br />
-                        <input type="number" placeholder="Fyll inn et tall" max="100" id="adults_female" ref={(c) => this.form.adults_female = c} required />
-                    </div>
-
-                    <div className="input-field">
-                        <label className="input-header" htmlFor="origin">{translate('Hvor er du fra')}:</label><br />
-                        <input type="text" placeholder="Fyll inn" id="origin" ref={(c) => this.form.origin = c} required />
+                    <div className="form-group">
+                        <div className="input-field col-1-1">
+                            <label className="input-header" htmlFor="origin">{translate('Hvor er du fra')}?</label>
+                            <input type="text" placeholder="Fyll inn" id="origin" ref={(c) => this.form.origin = c} required />
+                        </div>
                     </div>
 
                     {this.renderFoodConcerns()}
 
-                    <div className="input-field">
-                        <label className="input-header" htmlFor="address">{translate('Adresse')}:</label><br />
-                        <input type="text" placeholder="Fyll inn" id="address" ref={(c) => this.form.address = c} required />
+                    <div className="form-group">
+                        <div className="input-field col-1-1">
+                            <label className="input-header" htmlFor="address">{translate('Adresse')}?</label>
+                            <input type="text" placeholder="Fyll inn" id="address" ref={(c) => this.form.address = c} required />
+                        </div>
                     </div>
 
-                    <div className="input-field">
-                        <label className="input-header" htmlFor="zipcode">{translate('Postnummer')}:</label><br />
-                        <input type="text" placeholder="Fyll inn" id="zipcode" ref={(c) => this.form.zipcode = c} required />
+                    <div className="form-group">
+                        <div className="input-field col-1-1">
+                            <label className="input-header" htmlFor="zipcode">{translate('Postnummer')}?</label>
+                            <input type="text" placeholder="Fyll inn" id="zipcode" ref={(c) => this.form.zipcode = c} required />
+                        </div>
                     </div>
 
-                    <div className="input-field">
-                        <label className="input-header" htmlFor="freetext">{translate('Kan du fortelle litt mer om deg selv?')}</label><br />
-                        <textarea id="freetext" ref={(c) => this.form.freetext = c} required></textarea>
+                    <div className="form-group">
+                        <div className="input-field col-1-1 no-height">
+                            <label className="input-header" htmlFor="freetext">{translate('Kan du fortelle litt mer om deg selv?')}</label>
+                            <textarea id="freetext" ref={(c) => this.form.freetext = c} required></textarea>
+                        </div>
                     </div>
 
                     <div className="submit">
