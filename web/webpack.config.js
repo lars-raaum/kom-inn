@@ -19,7 +19,7 @@ const browserSupport = [
     'last 3 versions'
 ];
 
-let webpackConfig = {
+var webpackConfig = {
     devtool: 'source-map',
     entry: ['./src/js/app.js', './src/scss/main.scss'],
     output: {
