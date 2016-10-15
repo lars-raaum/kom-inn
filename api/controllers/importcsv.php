@@ -1,94 +1,65 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Request;
+$app->get('/importcsv/{name}', function($name) use ($app, $types) {
+    $counter = 0;
+    $now = new \DateTime('now');
+    if (($handle = fopen($name . ".csv", "r")) !== FALSE) {
+        while (($raw = fgetcsv($handle, 1000, ";")) !== FALSE) {
+            $row = array_map("utf8_encode", $raw);
+            // print_r($row); continue;
+            $data  = [
+                'status'    => $row[0],
+                'name'      => $row[1],
+                'gender'    => $row[3] == 'm' ? 'MALE' : 'FEMALE',
+                'age'       => $row[4],
+                'children'  => $row[5] ?: 0,
+                'adults_m'  => $row[6] ?: 0,
+                'adults_f'  => $row[7] ?: 0,
+                'address'   => $row[8],
+                'zipcode'   => $row[9],
+                'origin'    => $row[10],
+                'phone'     => $row[11],
+                'email'     => $row[12],
+                'freetext'  => $row[13],
+                'visits'    => $row[14],
+                'created'   => $now,
+                'updated'   => $now
+            ];
 
-$app->get('/api/importcsv/', function(Request $request) use ($app, $types) {
-    $r = $request->request;
-
-    $type = $r->get('type');
-
-    $defaults = [
-        'status'    => 1,
-        'updated'   => new DateTime('now'),
-        'created'   => new DateTime('now')
-    ];
-
-    $row = 1;
-    if (($handle = fopen("dummydata-1.csv", "r")) !== FALSE) {
-        while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
-            $data = array_map("utf8_encode", $data);
-            /*
-             * 0 id
-               1 name
-               2 gender
-               3 age
-               4 children
-               5 adults_m
-               6 adults_f
-               7 address
-               8 zipcode
-               9 origin
-               10 phone
-               11 email
-               12 status
-               13 freetext
-               14 visits
-               15 loc_long
-               16 loc_lat
-               17 visits
-             */
-            
-            $data2 = [
-                    'email'     => $data[11],
-                    'name'      => $data[1],
-                    'phone'     => $data[10],
-                    'gender'    => $data[2] == 'm' ? 'male' : 'female',
-                    'age'       => $data[3],
-                    'children'  => $data[4] ?: 0,
-                    'adults_m'  => $data[5] ?: 0,
-                    'adults_f'  => $data[6] ?: 0,
-                    'origin'    => $data[9],
-                    'zipcode'   => $data[8],
-                    'address'   => $data[7],
-                    'freetext'  => $data[13],
-                ] + $defaults;
-
-            print_r($data2);
-
-            if ($data2['email'] == 'email') {
+            if ($data['email'] == 'email') {
                 continue;
             }
 
-            // validation
+            if (!empty($row[16])) {
+                $data['created'] = new \DateTime($row[16]);
+            }
 
-            $result = $app['db']->insert('people', $data2, $types);
+            // print_r($data); continue;
 
+            $result = $app['db']->insert('people', $data, $types);
             if (!$result) {
-                return $app->json(['result' => false]);
+              return $app->json(['result' => false]);
             }
+
             $user_id = $app['db']->lastInsertId();
-
-            $data3 = [
+            $related_data = [
                 'user_id' => $user_id,
-                'updated' => new DateTime('now'),
-                'created' => new DateTime('now')
+                'updated' => $data['created'],
+                'created' => $now
             ];
+
+            $type = $row[1];
             if ($type == 'host') {
-                $result = $app['db']->insert('hosts', $data3, $types);
-                $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
+                $result = $app['db']->insert('hosts', $related_data, $types);
             } else {
-                $result = $app['db']->insert('guests', $data3, $types);
-                $sql = "SELECT people.*, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
+                $related_data['food_concerns'] = $row[15];
+                $result = $app['db']->insert('guests', $related_data, $types);
             }
 
-            $row++;
+            $counter++;
         }
         fclose($handle);
     }
 
-
-
-    $person = $app['db']->fetchAssoc($sql, [(int) $user_id]);
-
-    return $app->json($person);
+    return $app->json(['result' => true, 'imported' => $counter]);
 });
