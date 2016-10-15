@@ -43,14 +43,19 @@
         height: 400px;
         width: 100%;
         overflow: hidden;
+        position: relative;
     }
 
     button.match {
-        background-color: #3196EF;
         color: #fff;
         width: 180px;
         height: 40px;
         float: right;
         border: 0;
+        background-color: #555555;
+
+        &.active {
+            background-color: #3196EF;
+        }
     }
 }

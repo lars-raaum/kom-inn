@@ -31,11 +31,16 @@ $app->get('/hosts', function(Request $request) use ($app) {
     $longitude = NULL;
 
     if ($guest_id != NULL and $distance != NULL) {
-        $q = "select people.loc_lat, people.loc_long from people inner join guests on guests.id = $guest_id and guests.user_id = people.id";
-        $guest = $app['db']->fetchAll($q);
-        $latitude = $guest[0]['loc_lat'];
-        $longitude = $guest[0]['loc_long'];
-        $sql .=  " AND (people.loc_long - $longitude)*(people.loc_long - $longitude) + (people.loc_lat - $latitude)*(people.loc_lat - $latitude) < $distance ";
+        $q = "select people.loc_lat, people.loc_long from people where people.id = ?";
+        $people = $app['db']->fetchAll($q, [$guest_id]);
+
+        if (isset($people[0])) {
+            $latitude = floatval($people[0]['loc_lat']);
+            $longitude = floatval($people[0]['loc_long']);
+            if ($latitude && $longitude) {
+                $sql .=  " AND (people.loc_long - $longitude)*(people.loc_long - $longitude) + (people.loc_lat - $latitude)*(people.loc_lat - $latitude) < $distance ";
+            }
+        }
     }
 
     $children = isset($_GET['children']) ? $_GET['children'] : null;
@@ -66,6 +71,10 @@ $app->get('/hosts', function(Request $request) use ($app) {
         $dist = sqrt(pow($h_loc - $longitude, 2) + pow($h_lat - $latitude, 2)) * 60 / 0.539956803;
         $hosts[$i]['distance'] = $dist;
     }
+
+    usort($hosts, function($a, $b) {
+        return $a['distance'] > $b['distance'];
+    });
 
     return $app->json($hosts);
 });
