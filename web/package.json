@@ -1,0 +1,42 @@
+{
+  "name": "kom-inn-web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "webpack-dev-server --inline --content-base public/ --hot"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.5.0",
+    "babel-core": "^6.17.0",
+    "babel-eslint": "^7.0.0",
+    "babel-loader": "^6.2.5",
+    "babel-polyfill": "^6.16.0",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-1": "^6.16.0",
+    "css-loader": "^0.25.0",
+    "eslint": "^3.7.0",
+    "eslint-config-vgno": "^7.0.0",
+    "eslint-plugin-react": "^6.4.1",
+    "eyeglass": "^1.1.2",
+    "eyeglass-inline-svg": "^0.3.0",
+    "gulp": "^3.9.1",
+    "gulp-imagemin": "^3.0.3",
+    "node-sass": "^3.10.1",
+    "postcss-loader": "^0.13.0",
+    "react-addons-test-utils": "^15.3.2",
+    "sass-lint": "^1.9.1",
+    "sass-loader": "4.0.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.0",
+    "webpack-dev-middleware": "^1.8.4",
+    "webpack-dev-server": "^1.16.2",
+    "webpack-hot-middleware": "^2.13.0"
+  },
+  "dependencies": {
+    "react": "^15.4.0-rc.4",
+    "react-dom": "^15.4.0-rc.4",
+    "react-router": "^2.8.1"
+  }
+}
