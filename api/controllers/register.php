@@ -7,10 +7,6 @@ $app->post('/register', function(Request $request) use ($app, $types) {
 
     $type = $r->get('type');
 
-    $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
-    $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
-
-
     $defaults = [
         'status'    => 1,
         'updated'   => new DateTime('now'),
@@ -31,8 +27,8 @@ $app->post('/register', function(Request $request) use ($app, $types) {
         'freetext'  => $r->get('freetext'),
     ] + $defaults;
 
-    $addresses = $geocoder->geocode($data['address'] . ' oslo ' . $data['zipcode'] . ' norway');
-    $coords = $addresses->first()->getCoordinates();
+    $geo = new \app\Geo();
+    $coords = $geo->getCoords($data);
     $data['loc_long'] = $coords->getLongitude();
     $data['loc_lat'] = $coords->getLatitude();
 
