@@ -30,3 +30,12 @@ $app->post('/person/{id}', function($id, Request $request) use ($app, $types) {
 
     return $app->json($person);
 });
+
+
+$app->delete('/person/{id}', function ($id) use ($app) {
+    $app['db']->delete('hosts', array('user_id' => $id));
+    $app['db']->delete('guests', array('user_id' => $id));
+    $app['db']->delete('people', array('id' => $id));
+
+    return $app->json(true);
+});
