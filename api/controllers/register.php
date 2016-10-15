@@ -2,7 +2,7 @@
 
 use Symfony\Component\HttpFoundation\Request;
 
-$app->post('/api/register', function(Request $request) use ($app, $types) {
+$app->post('/register', function(Request $request) use ($app, $types) {
     $r = $request->request;
 
     $type = $r->get('type');

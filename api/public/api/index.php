@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/../../vendor/autoload.php';
 
 $app = new Silex\Application();
 
@@ -13,15 +13,15 @@ $app->before(function (Request $request) {
         $request->request->replace(is_array($data) ? $data : array());
     }
 });
-require_once __DIR__.'/../../resources/configuration.php';
+require_once __DIR__.'/../../../resources/configuration.php';
 
 $dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
 $types = ['updated' => $dtt, 'created' => $dtt];
 
-require_once __DIR__.'/../controllers/register.php';
-require_once __DIR__.'/../controllers/matches.php';
-require_once __DIR__.'/../controllers/hosts.php';
-require_once __DIR__.'/../controllers/guests.php';
-require_once __DIR__.'/../controllers/people.php';
+require_once __DIR__.'/../../controllers/register.php';
+require_once __DIR__.'/../../controllers/matches.php';
+require_once __DIR__.'/../../controllers/hosts.php';
+require_once __DIR__.'/../../controllers/guests.php';
+require_once __DIR__.'/../../controllers/people.php';
 
 $app->run();

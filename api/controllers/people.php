@@ -2,7 +2,7 @@
 
 use Symfony\Component\HttpFoundation\Request;
 
-$app->post('/api/person/{id}', function($id, Request $request) use ($app, $types) {
+$app->post('/person/{id}', function($id, Request $request) use ($app, $types) {
 
     $sql = "SELECT people.* FROM people WHERE people.id = ?";
     $person = $app['db']->fetchAssoc($sql, [(int) $id]);
