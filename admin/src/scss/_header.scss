@@ -1,0 +1,38 @@
+.header {
+    width: 100%;
+    height: 55px;
+    padding: 10px 30px;
+    border-bottom: 1px solid #000;
+
+    .location {
+        float: left;
+        margin-bottom: 10px;
+        padding: 0 10px;
+        select {
+            width: 160px;
+            height: 35px;
+        }
+    }
+
+    .tabs {
+        float: left;
+        a {
+            display: block;
+            float: left;
+            width: 160px;
+            height: 45px;
+            text-align: center;
+            line-height: 45px;
+
+            background-color: #ccc;
+            border: 1px solid #000;
+            color: #000;
+
+            &.selected {
+                background-color: #fff;
+                position: relative;
+                border-bottom: 1px solid #fff;
+            }
+        }
+    }
+}

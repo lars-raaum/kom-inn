@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router';
 
 export default class Header extends React.Component {
     render() {
@@ -8,10 +9,14 @@ export default class Header extends React.Component {
                     <option>Oslo</option>
                 </select>
             </div>
-            <ul className="tabs">
-                <li>Unmatched</li>
-                <li>Matched</li>
-            </ul>
+            <div className="tabs">
+                <Link to="/" activeClassName="selected">
+                        Unmatched
+                </Link>
+                <Link to="/matched" activeClassName="selected">
+                    Matched
+                </Link>
+            </div>
         </div>
     }
 }
