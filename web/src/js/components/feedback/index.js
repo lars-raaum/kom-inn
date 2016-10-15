@@ -79,8 +79,8 @@ export default class Feedback extends React.Component {
                 <form onSubmit={this.submit}>
                     <div className="radio-field">
                         <label className="input-header" htmlFor="type">{translate('Hva vil du?')}</label> <br />
-                        <span><input type="radio" name="type" onChange={() => this.setState({type: 'guest' })} required /> {translate('Komme til noen på middagsbesøk?')}</span> <br />
-                        <span><input type="radio" name="type" onChange={() => this.setState({type: 'host' })} required /> {translate('Invitere noen på middagsbesøk?')}</span>
+                        <label htmlFor="type-guest"><input type="radio" name="type" id="type-guest" onChange={() => this.setState({type: 'guest' })} required /> {translate('Komme til noen på middagsbesøk?')}</label> <br />
+                        <label htmlFor="type-host"><input type="radio" name="type" id="type-host" onChange={() => this.setState({type: 'host' })} required /> {translate('Invitere noen på middagsbesøk?')}</label>
                     </div>
                     <div className="input-field">
                         <label htmlFor="name">{translate('Hva er navnet ditt?')}</label> <br />
