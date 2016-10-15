@@ -19,7 +19,10 @@ $app->get('/guests', function() use ($app) {
     $args = [(int) $status];
     $sql = "SELECT people.*, guests.user_id FROM people, guests WHERE people.id = guests.user_id AND people.status = ?";
 
+
+
     $children = isset($_GET['children']) ? $_GET['children'] : null;
+
     if ($children !== null && $children == 'yes') {
         $sql .= " AND people.children <> ?";
         $args[] = 0;

@@ -12,7 +12,7 @@ $app->get('/importcsv/{name}', function($name) use ($app, $types) {
             $data  = [
                 'status'    => $row[0],
                 'name'      => $row[2],
-                'gender'    => $row[3] == 'm' ? 'MALE' : 'FEMALE',
+                'gender'    => $row[3] == 'm' ? 'male' : 'female',
                 'age'       => $row[4],
                 'children'  => $row[5] ?: 0,
                 'adults_m'  => $row[6] ?: 0,
@@ -23,7 +23,7 @@ $app->get('/importcsv/{name}', function($name) use ($app, $types) {
                 'phone'     => $row[11],
                 'email'     => $row[12],
                 'freetext'  => $row[13],
-                'visits'    => $row[14],
+                'visits'    => $row[14] ?: 0,
                 'created'   => $now,
                 'updated'   => $now
             ];
