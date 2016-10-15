@@ -2,8 +2,10 @@
 
 $app->get('/importcsv/{name}', function($name) use ($app, $types) {
     $counter = 0;
+    $geo = new \app\Geo();
     $now = new \DateTime('now');
-    if (($handle = fopen($name . ".csv", "r")) !== FALSE) {
+    $fn = realpath(__DIR__ . '/../../resources/') . '/' . $name . ".csv";
+    if (($handle = fopen($fn, "r")) !== FALSE) {
         while (($raw = fgetcsv($handle, 1000, ";")) !== FALSE) {
             $row = array_map("utf8_encode", $raw);
             // print_r($row); continue;
@@ -34,6 +36,13 @@ $app->get('/importcsv/{name}', function($name) use ($app, $types) {
                 $data['created'] = new \DateTime($row[16]);
             }
 
+            try {
+                $coords = $geo->getCoords($data);
+                $data['loc_long'] = $coords->getLongitude();
+                $data['loc_lat'] = $coords->getLatitude();
+            } catch (\Exception $e) {
+
+            }
             // print_r($data); continue;
 
             $result = $app['db']->insert('people', $data, $types);
