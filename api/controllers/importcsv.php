@@ -9,7 +9,7 @@ $app->get('/importcsv/{name}', function($name) use ($app, $types) {
             // print_r($row); continue;
             $data  = [
                 'status'    => $row[0],
-                'name'      => $row[1],
+                'name'      => $row[2],
                 'gender'    => $row[3] == 'm' ? 'MALE' : 'FEMALE',
                 'age'       => $row[4],
                 'children'  => $row[5] ?: 0,
@@ -48,8 +48,7 @@ $app->get('/importcsv/{name}', function($name) use ($app, $types) {
                 'created' => $now
             ];
 
-            $type = $row[1];
-            if ($type == 'host') {
+            if ($row[1] == 'host') {
                 $result = $app['db']->insert('hosts', $related_data, $types);
             } else {
                 $related_data['food_concerns'] = $row[15];

@@ -2,19 +2,29 @@
 
 use Symfony\Component\HttpFoundation\Request;
 
-$app->post('/match', function(Request $request) use ($app, $types) {
+$app->post('/match', function(Request $request) use ($app, $types, $dtt) {
     $r = $request->request;
+
+    $now = new DateTime('now');
     $data = [
         'guest_id' => $r->get('guest_id'),
         'host_id'  => $r->get('host_id'),
         'comment'  => $r->get('comment'),
-        'updated'  => new DateTime('now'),
-        'created'  => new DateTime('now')
+        'updated'  => $now,
+        'created'  => $now
     ];
     $result = $app['db']->insert('matches', $data, $types);
     if (!$result) {
         return $app->json(['result' => false]);
     }
+
+    $data = ['status' => 2, 'updated' => $now];
+    $result = $app['db']->update('people', $data, ['updated' => $dtt]);
+    if (!$result) {
+        error_log("Failed to updated person {$id} to be used!");
+        return $app->json(['result' => false]);
+    }
+
     return $app->json(['result' => true]);
 });
 
