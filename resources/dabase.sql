@@ -94,7 +94,7 @@ ALTER TABLE `hosts`
 --
 -- Indexes for table `users`
 --
-ALTER TABLE `users`
+ALTER TABLE `people`
   ADD PRIMARY KEY (`id`),
   ADD KEY `email` (`email`(255));
 
@@ -115,5 +115,5 @@ ALTER TABLE `hosts`
 --
 -- AUTO_INCREMENT for table `users`
 --
-ALTER TABLE `users`
+ALTER TABLE `people`
   MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
