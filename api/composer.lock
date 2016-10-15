@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8ba50eba22e91a71c25d2bafce045320",
-    "content-hash": "601ebc2023fc622e9c20954a66298625",
+    "hash": "608465c5c814aadd437e4f7ff21f71cc",
+    "content-hash": "9913aefdb001657a159c5858ce473955",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1213,6 +1213,52 @@
                 "url"
             ],
             "time": "2016-08-16 14:58:24"
+        },
+        {
+            "name": "twilio/sdk",
+            "version": "5.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twilio/twilio-php.git",
+                "reference": "354b5859cc7386642b8842a8b9e3dee01e957235"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/354b5859cc7386642b8842a8b9e3dee01e957235",
+                "reference": "354b5859cc7386642b8842a8b9e3dee01e957235",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "apigen/apigen": "^4.1",
+                "phpunit/phpunit": "4.5.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Twilio\\": "Twilio/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Twilio API Team",
+                    "email": "api@twilio.com"
+                }
+            ],
+            "description": "A PHP wrapper for Twilio's API",
+            "homepage": "http://github.com/twilio/twilio-php",
+            "keywords": [
+                "api",
+                "sms",
+                "twilio"
+            ],
+            "time": "2016-10-12 17:28:31"
         },
         {
             "name": "willdurand/geocoder",
