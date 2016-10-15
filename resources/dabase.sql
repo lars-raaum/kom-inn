@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `people` (
   `id` int(10) unsigned NOT NULL,
   `email` varchar(256) COLLATE utf8_bin NOT NULL,
   `name` varchar(128) COLLATE utf8_bin NOT NULL,
-  `gender` tinyint(4) NOT NULL,
+  `gender` enum('n/a','male','female') COLLATE utf8_bin NOT NULL DEFAULT 'n/a',
   `age` tinyint(4) NOT NULL,
   `children` tinyint(4) NOT NULL,
   `adults_m` tinyint(4) NOT NULL,
