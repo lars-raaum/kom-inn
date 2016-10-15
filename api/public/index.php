@@ -76,4 +76,25 @@ $app->get('/api/guest/{id}', function ($id) use ($app) {
     return $app->json($guest);
 });
 
+
+$app->get('/api/host/{id}', function ($id) use ($app) {
+
+    $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
+    $host = $app['db']->fetchAssoc($sql, [(int) $id]);
+
+    return $app->json($host);
+});
+
+$app->get('/api/hosts', function() use ($app) {
+	$sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id";
+    $hosts = $app['db']->fetchAll($sql);
+    return $app->json($hosts);
+});
+
+$app->get('/api/guests', function() use ($app) {
+	$sql = "SELECT people.*, guests.user_id FROM people, guests WHERE people.id = guests.user_id";
+    $guests = $app['db']->fetchAll($sql);
+    return $app->json($guests);
+});
+
 $app->run();
