@@ -1,6 +1,8 @@
 <?php
 
-$app->get('/api/host/{id}', function ($id) use ($app) {
+use Symfony\Component\HttpFoundation\Request;
+
+$app->get('/host/{id}', function ($id) use ($app) {
 
     $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
     $host = $app['db']->fetchAssoc($sql, [(int) $id]);
@@ -11,7 +13,7 @@ $app->get('/api/host/{id}', function ($id) use ($app) {
     return $app->json($host);
 });
 
-$app->get('/api/hosts', function(Request $request) use ($app) {
+$app->get('/hosts', function(Request $request) use ($app) {
     $status = $_GET['status'] ?: 1;
     $args = [(int) $status];
     $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.status = ?";

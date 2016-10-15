@@ -2,7 +2,7 @@
 
 use Symfony\Component\HttpFoundation\Request;
 
-$app->post('/api/match', function(Request $request) use ($app, $types) {
+$app->post('/match', function(Request $request) use ($app, $types) {
     $r = $request->request;
     $data = [
         'guest_id' => $r->get('guest_id'),
@@ -18,7 +18,7 @@ $app->post('/api/match', function(Request $request) use ($app, $types) {
     return $app->json(['result' => true]);
 });
 
-$app->get('/api/match/{id}', function ($id) use ($app) {
+$app->get('/match/{id}', function ($id) use ($app) {
 
     $sql = "SELECT * FROM matches WHERE id = ?";
     $match = $app['db']->fetchAssoc($sql, [(int) $id]);
@@ -35,7 +35,7 @@ $app->get('/api/match/{id}', function ($id) use ($app) {
     return $app->json($match);
 });
 
-$app->post('/api/match/{id}', function ($id, Request $request) use ($app) {
+$app->post('/match/{id}', function ($id, Request $request) use ($app) {
 
     $sql = "SELECT * FROM matches WHERE id = ?";
     $match = $app['db']->fetchAssoc($sql, [(int) $id]);
@@ -69,7 +69,7 @@ $app->post('/api/match/{id}', function ($id, Request $request) use ($app) {
 });
 
 
-$app->get('/api/matches', function(Request $request) use ($app) {
+$app->get('/matches', function(Request $request) use ($app) {
     $status = 0; // matched
     $sql = "SELECT * FROM matches WHERE status = ?";
     $matches = $app['db']->fetchAll($sql, [(int) $status]);
