@@ -1,0 +1,56 @@
+.unmatched {
+    margin-top: 25px;
+    ul {
+        li {
+            padding: 5px 10px 10px 10px;
+            margin: 5px 0;
+            background-color: #fff;
+            cursor: pointer;
+
+            &.selected {
+                border: 1px solid #000;
+            }
+
+            h2 {
+                padding: 10px 0;
+                font-weight: bold;
+            }
+
+            span {
+                display: inline-block;
+                padding: 0 0 0 5px;
+            }
+
+            div.info {
+                padding: 10px 0;
+            }
+
+            div.freetext {
+                padding: 10px 0;
+            }
+        }
+    }
+
+    .filters {
+        padding: 10px 0;
+        label {
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+    }
+
+    .map-view {
+        height: 400px;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    button.match {
+        background-color: #3196EF;
+        color: #fff;
+        width: 180px;
+        height: 40px;
+        float: right;
+        border: 0;
+    }
+}
