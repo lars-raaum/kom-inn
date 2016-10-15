@@ -46,17 +46,22 @@ let webpackConfig = {
                 test: /\.scss$/,
                 include: path.join(__dirname, 'src', 'scss'),
                 loaders: ['style', 'css?sourceMap&-autoprefixer', 'postcss', 'sass?sourceMap']
-            }
+            },
+            { test: /\.json$/, loader: "json-loader" }
         ]
     },
     postcss: [ autoprefixer({ browsers: browserSupport }) ],
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify(env)
+                NODE_ENV: JSON.stringify(env),
+                API_URL: JSON.stringify(process.env.API_URL)
             }
         })
-    ]
+    ],
+    node: {
+        fs: 'empty'
+    }
 };
 
 if (isProd) {
@@ -73,10 +78,20 @@ if (isProd) {
     /* eslint-enable */
 } else {
     webpackConfig.devtool = 'eval-source-map';
-    webpackConfig.entry.push('webpack-hot-middleware/client');
     webpackConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin());
     webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
     webpackConfig.plugins.push(new webpack.NoErrorsPlugin());
+    webpackConfig.devServer = {
+        hot: true,
+        inline: true,
+        port: 7000,
+        contentBase: 'public/',
+        proxy: {
+            '/api': {
+                target: process.env.API_URL
+            }
+        }
+    }
 }
 
 module.exports = webpackConfig;

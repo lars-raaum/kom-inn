@@ -33,7 +33,7 @@ export default class MainPage extends React.Component {
     submit(e) {
         e.preventDefault();
 
-        fetch('/api/trololo', {
+        fetch('/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

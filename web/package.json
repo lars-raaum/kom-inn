@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack-dev-server --inline --content-base public/ --hot"
+    "dev": "NODE_ENV=development webpack-dev-server webpack.config.js"
   },
   "devDependencies": {
     "autoprefixer": "^6.5.0",
@@ -35,6 +35,7 @@
     "webpack-hot-middleware": "^2.13.0"
   },
   "dependencies": {
+    "json-loader": "^0.5.4",
     "react": "^15.4.0-rc.4",
     "react-dom": "^15.4.0-rc.4",
     "react-router": "^2.8.1"
