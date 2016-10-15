@@ -68,7 +68,9 @@ CREATE TABLE IF NOT EXISTS `users` (
   `freetext` text COLLATE utf8_bin,
   `loc_long` float NOT NULL,
   `loc_lat` float NOT NULL,
-  `vists` tinyint(4) NOT NULL DEFAULT '0'
+  `vists` tinyint(4) NOT NULL DEFAULT '0',
+  `updated` datetime NOT NULL,
+  `created` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
