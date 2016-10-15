@@ -1,3 +1,52 @@
+body {
+    background-color: #bddee4;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.header {
+    height: 275px;
+    width: 100%;
+    background-image: url(../img/header.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
 .content {
-    max-width: 990px;
+    max-width: 640px;
+    margin: 0px auto;
+    background-color: #fff;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.37);
+    word-wrap: break-word;
+    border-top: 8px solid #2290a6;
+    padding: 35px 15px;
+    position: relative;
+    top: -100px;
+}
+.footer {
+    padding: 14px 10px;
+    text-align: center;
+    background: #fff;
+    border-top: 5px solid #e1e1e1;
+
+    .translate {
+        width: 200px;
+        margin: 0 auto;
+    }
+    &:after {
+        content: "";
+        clear: both;
+        display: block;
+    }
+}
+
+h1 {
+    font-size: 24px;
+    text-transform: uppercase;
+}
+
+p {
+    white-space: pre-wrap;
+    line-height: 135%;
+    margin-top: 22px;
+    font-size: 16px;
 }

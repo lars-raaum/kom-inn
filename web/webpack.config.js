@@ -47,7 +47,8 @@ let webpackConfig = {
                 include: path.join(__dirname, 'src', 'scss'),
                 loaders: ['style', 'css?sourceMap&-autoprefixer', 'postcss', 'sass?sourceMap']
             },
-            { test: /\.json$/, loader: "json-loader" }
+            { test: /\.json$/, loader: "json-loader" },
+            { test: /\.(png|jpg|jpeg)$/, loader: "url-loader?limit=10000000" }
         ]
     },
     postcss: [ autoprefixer({ browsers: browserSupport }) ],
@@ -81,13 +82,15 @@ if (isProd) {
     webpackConfig.plugins.push(new webpack.NoErrorsPlugin());
     webpackConfig.devServer = {
         hot: true,
-        inline: true,
         port: 7000,
         contentBase: 'public/',
         proxy: {
             '/api': {
                 target: process.env.API_URL
             }
+        },
+        historyApiFallback: {
+            index: 'index.html'
         }
     }
 }

@@ -1,0 +1,43 @@
+form {
+    margin: 40px 0;
+
+    >div {
+        margin: 20px 0px;
+    }
+    label {
+        padding-bottom: 5px;
+        display: inline-block;
+        font-weight: 500;
+    }
+    input,textarea {
+        outline: none;
+    }
+
+    input {
+        background-color: transparent;
+        line-height: 20px;
+        font-size: 14px;
+        min-width: 300px;
+        border: 0;
+        border-bottom: 1px solid #E1E1E1;
+        &:focus {
+            border-bottom: 1px solid #009E55;
+        }
+    }
+
+    textarea {
+        border: 1px solid #E1E1E1;
+        min-width: 300px;
+        min-height: 200px;
+    }
+
+    button {
+        border: 1px solid #e1e1e1;
+        background: #ececec;
+        width: 100px;
+        line-height: 30px;
+        border-radius: 2px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+}
