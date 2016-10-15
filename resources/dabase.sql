@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `people` (
   `freetext` text COLLATE utf8_bin,
   `loc_long` float NULL DEFAULT NULL,
   `loc_lat` float NULL DEFAULT NULL,
-  `vists` tinyint(4) NOT NULL DEFAULT '0',
+  `visits` tinyint(4) NOT NULL DEFAULT '0',
   `updated` datetime NOT NULL,
   `created` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
