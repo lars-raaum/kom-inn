@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Request;
+
 $app->post('/api/register', function(Request $request) use ($app, $types) {
     $r = $request->request;
 
