@@ -5,9 +5,9 @@ $app['debug'] = true;
 $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => [
         'driver'    => 'pdo_mysql',
-        'host'      => 'docker.default',
+        'host'      => '127.0.0.1',
         'dbname'    => 'kominn',
-        'user'      => 'root',
+        'user'      => 'kominn',
         'password'  => '',
         'charset'   => 'utf8mb4'
 	]
