@@ -54,8 +54,7 @@ let webpackConfig = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify(env),
-                API_URL: JSON.stringify(process.env.API_URL)
+                NODE_ENV: JSON.stringify(env)
             }
         })
     ],
@@ -70,7 +69,6 @@ if (isProd) {
     webpackConfig.plugins.push(
         new webpack.optimize.UglifyJsPlugin({
             compressor: {
-                screw_ie8: true,
                 warnings: false
             }
         })
