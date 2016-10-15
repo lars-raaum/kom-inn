@@ -4,6 +4,9 @@ $app->get('/api/guest/{id}', function ($id) use ($app) {
 
     $sql = "SELECT people.*, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
     $guest = $app['db']->fetchAssoc($sql, [(int) $id]);
+    if (!$guest) {
+        return $app->json(null, 404);
+    }
 
     return $app->json($guest);
 });

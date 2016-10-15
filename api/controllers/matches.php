@@ -18,6 +18,24 @@ $app->post('/api/match', function(Request $request) use ($app, $types) {
     return $app->json(['result' => true]);
 });
 
+$app->get('/api/match/{id}', function ($id) use ($app) {
+
+    $sql = "SELECT * FROM matches WHERE id = ?";
+    $match = $app['db']->fetchAssoc($sql, [(int) $id]);
+    if (!$match) {
+        return $app->json(null, 404);
+    }
+
+    $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
+    $match['host'] = $app['db']->fetchAssoc($sql, [(int) $match['host_id']]);
+
+    $sql = "SELECT people.*, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
+    $match['guest'] = $app['db']->fetchAssoc($sql, [(int) $match['guest_id']]);
+
+    return $app->json($match);
+});
+
+
 $app->get('/api/matches', function(Request $request) use ($app) {
     $status = 0; // matched
     $sql = "SELECT * FROM matches WHERE status = ?";
