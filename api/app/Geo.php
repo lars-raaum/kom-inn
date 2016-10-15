@@ -12,7 +12,7 @@ class Geo {
     }
 
     public function getCoords(array $data) {
-        $addresses = $this->geocoder->geocode($data['address'] . ' oslo ' . $data['zipcode'] . ' norway');
+        $addresses = $this->geocoder->geocode($data['address'] . ' ' . $data['zipcode'] . ' norway');
         $coords    = $addresses->first()->getCoordinates();
         return $coords;
     }
