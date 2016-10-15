@@ -13,6 +13,7 @@ class Sms {
         $config = require_once RESOURCE_PATH . '/sms.php';
         if (empty($config)) return;
         $this->from = $config['phone'];
+        $this->admin = $config['admin'];
         $this->client = new Client($config['sid'], $config['token']);
     }
 
@@ -25,6 +26,18 @@ class Sms {
                 'body' => "Hei! En Kom inn-gjest er klar for en middagsinvitasjon fra deg! Mer informasjon på epost :)"
             ]
         );
+    }
+
+    public function sendAdminRegistrationNotice() {
+        if (empty($this->client)) return;
+        return $this->client->messages->create(
+            $this->admin,
+            [
+                'from' => $this->from,
+                'body' => "Hoi! Ny gjest! Hvor er det husly? Trenger hjerterom! FTD.."
+            ]
+        );
+
     }
 }
 
