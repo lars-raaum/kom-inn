@@ -57,10 +57,10 @@ $app->post('/api/register', function(Request $request) use ($app) {
 	];
 	if ($type == 'host') {
 		$result = $app['db']->insert('hosts', $data, $types);
-	    $sql = "SELECT * FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
+	    $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
 	} else {
 		$result = $app['db']->insert('guests', $data, $types);
-	    $sql = "SELECT * FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
+	    $sql = "SELECT people.*, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
 	}
 
     $person = $app['db']->fetchAssoc($sql, [(int) $user_id]);
@@ -70,7 +70,7 @@ $app->post('/api/register', function(Request $request) use ($app) {
 
 $app->get('/api/guest/{id}', function ($id) use ($app) {
 
-    $sql = "SELECT * FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
+    $sql = "SELECT people.*, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
     $guest = $app['db']->fetchAssoc($sql, [(int) $id]);
 
     return $app->json($guest);
