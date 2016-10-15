@@ -1,0 +1,33 @@
+body {
+    background-color: #bddee4;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.header {
+    height: 275px;
+    width: 100%;
+}
+
+.content {
+    max-width: 940px;
+    margin: 0px auto;
+    background-color: #fff;
+}
+
+h1 {
+    font-size: 24px;
+    text-transform: uppercase;
+}
+
+h2 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+p {
+    white-space: pre-wrap;
+    line-height: 135%;
+    margin-top: 22px;
+    font-size: 16px;
+}
