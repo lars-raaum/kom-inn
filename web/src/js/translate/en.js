@@ -9,6 +9,7 @@ module.exports = {
     'Hva er navnet ditt?': 'What\'s your name?',
     'Hva er e-postadressen din?': 'What\'s your email address',
     'Hva er telefonnummeret ditt?': 'What\'s your phone number',
+    'Er det noe mat du ikke spiser?': 'Is there any food you don\'t eat?',
     'Er du': 'Are you',
     'Mann': 'Man',
     'Kvinne': 'Woman',

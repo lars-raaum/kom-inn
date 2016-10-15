@@ -6,7 +6,7 @@ export default class Feedback extends React.Component {
         super()
         this.form = {};
 
-        this.state = { gender: null, type: null };
+        this.state = { gender: null, type: null, error: null, success: false };
 
         this.submit = this.submit.bind(this);
     }
@@ -16,18 +16,39 @@ export default class Feedback extends React.Component {
             type: this.state.type,
             name: this.form.name.value,
             email: this.form.email.value,
+            phone: this.form.phone.value,
             gender: this.state.gender,
             age: this.form.age.value,
             children: this.form.children.value,
             adults_m: this.form.adults_male.value,
             adults_f: this.form.adults_female.value,
             origin: this.form.origin.value,
+            food_concerns: this.form.food_concerns ? this.form.food_concerns.value : null,
             address: this.form.address.value,
             zipcode: this.form.zipcode.value,
             freetext: this.form.freetext.value
         };
 
         return data;
+    }
+
+    renderFoodConcerns() {
+        if (this.state.type !== 'guest') {
+            return null;
+        }
+
+        return <div className="input-field">
+            <label htmlFor="food_concerns">{this.context.translate('Er det noe mat du ikke spiser?')}:</label><br />
+            <input type="text" placeholder="Fyll inn" name="food_concerns" ref={(c) => this.form.food_concerns = c} required />
+        </div>
+    }
+
+    renderError() {
+        if (this.state.error === null) {
+            return null;
+        }
+
+        return <span className="error">{this.state.error}</span>
     }
 
     submit(e) {
@@ -39,6 +60,10 @@ export default class Feedback extends React.Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(this.getFormData())
+        }).then(() => {
+            this.setState({ success: true });
+        }).catch(err => {
+            this.setState({ error: err.message ? err.message : err });
         });
     }
 
@@ -103,6 +128,8 @@ export default class Feedback extends React.Component {
                         <input type="text" placeholder="Fyll inn" name="origin" ref={(c) => this.form.origin = c} required />
                     </div>
 
+                    {this.renderFoodConcerns()}
+
                     <div className="input-field">
                         <label htmlFor="address">{translate('Adresse')}:</label><br />
                         <input type="text" placeholder="Fyll inn" name="address" ref={(c) => this.form.address = c} required />
@@ -121,6 +148,8 @@ export default class Feedback extends React.Component {
                     <div className="submit">
                         <button type="submit">{translate('Send inn')}</button>
                     </div>
+
+                    {this.renderError()}
                 </form>
             </div>
         )
