@@ -14,12 +14,12 @@ $app->get('/guest/{id}', function ($id) use ($app) {
 });
 
 $app->get('/guests', function() use ($app) {
-    $status = $_GET['status'] ?: 1;
+    $status = isset($_GET['status']) ? $_GET['status'] : 1;
 
     $args = [(int) $status];
     $sql = "SELECT people.*, guests.user_id FROM people, guests WHERE people.id = guests.user_id AND people.status = ?";
 
-    $children = $_GET['children'] ?: null;
+    $children = isset($_GET['children']) ? $_GET['children'] : null;
     if ($children !== null && $children == 'yes') {
         $sql .= " AND people.children <> ?";
         $args[] = 0;
