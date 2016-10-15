@@ -42,18 +42,35 @@ $app->post('/api/register', function(Request $request) use ($app) {
 	// validation
 
 	$dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
-	$result = $app['db']->insert('users', $data ,['updated' => $dtt, 'created' => $dtt]);
+	$types = ['updated' => $dtt, 'created' => $dtt];
+	$result = $app['db']->insert('people', $data , $types);
 
-	$id = $app['db']->lastInsertId();
-    $sql = "SELECT * FROM users WHERE id = ?";
-    $guest = $app['db']->fetchAssoc($sql, [(int) $id]);
+	if (!$result) {
+		return $app->json(false);
+	}
+	$user_id = $app['db']->lastInsertId();
 
-	return $app->json($guest);
+	$data = [
+		'user_id' => $user_id,
+		'updated' => new DateTime('now'),
+		'created' => new DateTime('now')
+	];
+	if ($type == 'host') {
+		$result = $app['db']->insert('hosts', $data, $types);
+	    $sql = "SELECT * FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
+	} else {
+		$result = $app['db']->insert('guests', $data, $types);
+	    $sql = "SELECT * FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
+	}
+
+    $person = $app['db']->fetchAssoc($sql, [(int) $user_id]);
+
+	return $app->json($person);
 });
 
 $app->get('/api/guest/{id}', function ($id) use ($app) {
 
-    $sql = "SELECT * FROM users WHERE id = ?";
+    $sql = "SELECT * FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
     $guest = $app['db']->fetchAssoc($sql, [(int) $id]);
 
     return $app->json($guest);

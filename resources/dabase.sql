@@ -48,11 +48,11 @@ CREATE TABLE IF NOT EXISTS `hosts` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Table structure for table `people`
 --
 
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
+DROP TABLE IF EXISTS `people`;
+CREATE TABLE IF NOT EXISTS `people` (
   `id` int(10) unsigned NOT NULL,
   `email` varchar(256) COLLATE utf8_bin NOT NULL,
   `name` varchar(128) COLLATE utf8_bin NOT NULL,

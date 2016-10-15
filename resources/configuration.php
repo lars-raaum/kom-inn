@@ -1,11 +1,11 @@
 <?php
 
-$app['debug'] = false;
+$app['debug'] = true;
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => [
         'driver'    => 'pdo_mysql',
-        'host'      => 'spp.dev',
+        'host'      => 'localhost',
         'dbname'    => 'kominn',
         'user'      => 'root',
         'password'  => 'root',
