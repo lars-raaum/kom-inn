@@ -30,6 +30,13 @@ $app->post('/person/{id}', function($id, Request $request) use ($app, $types) {
         'freetext'  => $r->get('freetext'),
         'updated'   => new DateTime('now')
     ];
+
+    foreach ($data as $key => $value) {
+        if ($value === null) {
+            unset($data[$key]);
+        }
+    }
+
     $result = $app['db']->update('people', $data, ['id' => (int) $id], $types);
     if (!$result) {
         error_log("Failed to update match {$id}");
