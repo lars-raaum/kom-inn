@@ -101,8 +101,8 @@ export default class Feedback extends React.Component {
 
                         <div className="radio-field col-1-3">
                             <label className="input-header">{translate('Kjønn')}</label>
-                            <label htmlFor="gender-male"><input type="radio" name="gender" id="gender-male" onChange={() => this.setState({gender: 'male' })} />  {translate('Mann')}</label>
-                            <label htmlFor="gender-female"><input type="radio" name="gender" id="gender-female" onChange={() => this.setState({gender: 'female' })} />  {translate('Kvinne')}</label>
+                            <label htmlFor="gender-male"><input type="radio" name="gender" id="gender-male" onChange={() => this.setState({gender: 'm' })} />  {translate('Mann')}</label>
+                            <label htmlFor="gender-female"><input type="radio" name="gender" id="gender-female" onChange={() => this.setState({gender: 'f' })} />  {translate('Kvinne')}</label>
                         </div>
                     </div>
 
