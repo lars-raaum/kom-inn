@@ -2,10 +2,10 @@
     margin-top: 25px;
     ul {
         li {
-            padding: 5px 10px;
+            padding: 10px 10px 5px 10px;
             margin: 10px 0;
             background-color: #fff;
-            color: #000;
+            color: #999;
             cursor: pointer;
             position: relative;
             font-size: 14px;
@@ -14,8 +14,7 @@
                 border: 1px solid #000;
             }
 
-            b {
-                font-weight: bold;
+            .title {
                 color: #000;
             }
 
@@ -25,28 +24,20 @@
             }
 
             div.info {
-                padding: 10px 0;
+                padding: 5px 0;
                 line-height: 1.5;
             }
 
-            div.freetext {
-                margin-bottom: 15px;
+            .freetext {
                 i {
                     font-style: italic;
                 }
             }
 
-            .distance {
+            .cancel-match {
                 position: absolute;
-                top: 5px;
-                right: 10px;
-            }
-
-            .updated {
-                position: absolute;
-                bottom: 5px;
-                right: 10px;
-                font-size: 12px;
+                bottom: 10px;
+                left: 15px;
             }
         }
     }
