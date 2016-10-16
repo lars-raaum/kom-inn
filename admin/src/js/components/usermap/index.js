@@ -51,7 +51,6 @@ export class Marker extends React.Component {
             position = new google.maps.LatLng(pos.lat, pos.lng);
         }
 
-        console.log(this.props);
         var pinColor = color;
         var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
             new google.maps.Size(21, 34),

@@ -52,7 +52,6 @@ export class Marker extends React.Component {
             position = new google.maps.LatLng(pos.lat, pos.lng);
         }
 
-        console.log(this.props);
         var pinColor = color;
         var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
             new google.maps.Size(21, 34),
@@ -116,6 +115,7 @@ class Person extends React.Component {
     }
 
     renderDistance() {
+        // console.log(this.props.person);
         const distance = Math.floor(this.props.person.distance);
         if (!distance) {
             return null;
@@ -293,7 +293,7 @@ export default class Unmatched extends React.Component {
 
     selectGuest(guest) {
         this.setState({ selectedGuest: guest, selectedHost: null });
-        this.fetchHosts();
+        this.fetchHosts(guest);
     }
 
     fetchGuests() {
@@ -306,12 +306,19 @@ export default class Unmatched extends React.Component {
         });
     }
 
-    fetchHosts() {
+    fetchHosts(guest) {
         const { filters, selectedGuest, distance } = this.state;
         const query = Object.keys(filters).filter(key => filters[key]).map(key => key + '=yes');
+        var filterGuest = undefined;
 
-        if (selectedGuest) {
-            query.push(`guest_id=${selectedGuest.id}`);
+        if (selectedGuest == undefined) {
+          filterGuest = guest;
+        } else {
+          filterGuest = selectedGuest;
+        }
+
+        if (filterGuest) {
+            query.push(`guest_id=${filterGuest.id}`);
         }
 
         if (distance) {
