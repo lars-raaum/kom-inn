@@ -31,6 +31,9 @@ class Person extends React.Component {
                 <span className="info">{person.age} år. {person.adults_f} females. {person.adults_m} males.</span>
                 <span className="origin">{person.origin}.</span>
             </div>
+            <div>
+                <span className="phone">Phone: {person.phone}</span> <span className="email">Email {person.email}</span>
+            </div>
             <span className="freetext">{person.freetext}</span>
             {this.renderDistance()}
         </li>
