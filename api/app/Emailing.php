@@ -9,14 +9,17 @@ class Emailing {
     protected $client;
     protected $domain;
 
-
     public function __construct() {
-        $this->client = new Mailgun("key-4d699703721ad54fe248b4ed18da8526");
-        $this->domain = "barracuda.makosoft.co.uk";
-        $this->from   = 'kom-inn@barracuda.makosoft.co.uk';
+        $config = require_once RESOURCE_PATH . '/emails.php';
+        if (empty($config)) return;
+
+        $this->client = new Mailgun($config['key']);
+        $this->domain = $config['domain'];
+        $this->from   = $config['from'];
     }
 
     public function sendHostInform(array $match) {
+        if (empty($this->client)) return;
         $to = $match['host']['email'];
         $this->client->sendMessage($this->domain, [
             'from'    => $this->from,
