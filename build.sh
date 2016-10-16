@@ -1,11 +1,12 @@
 #!/bin/bash
 
 WORKING_DIR=$(pwd)
+DIR=$(dirname "$0")
 
-cd "$(dirname "$0")/web"
+cd "$DIR/web"
 npm run build
 
-cd "$(dirname "$0")/admin"
+cd "../admin"
 npm run build
 
 cd $WORKING_DIR
