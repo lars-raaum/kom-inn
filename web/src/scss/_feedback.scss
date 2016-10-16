@@ -1,9 +1,6 @@
 form {
     margin: 40px 0;
 
-    >div {
-        margin: 20px 0px;
-    }
     label.input-header {
         margin-bottom: 10px;
         display: block;
@@ -14,15 +11,26 @@ form {
     }
 
     input {
+        &[type="text"],&[type="number"] {
+            width: 100%;
+            max-width: 400px;
+        }
+        &[type="radio"] {
+            margin: 5px 5px 5px 10px;
+        }
+
         background-color: transparent;
         line-height: 20px;
         font-size: 14px;
-        min-width: 300px;
         border: 0;
         border-bottom: 1px solid #E1E1E1;
         &:focus {
             border-bottom: 1px solid #009E55;
         }
+    }
+
+    .radio-field {
+
     }
 
     textarea {
@@ -43,12 +51,13 @@ form {
 
     h2 {
         padding: 0 10px;
+        margin-bottom: 12px;
     }
 
     .form-group {
         clear: both;
         width: 100%;
-        margin-bottom: 25px;
+        margin-bottom: 40px;
         overflow: hidden;
 
         .col-1-1 {
@@ -78,6 +87,11 @@ form {
             float: left;
             padding: 0 10px;
             box-sizing: border-box;
+
+            @media (max-width: 768px) {
+                width: 100%;
+                margin-bottom: 25px;
+            }
         }
     }
 }
