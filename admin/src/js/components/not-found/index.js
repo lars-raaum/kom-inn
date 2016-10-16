@@ -3,6 +3,8 @@ import { Link } from 'react-router'
 
 export default class NotFound extends React.Component {
     render() {
+        console.log(this.props);
+
         return (
             <div>
                 <h1>Side ikke funnet.</h1>

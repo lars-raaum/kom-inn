@@ -11,10 +11,10 @@ export default class Header extends React.Component {
             </div>
             <div className="tabs">
                 <Link to="/" activeClassName="selected">
-                        Unmatched
+                    Unmatched
                 </Link>
-                <Link to="/matched" activeClassName="selected">
-                    Matched
+                <Link to="/matches" activeClassName="selected">
+                    Matches
                 </Link>
             </div>
         </div>
