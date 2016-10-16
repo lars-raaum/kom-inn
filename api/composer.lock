@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1d6bf0ca8bc7b26eb2fbc87a806e5cd6",
-    "content-hash": "42d98847a84b4d93666c7f89c54a5e41",
+    "hash": "f1e239afa04ab7b43c5289644f13c040",
+    "content-hash": "decc83a9eb97ab916d9d38e2019c24f8",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -692,6 +692,62 @@
             ],
             "description": "The Mailgun SDK provides methods for all API functions.",
             "time": "2016-08-10 16:58:18"
+        },
+        {
+            "name": "php-http/curl-client",
+            "version": "v1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-http/curl-client.git",
+                "reference": "984b3e6e9b7c56bb85f6db3725e5a74e83cd6257"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-http/curl-client/zipball/984b3e6e9b7c56bb85f6db3725e5a74e83cd6257",
+                "reference": "984b3e6e9b7c56bb85f6db3725e5a74e83cd6257",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": "^5.5 || ^7.0",
+                "php-http/discovery": "^1.0",
+                "php-http/httplug": "^1.0",
+                "php-http/message": "^1.2",
+                "php-http/message-factory": "^1.0.2"
+            },
+            "provide": {
+                "php-http/async-client-implementation": "1.0",
+                "php-http/client-implementation": "1.0"
+            },
+            "require-dev": {
+                "guzzlehttp/psr7": "^1.0",
+                "php-http/client-integration-tests": "^0.5.1",
+                "phpunit/phpunit": "^4.8.27",
+                "zendframework/zend-diactoros": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Http\\Client\\Curl\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Михаил Красильников",
+                    "email": "m.krasilnikov@yandex.ru"
+                }
+            ],
+            "description": "cURL client for PHP-HTTP",
+            "homepage": "http://php-http.org",
+            "keywords": [
+                "curl",
+                "http"
+            ],
+            "time": "2016-09-12 14:10:21"
         },
         {
             "name": "php-http/discovery",

@@ -1,7 +1,6 @@
 <?php
 
 use Symfony\Component\HttpFoundation\Request;
-use Mailgun\Mailgun;
 
 
 function getMatch($id, $app) {
@@ -51,20 +50,21 @@ $app->post('/match', function(Request $request) use ($app, $types, $dtt) {
         return $app->json(['result' => false]);
     }
 
-
     $match = getMatch($id, $app);
     if (!$match) {
         return $app->json(['result' => false]);
     }
 
-    $sender = new \app\Sms();
-    $result = $sender->sendHostInform($match);
+    $sms_sender = new \app\Sms();
+    $result = $sms_sender->sendHostInform($match);
+
+    $email_sender = new \app\Emailing();
+    $result = $email_sender->sendHostInform($match);
 
     return $app->json(['result' => true]);
 });
 
 $app->get('/match/{id}', function ($id) use ($app) {
-
     $match = getMatch($id, $app);
     if (!$match) return $app->json(null, 404);
     return $app->json($match);
@@ -90,16 +90,6 @@ $app->post('/match/{id}', function ($id, Request $request) use ($app) {
         error_log("Failed to update match {$id}");
         return $app->json(null, 500);
     }
-
-    # First, instantiate the SDK with your API credentials and define your domain.
-    $mg = new Mailgun("key-4d699703721ad54fe248b4ed18da8526");
-    $domain = "naggingnelly.com";
-
-    # Now, compose and send your message.
-    $mg->sendMessage($domain, array('from'    => 'kom-inn@naggingnelly.com',
-        'to'      =>  'techfugees@jlf.me',
-        'subject' => 'Kom inn: Gjester venter på invitasjon :)',
-        'text'    => "Hei $name (Or $name remove everything after first space)\n\nFørst og fremst takk for at dere vil være med på Kom inn!\n\nVi håper dere er klare for middag:)\n\nHva skjer nå?\n\nVi har funnet gjester som gjerne vil komme på besøk. $guestname på $age fra $origin\n\nIf SUM(adults_m + adults_f + children)=0 $genderpronoun kommer alene. else $genderpronoun tar med seg $adults_m voksne menn, $adults_f voksne kvinner, og $children barn.\n\nPå spørsmål om det er noe $genderpronoun ikke spiser, svarer $genderpronoun: $food_concerns\n\nSelve invitasjonen står du for selv slik at eventuell videre kommunikasjonen kan skje direkte. Vi anbefaler at du bruker SMS. Skriv meldingen på norsk, nevn gjerne \"Kom inn\" og husk å få med tidspunkt/adresse.\n\nDersom du ikke hører noe på SMS, så anbefaler vi at du tar en telefon. Noen er komfortable med å snakke norsk, men synes skriftlig er vanskelig.\n\nTelefonnummeret til $guestname er $guestphonenumber\n\nVi opplever dessverre at en god del verter ikke sender en invitasjon, så vi ber deg invitere i løpet av 48 timer og gi oss beskjed. Selve avtalen trenger ikke å være i løpet av de nærmeste dagene, det viktige er at dere oppretter kontakten.\n\nDersom du har noen spørsmål ta gjerne kontakt med oss eller se http://www.kom-inn.org/ for litt mer praktisk informasjon!\n\nTakk igjen, lykke til og send oss gjerne et bilde hvis det føles naturlig - eller del det på Facebook-siden vår.\n\nMed vennlig hilsen Kom inn-teamet!"));
 
     $sql = "SELECT * FROM matches WHERE id = ?";
     $match = $app['db']->fetchAssoc($sql, [(int) $id]);

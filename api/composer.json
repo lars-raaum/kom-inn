@@ -5,7 +5,8 @@
         "Doctrine/DBAL": "^2.5",
         "willdurand/geocoder": "@stable",
         "twilio/sdk": "^5.4",
-        "mailgun/mailgun-php": "@stable"
+        "mailgun/mailgun-php": "@stable",
+        "php-http/curl-client": "^1.6"
     },
     "autoload": {
         "psr-4": {
