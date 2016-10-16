@@ -74,7 +74,7 @@ export default class Feedback extends React.Component {
         return (
             <div className="main-page">
                 <h1>Kom inn</h1>
-                <p>{translate('Mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk.')}</p>
+                <p>{translate('Mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk')}.</p>
                 <p>{translate('Hvis du vil komme på middag, eller invitere noen på middag registrerer du deg nedenfor. Vi matcher dere basert på hvem dere er og hvor dere bor og setter dere i kontakt for å avtale tidspunkt.')}</p>
 
                 <p>{translate('Du finner mer informasjon på')} <a href="http://www.kom-inn.org">www.kom-inn.org.</a></p>
@@ -101,8 +101,8 @@ export default class Feedback extends React.Component {
 
                         <div className="radio-field col-1-3">
                             <label className="input-header">{translate('Kjønn')}</label>
-                            <label htmlFor="gender-male"><input type="radio" name="gender" id="gender-male" onChange={() => this.setState({gender: 'male' })} />  {translate('Mann')}</label>
-                            <label htmlFor="gender-female"><input type="radio" name="gender" id="gender-female" onChange={() => this.setState({gender: 'female' })} />  {translate('Kvinne')}</label>
+                            <label htmlFor="gender-male"><input type="radio" name="gender" id="gender-male" onChange={() => this.setState({gender: 'MALE' })} />  {translate('Mann')}</label>
+                            <label htmlFor="gender-female"><input type="radio" name="gender" id="gender-female" onChange={() => this.setState({gender: 'FEMALE' })} />  {translate('Kvinne')}</label>
                         </div>
                     </div>
 
