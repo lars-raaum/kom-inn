@@ -74,6 +74,20 @@ CREATE TABLE IF NOT EXISTS `people` (
   `created` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+DROP TABLE IF EXISTS `matches`;
+CREATE TABLE `matches` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guest_id` int(11) NOT NULL,
+  `host_id` int(11) NOT NULL,
+  `comment` text COLLATE utf8_bin,
+  `status` tinyint(4) NOT NULL DEFAULT '0',
+  `updated` datetime NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+/*!40000 ALTER TABLE `matches` DISABLE KEYS */;
+
 --
 -- Indexes for dumped tables
 --
