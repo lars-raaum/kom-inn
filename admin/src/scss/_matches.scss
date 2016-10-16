@@ -1,0 +1,53 @@
+.matches {
+    margin-top: 25px;
+    ul {
+        li {
+            padding: 5px 10px;
+            margin: 10px 0;
+            background-color: #fff;
+            color: #000;
+            cursor: pointer;
+            position: relative;
+            font-size: 14px;
+
+            &.selected {
+                border: 1px solid #000;
+            }
+
+            b {
+                font-weight: bold;
+                color: #000;
+            }
+
+            span {
+                display: inline-block;
+                padding: 0 5px 0 0;
+            }
+
+            div.info {
+                padding: 10px 0;
+                line-height: 1.5;
+            }
+
+            div.freetext {
+                margin-bottom: 15px;
+                i {
+                    font-style: italic;
+                }
+            }
+
+            .distance {
+                position: absolute;
+                top: 5px;
+                right: 10px;
+            }
+
+            .updated {
+                position: absolute;
+                bottom: 5px;
+                right: 10px;
+                font-size: 12px;
+            }
+        }
+    }
+}
