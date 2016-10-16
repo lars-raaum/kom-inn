@@ -145,9 +145,12 @@ $app->delete('/match/{id}', function ($id, Request $request) use ($app) {
 });
 
 $app->get('/matches', function(Request $request) use ($app) {
-    $status = 0; // matched
+    $status = isset($_GET['status']) ? $_GET['status'] : 0;
+
+    $args = [(int) $status];
+
     $sql = "SELECT * FROM matches WHERE status = ?";
-    $matches = $app['db']->fetchAll($sql, [(int) $status]);
+    $matches = $app['db']->fetchAll($sql, $args);
     foreach ($matches as $k => $match) {
 
         $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
