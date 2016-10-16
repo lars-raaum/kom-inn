@@ -144,14 +144,14 @@ export default class UserMap extends Component {
 
     render() {
         var guestPosition = {};
-        guestPosition.lat = 59.8935576;
-        guestPosition.lng = 10.504951;
+        guestPosition.lat = 59.9035576;
+        guestPosition.lng = 10.7354951;
         return (
             <div>
                 <Map key="waawawlsdfa" google={window.google}
-                    style={{width: '100%', height: '400px'}}
+                    style={{width: '100%', height: '800px'}}
                     className={'map'}
-                    zoom={14}
+                    zoom={12}
                     initialCenter={guestPosition}>
                         {this.state.hosts.filter(host => {
                             return host.loc_lat && host.loc_long;

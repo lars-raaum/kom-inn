@@ -189,7 +189,7 @@ class Hosts extends React.Component {
             <Map key={guest.id + '-' + query + '-' + distance} google={window.google}
                 style={{width: '100%', height: '400px'}}
                 className={'map'}
-                zoom={14}
+                zoom={12}
                 initialCenter={guestPosition}>
                     {hosts.filter(host => {
                         return host.loc_lat && host.loc_long;
