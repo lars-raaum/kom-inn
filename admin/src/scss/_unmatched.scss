@@ -6,6 +6,7 @@
             margin: 5px 0;
             background-color: #fff;
             cursor: pointer;
+            position: relative;
 
             &.selected {
                 border: 1px solid #000;
@@ -27,6 +28,12 @@
 
             div.freetext {
                 padding: 10px 0;
+            }
+
+            .distance {
+                position: absolute;
+                top: 5px;
+                right: 10px;
             }
         }
     }

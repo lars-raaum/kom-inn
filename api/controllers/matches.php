@@ -91,23 +91,66 @@ $app->post('/match/{id}', function ($id, Request $request) use ($app) {
         return $app->json(null, 500);
     }
 
-    $sql = "SELECT * FROM matches WHERE id = ?";
-    $match = $app['db']->fetchAssoc($sql, [(int) $id]);
-
-    $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
-    $match['host'] = $app['db']->fetchAssoc($sql, [(int) $match['host_id']]);
-
-    $sql = "SELECT people.*, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
-    $match['guest'] = $app['db']->fetchAssoc($sql, [(int) $match['guest_id']]);
+    $match = getMatch($id, $app);
+    if (!$match) {
+        return $app->json(null, 500);
+    }
 
     return $app->json($match);
 });
 
+$app->delete('/match/{id}', function ($id, Request $request) use ($app) {
+
+    $sql = "SELECT * FROM matches WHERE id = ?";
+    $match = $app['db']->fetchAssoc($sql, [(int) $id]);
+    if (!$match) {
+        return $app->json(null, 404);
+    }
+
+    $r     = $request->request;
+    $now   = new DateTime('now');
+    $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
+    $data  = [
+        'status'  => -1,
+        'updated' => new DateTime('now')
+    ];
+    $result = $app['db']->update('matches', $data, ['id' => (int) $id], $types);
+    if (!$result) {
+        error_log("Failed to update match {$id}");
+        return $app->json(null, 500);
+    }
+    $guest_id = $match['guest_id'];
+    $host_id  = $match['host_id'];
+
+    $data = ['status' => 1, 'updated' => $now->format('Y-m-d H:i:s')];
+    $result = $app['db']->update('people', $data, ['id' => $guest_id]);
+    if (!$result) {
+        error_log("Failed to updated person {$guest_id} to be used!");
+        return $app->json(['result' => false]);
+    }
+
+    $result = $app['db']->update('people', $data, ['id' => $host_id]);
+    if (!$result) {
+        error_log("Failed to updated person {$host_id} to be used!");
+        return $app->json(['result' => false]);
+    }
+
+    $match = getMatch($id, $app);
+    if (!$match) {
+        return $app->json(null, 500);
+    }
+
+    return $app->json($match);
+
+});
 
 $app->get('/matches', function(Request $request) use ($app) {
-    $status = 0; // matched
+    $status = isset($_GET['status']) ? $_GET['status'] : 0;
+
+    $args = [(int) $status];
+
     $sql = "SELECT * FROM matches WHERE status = ?";
-    $matches = $app['db']->fetchAll($sql, [(int) $status]);
+    $matches = $app['db']->fetchAll($sql, $args);
     foreach ($matches as $k => $match) {
 
         $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
