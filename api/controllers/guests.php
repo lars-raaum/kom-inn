@@ -17,7 +17,7 @@ $app->get('/guests', function() use ($app) {
     $status = isset($_GET['status']) ? $_GET['status'] : 1;
 
     $args = [(int) $status];
-    $sql = "SELECT people.*, guests.user_id FROM people, guests WHERE people.id = guests.user_id AND people.status = ? ORDER BY created DESC";
+    $sql = "SELECT people.*, guests.user_id FROM people, guests WHERE people.id = guests.user_id AND people.status = ? ORDER BY updated DESC";
 
 
 
