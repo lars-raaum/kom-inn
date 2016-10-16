@@ -1,7 +1,6 @@
 <?php
 
 use Symfony\Component\HttpFoundation\Request;
-require 'vendor/autoload.php';
 use Mailgun\Mailgun;
 
 
