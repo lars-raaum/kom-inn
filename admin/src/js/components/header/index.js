@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router';
+import { Link, IndexLink } from 'react-router';
 
 export default class Header extends React.Component {
     render() {
@@ -10,11 +10,14 @@ export default class Header extends React.Component {
                 </select>
             </div>
             <div className="tabs">
-                <Link to="/" activeClassName="selected">
+                <IndexLink to="/" activeClassName="selected">
                     Unmatched
-                </Link>
+                </IndexLink>
                 <Link to="/matches" activeClassName="selected">
                     Matches
+                </Link>
+                <Link to="/usermap" activeClassName="selected">
+                    Overview map
                 </Link>
             </div>
         </div>
