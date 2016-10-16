@@ -10,6 +10,15 @@ class Person extends React.Component {
         return parseInt(person.adults_f, 10) + parseInt(person.adults_m, 10);
     }
 
+    renderDistance() {
+        const distance = Math.floor(this.props.person.distance);
+        if (!distance) {
+            return null;
+        }
+
+        return <span className="distance">{distance} kilometers</span>;
+    }
+
     render() {
         const { person, selected } = this.props;
 
@@ -19,10 +28,11 @@ class Person extends React.Component {
             <h2>{this.getAdults()} adults. {person.children} children.</h2>
             <div className={'info'}>
                 <span className="name">{person.name}</span>
-                <span className="info">{person.age} år.</span>
+                <span className="info">{person.age} år. {person.adults_f} females. {person.adults_m} males.</span>
                 <span className="origin">{person.origin}.</span>
             </div>
             <span className="freetext">{person.freetext}</span>
+            {this.renderDistance()}
         </li>
     }
 }
