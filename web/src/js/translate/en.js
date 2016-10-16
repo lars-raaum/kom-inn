@@ -1,5 +1,5 @@
 module.exports = {
-    'Mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk': 'People that speaks norwegian invites someone who wants to learn norwegian for a dinner',
+    'Mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk': 'People that speak Norwegian invite people who want to learn Norwegian over for dinner',
     'Hvis du vil komme på middag, eller invitere noen på middag registrerer du deg nedenfor. Vi matcher dere basert på hvem dere er og hvor dere bor og setter dere i kontakt for å avtale tidspunkt.': 'If you want to join a dinner or invite someone for a dinner register below. We will match you based on who you are and where you live. We will then set you in touch with each other',
     'Du finner mer informasjon på': 'More information are available here',
 
@@ -24,7 +24,7 @@ module.exports = {
     'Antall voksne kvinner': 'Female adults',
     'Hvor er du fra': 'Where are you from',
     'Hvor mange blir med på middag': 'How many people are you bringing',
-    'Er det noe mat du/dere ikke spiser': 'Are there any food you don\'t eat',
+    'Er det noe mat du/dere ikke spiser': 'Is they any food you don\'t eat',
     'Adresse': 'Address',
     'Postnummer': 'Zip code',
     'Kan du fortelle litt mer om deg selv': 'Can you tell us a bit more about yourself',
