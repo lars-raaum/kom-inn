@@ -116,7 +116,7 @@ class Person extends React.Component {
 
     renderDistance() {
         // console.log(this.props.person);
-        const distance = Math.floor(this.props.person.distance);
+        const distance = this.props.person.distance ? this.props.person.distance.toFixed(1) : null;
         if (!distance) {
             return null;
         }
