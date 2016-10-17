@@ -52,6 +52,7 @@ $app->post('/register', function(Request $request) use ($app, $types) {
     } else {
         $sender = new \app\Sms();
         $sender->sendAdminRegistrationNotice();
+        $data['food_concerns'] = $r->get('food_concerns');
         $result = $app['db']->insert('guests', $data, $types);
         $sql = "SELECT people.*, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
     }
