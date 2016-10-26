@@ -34,7 +34,7 @@ if [ -z $(git tag | grep $VERSION) ]; then
     echo " - Built"
 
     echo " - Updating ansible version"
-    sed -e 's/version=.*/version=${VERSION}/g' ansible/roles/kom-inn.yaml | tee ansible/roles/kom-inn.yaml
+    perl -pi -e "s/version=.*/version=${VERSION}/g" ansible/roles/kom-inn.yaml
 
     echo $VERSION > VERSION
 
