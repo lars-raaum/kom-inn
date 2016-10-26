@@ -1,0 +1,44 @@
+.people {
+    margin-top: 25px;
+    ul {
+        li {
+            padding: 10px 10px 5px 10px;
+            margin: 10px 0;
+            background-color: #fff;
+            color: #999;
+            cursor: pointer;
+            position: relative;
+            font-size: 14px;
+
+            &.selected {
+                border: 1px solid #000;
+            }
+
+            .title {
+                color: #000;
+            }
+
+            span {
+                display: inline-block;
+                padding: 0 5px 0 0;
+            }
+
+            div.info {
+                padding: 5px 0;
+                line-height: 1.5;
+            }
+
+            .freetext {
+                i {
+                    font-style: italic;
+                }
+            }
+
+            .cancel-match {
+                position: absolute;
+                bottom: 10px;
+                left: 15px;
+            }
+        }
+    }
+}

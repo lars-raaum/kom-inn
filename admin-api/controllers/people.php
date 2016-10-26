@@ -113,3 +113,18 @@ $app->delete('/person/{id}', function ($id) use ($app) {
 
     return $app->json(true);
 });
+
+$app->get('/people', function() use ($app) {
+
+    $status = (int) (isset($_GET['status']) ? $_GET['status'] : 1);
+    $offset = (int) 0;
+    $limit  = (int) 10;
+
+    $args = [$status];
+    $sql = "SELECT * FROM people WHERE status = ? ORDER BY updated DESC LIMIT {$offset}, $limit ";
+    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
+    $people = $app['db']->fetchAll($sql, $args);
+
+    return $app->json($people);
+});
+

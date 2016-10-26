@@ -16,6 +16,9 @@ export default class Header extends React.Component {
                 <Link to="/matches" activeClassName="selected">
                     Matches
                 </Link>
+                <Link to="/people" activeClassName="selected">
+                    People
+                </Link>
                 <Link to="/usermap" activeClassName="selected">
                     Overview map
                 </Link>
