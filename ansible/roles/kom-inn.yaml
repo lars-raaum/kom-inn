@@ -1,6 +1,0 @@
----
-- hosts:
-  - dev
-  - pro
-  tasks:
-  - git: repo=https://github.com/lars-raaum/kom-inn dest=/services/kom-inn force=True version=master
