@@ -1,40 +1,59 @@
 #!/bin/bash
 
-if [ $# -eq 0 ]
+set -e
+
+if [ $# -lt 1 ]
   then
     echo " - "
-    echo "    Missing version. Usage: '$0 1.2.3'"
+    echo "    Missing version. Usage: '$0 1.2.3 ENV'"
     echo " - "
     exit
 fi
 
 VERSION="$1"
+ENV=${2:-"dev"}
 
-echo " "
-echo " == Building " $VERSION " === "
+git fetch --tags
+
+if [ -z $(git tag | grep $VERSION) ]; then
+
+    if git diff-index --quiet HEAD --; then
+        # no changes
+        echo " - Git state clean, proceeding"
+    else
+        # changes
+        echo " - "
+        echo "    YOUR GIT IS DIRTY!"
+        echo " - "
+        exit 1
+    fi
+
+    echo " - Building version ${VERSION}"
+    sleep 1
+    ./build.sh
+    echo " - Built"
+
+    echo " - Updating ansible version"
+    sed -e 's/version=.*/version=${VERSION}/g' ansible/roles/kom-inn.yaml | tee ansible/roles/kom-inn.yaml
+
+    echo " - Making commit"
+    git add admin/public/js
+    git add web/public/js
+    git add ansible/roles/kom-inn.yaml
+    git commit -m "Build version ${VERSION}"
+    git tag $VERSION
+
+    echo " - Pushing branch and tag to github"
+    git push origin HEAD --tags
+else
+    echo " - Tag exists, deploying existing tag"
+    git checkout $VERSION
+fi
+
+echo " - Deploying ${VERSION} to ${ENV}"
 
 sleep 1
 
-if git diff-index --quiet HEAD --; then
-    # no changes
-    echo " - Git state clean, proceeding"
-else
-    # changes
-    echo " - "
-    echo "    YOUR GIT IS DIRTY!"
-    echo " - "
-    exit 1
-fi
+ansible-playbook ./ansible/roles/admin.yaml -i ./ansible/hosts/${ENV}
 
-echo " - Building"
-./build.sh
-echo " - Built"
-
-echo " - Making commit"
-git add admin/public/js
-git add web/public/js
-git commit -m "Build version ${VERSION}"
-git tag $VERSION
-
-echo " - Pushing branch and tag to github"
-git push origin HEAD --tags
+echo " - Deployed. Gracias."
