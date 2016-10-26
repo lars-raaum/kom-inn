@@ -8,12 +8,13 @@ class Sms {
 
     protected $client;
     protected $from;
+    protected $admin;
 
     public function __construct() {
         $config = require_once RESOURCE_PATH . '/sms.php';
         if (empty($config)) return;
         $this->from = $config['phone'];
-        $this->admin = $config['admin'];
+        $this->admin = isset($config['admin']) ? $config['admin'] : false;
         $this->client = new Client($config['sid'], $config['token']);
     }
 
@@ -29,12 +30,12 @@ class Sms {
     }
 
     public function sendAdminRegistrationNotice() {
-        if (empty($this->client)) return;
+        if (empty($this->client) || empty($this->admin)) return;
         return $this->client->messages->create(
             $this->admin,
             [
                 'from' => $this->from,
-                'body' => "Hoi! Ny gjest! Hvor er det husly? Trenger hjerterom! FTD.."
+                'body' => "Ny gjest!\nHvor er det husly? Trenger hjerterom!\n - Kom-Inn"
             ]
         );
 
