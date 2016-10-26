@@ -82,7 +82,7 @@ if (isProd) {
     webpackConfig.plugins.push(new webpack.NoErrorsPlugin());
     webpackConfig.devServer = {
         hot: true,
-        port: 7000,
+        port: 8000,
         contentBase: 'public/',
         proxy: {
             '/api': {
