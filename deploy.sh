@@ -57,6 +57,6 @@ echo " - Deploying ${VERSION} to ${ENV}"
 
 sleep 1
 
-ansible-playbook ./ansible/roles/admin.yaml -i ./ansible/hosts/${ENV}
+ansible-playbook ./ansible/roles/kom-inn.yaml -i ./ansible/hosts/${ENV}
 
 echo " - Deployed. Gracias."
