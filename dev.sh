@@ -1,7 +1,7 @@
 #!/bin/bash
 
 WORKING_DIR=$(pwd)
-DIR=$(dirname "$0")
+DIR=`dirname $(realpath $0)`
 
 php -S 0.0.0.0:8080 -t api/public api/public/index.php &
 API_PID=$!
@@ -11,7 +11,7 @@ echo $(pwd)
 API_URL="http://localhost:8080" npm run dev &
 ADMIN_PID=$!
 
-cd "../web"
+cd "${DIR}/web"
 echo $(pwd)
 API_URL="http://localhost:8080" npm run dev &
 WEB_PID=$!
