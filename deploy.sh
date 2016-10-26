@@ -36,10 +36,13 @@ if [ -z $(git tag | grep $VERSION) ]; then
     echo " - Updating ansible version"
     sed -e 's/version=.*/version=${VERSION}/g' ansible/roles/kom-inn.yaml | tee ansible/roles/kom-inn.yaml
 
+    echo $VERSION > VERSION
+
     echo " - Making commit"
     git add admin/public/js
     git add web/public/js
     git add ansible/roles/kom-inn.yaml
+    git add VERSION
     git commit -m "Build version ${VERSION}"
     git tag $VERSION
 
