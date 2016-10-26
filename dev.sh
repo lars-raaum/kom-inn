@@ -1,7 +1,7 @@
 #!/bin/bash
 
 WORKING_DIR=$(pwd)
-DIR=`dirname $(realpath $0)`
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 php -S 0.0.0.0:8001 -t $DIR/web-api/public $DIR/web-api/public/index.php &
 WEB_API_PID=$!
