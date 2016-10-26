@@ -17,28 +17,30 @@ $app->get('/hosts', function(Request $request) use ($app) {
     $status = isset($_GET['status']) ? $_GET['status'] : 1;
 
     $guest_id = isset($_GET['guest_id']) ? $_GET['guest_id'] : NULL;
-    $distance = isset($_GET['distance']) ? pow(floatval($_GET['distance']) * 0.539956803 / 60, 2) : NULL; // distance in nautical miles squared
-
-//
-//    if ($longitude != NULL and $latitude != NULL and $distance != NULL) {
-//
-//    }
+    $distance = isset($_GET['distance']) ? pow(floatval($_GET['distance']) * 0.539956803 / 60, 2) : 20; // distance in nautical miles squared
 
     $args = [(int) $status];
     $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.status = ?";
 
-    $latitude = NULL;
-    $longitude = NULL;
+    $target_latitude = NULL;
+    $target_longitude = NULL;
 
-    if ($guest_id != NULL and $distance != NULL) {
-        $q = "select people.loc_lat, people.loc_long from people where people.id = ?";
-        $people = $app['db']->fetchAll($q, [$guest_id]);
+    if ($guest_id != NULL && $distance != NULL) {
+        $sub_args = [$guest_id];
+        $sub_sql = "SELECT people.loc_lat, people.loc_long FROM people WHERE people.id = ?";
+        error_log("SQL [ $sub_sql ] [" . join(', ', $sub_args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
+        $people = $app['db']->fetchAll($sub_sql, $sub_args);
 
         if (isset($people[0])) {
-            $latitude = floatval($people[0]['loc_lat']);
-            $longitude = floatval($people[0]['loc_long']);
-            if ($latitude && $longitude) {
-                $sql .=  " AND (people.loc_long - $longitude)*(people.loc_long - $longitude) + (people.loc_lat - $latitude)*(people.loc_lat - $latitude) < $distance ";
+            $target_latitude = floatval($people[0]['loc_lat']);
+            $target_longitude = floatval($people[0]['loc_long']);
+            if ($target_latitude && $target_longitude) {
+                $sql .=  " AND (people.loc_long - ?)*(people.loc_long - ?) + (people.loc_lat - ?)*(people.loc_lat - ?) < ? ";
+                $args[] = $target_longitude;
+                $args[] = $target_longitude;
+                $args[] = $target_latitude;
+                $args[] = $target_latitude;
+                $args[] = $distance;
             }
         }
     }
@@ -61,20 +63,21 @@ $app->get('/hosts', function(Request $request) use ($app) {
         $args[] = 0;
     }
 
-    error_log("SQL [ $sql ] [" . join(', ', $args) . "]");
+    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
     $hosts = $app['db']->fetchAll($sql, $args);
 
-    for ($i = 0; $i < count($hosts); $i++) {
-        $h_lat = $hosts[$i]['loc_lat'];
-        $h_loc = $hosts[$i]['loc_long'];
+    if ($target_longitude && $target_latitude) {
+        for ($i = 0; $i < count($hosts); $i++) {
+            $h_lat = $hosts[$i]['loc_lat'];
+            $h_loc = $hosts[$i]['loc_long'];
+            $dist = sqrt(pow($h_loc - $target_longitude, 2) + pow($h_lat - $target_latitude, 2)) * 60 / 0.539956803;
+            $hosts[$i]['distance'] = $dist;
+        }
 
-        $dist = sqrt(pow($h_loc - $longitude, 2) + pow($h_lat - $latitude, 2)) * 60 / 0.539956803;
-        $hosts[$i]['distance'] = $dist;
+        usort($hosts, function($a, $b) {
+            return $a['distance'] > $b['distance'];
+        });
     }
-
-    usort($hosts, function($a, $b) {
-        return $a['distance'] > $b['distance'];
-    });
 
     return $app->json($hosts);
 });
