@@ -2,15 +2,50 @@
 
 use Symfony\Component\HttpFoundation\Request;
 
-$app->post('/person/{id}', function($id, Request $request) use ($app, $types) {
+function get_person($id, $app) {
 
-    $sql = "SELECT people.* FROM people WHERE people.id = ?";
-    $person = $app['db']->fetchAssoc($sql, [(int) $id]);
+    $args = [(int) $id];
+    $sql = "SELECT p.*, g.id as `guest_id`, g.food_concerns, h.id as `host_id` FROM people AS p ".
+           "LEFT JOIN guests AS g ON (p.id = g.user_id) ".
+           "LEFT JOIN hosts  AS h ON (p.id = h.user_id) ".
+           "WHERE p.id = ?";
+    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
+    $person = $app['db']->fetchAssoc($sql, $args);
 
+    if (!$person) return null;
+    if ($person['guest_id'] === NULL) {
+        unset($person['guest_id']);
+        unset($person['food_concerns']);
+        $person['type'] = 'HOST';
+    }
+    if ($person['host_id'] === NULL) {
+        unset($person['host_id']);
+        $person['type'] = 'GUEST';
+    }
+
+    return $person;
+}
+
+$app->get('/person/{id}', function($id, Request $request) use ($app) {
+
+    $person = get_person($id, $app);
     if (!$person) {
         return $app->json(null, 404);
     }
 
+    return $app->json($person);
+});
+
+
+$app->post('/person/{id}', function($id, Request $request) use ($app, $types) {
+    $id = (int) $id;
+
+    $person = get_person($id, $app);
+    if (!$person) {
+        return $app->json(null, 404);
+    }
+
+    $updated = new DateTime('now');
     $r = $request->request;
     $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
     $data  = [
@@ -28,7 +63,7 @@ $app->post('/person/{id}', function($id, Request $request) use ($app, $types) {
         'status'    => $r->get('status'),
         'visits'    => $r->get('visits'),
         'freetext'  => $r->get('freetext'),
-        'updated'   => new DateTime('now')
+        'updated'   => $updated
     ];
 
     foreach ($data as $key => $value) {
@@ -37,22 +72,43 @@ $app->post('/person/{id}', function($id, Request $request) use ($app, $types) {
         }
     }
 
-    $result = $app['db']->update('people', $data, ['id' => (int) $id], $types);
+    error_log("Update person {$id} - by [{$_SERVER['PHP_AUTH_USER']}]");
+    $result = $app['db']->update('people', $data, ['id' => $id], $types);
     if (!$result) {
-        error_log("Failed to update match {$id}");
+        error_log("Failed to update person {$id}");
         return $app->json(null, 500);
     }
 
-    $sql = "SELECT people.* FROM people WHERE people.id = ?";
-    $person = $app['db']->fetchAssoc($sql, [(int) $id]);
+    $food_concerns = $r->get('food_concerns');
+    if ($food_concerns) {
+        error_log("Update guest {$person['guest_id']} - by [{$_SERVER['PHP_AUTH_USER']}]");
+        $result = $app['db']->update('guests', compact('food_concerns', 'updated'), ['id' => $person['guest_id']], $types);
+
+        if (!$result) {
+            error_log("Failed to update guest {$person['guest_id']}");
+        }
+    }
+
+    $person = get_person($id, $app);
 
     return $app->json($person);
 });
 
 
 $app->delete('/person/{id}', function ($id) use ($app) {
-    $app['db']->delete('hosts', array('user_id' => $id));
-    $app['db']->delete('guests', array('user_id' => $id));
+    $id = (int) $id;
+
+    $person = get_person($id, $app);
+    if (!$person) {
+        return $app->json(null, 404);
+    }
+
+    error_log("Deleting Person[$id] by [{$_SERVER['PHP_AUTH_USER']}]");
+    if ($person['type'] == 'HOST') {
+        $app['db']->delete('hosts', array('user_id' => $id));
+    } else {
+        $app['db']->delete('guests', array('user_id' => $id));
+    }
     $app['db']->delete('people', array('id' => $id));
 
     return $app->json(true);
