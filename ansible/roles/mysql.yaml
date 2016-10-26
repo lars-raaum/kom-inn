@@ -10,7 +10,7 @@
     - mysql-server
     - python-mysqldb
   - mysql_db: name=kominn state=present
-  - git: repo=https://github.com/lars-raaum/kom-inn.git dest=/services/kom-inn version=master
+#  - git: repo=https://github.com/lars-raaum/kom-inn.git dest=/services/kom-inn version=master
   - mysql_db: name=kominn state=import target=/services/kom-inn/resources/dabase.sql
   - name: Create the mysql user
     mysql_user: >
