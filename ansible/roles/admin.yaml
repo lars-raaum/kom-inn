@@ -1,0 +1,19 @@
+---
+- hosts:
+  - dev
+  - pro
+  sudo: yes
+  vars:
+    doc_root: /services/kom-inn/admin-root
+    server_name: admin.kom-inn.org
+    server_alias: admin.kom-inn.org admin.dev.kom-inn.org
+    basic_auth_file: /services/htpasswd_admins
+  tasks:
+  - name: Set up Apache virtual host file
+    template: src=../templates/vhost.tpl dest=/etc/apache2/sites-enabled/001-admin.conf
+    notify: restart apache
+  - name: Ensure passwd file is present
+    file: path=/services/htpasswd_admins state=touch
+  handlers:
+  - name: restart apache
+    service: name=apache2 state=restarted

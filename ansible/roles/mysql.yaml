@@ -1,0 +1,23 @@
+---
+- hosts:
+  - dev
+  - pro
+  sudo: yes
+  tasks:
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+    - mysql-server
+    - python-mysqldb
+  - mysql_db: name=kominn state=present
+  - git: repo=https://github.com/lars-raaum/kom-inn.git dest=/services/kom-inn version=master
+  - mysql_db: name=kominn state=import target=/services/kom-inn/resources/dabase.sql
+  - name: Create the mysql user
+    mysql_user: >
+      name=kominn
+      password=kominn
+      priv=kominn.*:ALL
+      host=localhost
+  handlers:
+  - name: restart mysql-server
+    service: name=mysql-server state=restarted

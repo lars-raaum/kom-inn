@@ -1,0 +1,16 @@
+---
+- hosts:
+  - dev
+  - pro
+  sudo: yes
+  vars:
+    doc_root: /services/kom-inn/web-root
+    server_name: kom-inn.org
+    server_alias: pro.kom-inn.org dev.kom-inn.org
+  tasks:
+  - name: Set up Apache virtual host file
+    template: src=../templates/vhost.tpl dest=/etc/apache2/sites-enabled/000-web.conf
+    notify: restart apache
+  handlers:
+  - name: restart apache
+    service: name=apache2 state=restarted

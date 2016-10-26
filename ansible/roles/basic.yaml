@@ -1,0 +1,10 @@
+---
+- hosts: all
+  sudo: true
+  tasks:
+  - name: Install Packages
+    apt: name={{ item }} state=latest
+    with_items:
+    - vim
+    - git
+    - curl
