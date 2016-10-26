@@ -22,7 +22,6 @@ USE `kominn`;
 -- Table structure for table `guests`
 --
 
-DROP TABLE IF EXISTS `guests`;
 CREATE TABLE IF NOT EXISTS `guests` (
   `id` int(10) unsigned NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -37,7 +36,6 @@ CREATE TABLE IF NOT EXISTS `guests` (
 -- Table structure for table `hosts`
 --
 
-DROP TABLE IF EXISTS `hosts`;
 CREATE TABLE IF NOT EXISTS `hosts` (
   `id` int(10) unsigned NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -51,7 +49,6 @@ CREATE TABLE IF NOT EXISTS `hosts` (
 -- Table structure for table `people`
 --
 
-DROP TABLE IF EXISTS `people`;
 CREATE TABLE IF NOT EXISTS `people` (
   `id` int(10) unsigned NOT NULL,
   `email` varchar(256) COLLATE utf8_bin NOT NULL,
@@ -74,8 +71,7 @@ CREATE TABLE IF NOT EXISTS `people` (
   `created` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-DROP TABLE IF EXISTS `matches`;
-CREATE TABLE `matches` (
+CREATE TABLE IF NOT EXISTS `matches` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `guest_id` int(11) NOT NULL,
   `host_id` int(11) NOT NULL,
