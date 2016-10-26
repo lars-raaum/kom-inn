@@ -4,8 +4,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 $app->get('/guest/{id}', function ($id) use ($app) {
 
+    $args = [(int) $id];
     $sql = "SELECT people.*, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
-    $guest = $app['db']->fetchAssoc($sql, [(int) $id]);
+    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
+    $guest = $app['db']->fetchAssoc($sql, $args);
     if (!$guest) {
         return $app->json(null, 404);
     }
@@ -18,8 +20,6 @@ $app->get('/guests', function() use ($app) {
 
     $args = [(int) $status];
     $sql = "SELECT people.*, guests.user_id FROM people, guests WHERE people.id = guests.user_id AND people.status = ? ORDER BY updated DESC";
-
-
 
     $children = isset($_GET['children']) ? $_GET['children'] : null;
 
@@ -40,7 +40,7 @@ $app->get('/guests', function() use ($app) {
         $args[] = 0;
     }
 
-    error_log("SQL [ $sql ] [" . join(', ', $args) . "]");
+    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
     $guests = $app['db']->fetchAll($sql, $args);
     return $app->json($guests);
 });
