@@ -4,4 +4,4 @@
   - pro
   tasks:
   - name: Deploy
-    git: repo=https://github.com/lars-raaum/kom-inn dest=/services/kom-inn force=True version=0.0.3
+    git: repo=https://github.com/lars-raaum/kom-inn dest=/services/kom-inn force=True version=0.0.4
