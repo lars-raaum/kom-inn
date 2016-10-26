@@ -1,7 +1,7 @@
 #!/bin/bash
 
 WORKING_DIR=$(pwd)
-DIR=`dirname $(realpath $0)`
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 cd "$DIR/web"
 npm run build &
