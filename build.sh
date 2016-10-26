@@ -8,10 +8,12 @@ npm run build &
 WEB_PID=$!
 
 cd "$DIR/admin"
-npm run build
+npm run build &
 ADMIN_PID=$!
 
 cd $WORKING_DIR
+
+echo "Waiting for build to succeed"
 
 wait $WEB_PID
 wait $ADMIN_PID
