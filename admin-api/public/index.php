@@ -18,7 +18,6 @@ require_once __DIR__.'/../../resources/configuration.php';
 $dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
 $types = ['updated' => $dtt, 'created' => $dtt];
 
-require_once __DIR__.'/../controllers/register.php';
 require_once __DIR__.'/../controllers/matches.php';
 require_once __DIR__.'/../controllers/hosts.php';
 require_once __DIR__.'/../controllers/guests.php';
