@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 
-export default class Feedback extends React.Component {
+export default class Register extends React.Component {
     constructor() {
         super()
         this.form = {};
@@ -179,6 +179,6 @@ export default class Feedback extends React.Component {
     }
 }
 
-Feedback.contextTypes = {
+Register.contextTypes = {
     translate: React.PropTypes.func
 }
