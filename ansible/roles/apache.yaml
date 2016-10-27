@@ -17,6 +17,7 @@
     - php7.0-mcrypt
     - php7.0-mysql
     - libapache2-mod-php7.0
+    - python-letsencrypt-apache
 
   - name: enable php apache module
     shell: a2enmod php7.0
@@ -24,7 +25,8 @@
   - name: enable rewrite apache module
     shell: a2enmod rewrite
     notify: restart apache
-  - file: path=/etc/apache2/sites-enabled/000-default.conf state=absent
+  - name: remove default vhost
+    file: path=/etc/apache2/sites-enabled/000-default.conf state=absent
     notify: restart apache
   handlers:
   - name: restart apache

@@ -19,5 +19,4 @@
         Require all granted
 {% endif %}
     </Directory>
-
 </VirtualHost>

@@ -5,7 +5,7 @@
   become: yes
   vars:
     doc_root: /services/kom-inn/admin-root
-    server_name: admin.kom-inn.org
+    server_name: "{{ admin_domain }}"
     server_alias: admin.kom-inn.org admin.dev.kom-inn.org
     basic_auth_file: /services/htpasswd_admins
   tasks:
@@ -14,6 +14,21 @@
     notify: restart apache
   - name: Ensure passwd file is present
     file: path=/services/htpasswd_admins state=touch
+  - name: setup letsencrypt group
+    group: name=letsencrypt state=present
+  - name: setup www-data letsencrypt permissions
+    user: name=www-data groups=devs,letsencrypt append=yes
+  - name: enable ssl
+    shell: a2enmod ssl
+  - name: setup ssl certificates
+    shell: "{{ item }}"
+    with_items:
+      - letsencrypt --apache -d {{ admin_domain }} -m sgulseth@gmail.com --non-interactive --agree-tos --redirect
+      - chown -R root:letsencrypt /etc/letsencrypt
+      - sudo chmod --recursive 755 /etc/letsencrypt
+    notify: restart apache
+  - name: setup cronjob for letsencrypt renewal
+    cron: name="update certificates" minute="4" hour="0" user="www-data" job="letsencrypt renew > /var/log/letsencrypt-renewal.log"
   handlers:
   - name: restart apache
     service: name=apache2 state=restarted
