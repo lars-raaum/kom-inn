@@ -2,6 +2,16 @@
 - hosts:
   - dev
   - pro
+  roles:
+    - apache.yaml
   tasks:
   - name: Deploy
     git: repo=https://github.com/lars-raaum/kom-inn dest=/services/kom-inn force=True version=0.0.5
+  - name: install web api php dependencies
+    shell: composer install
+    args:
+      chdir: /services/kom-inn/web-api/
+  - name: install admin api php dependencies
+    shell: composer install
+    args:
+      chdir: /services/kom-inn/admin-api/

@@ -17,6 +17,7 @@
     - php7.0-mcrypt
     - php7.0-mysql
     - libapache2-mod-php7.0
+    - composer
     - python-letsencrypt-apache
 
   - name: enable php apache module
