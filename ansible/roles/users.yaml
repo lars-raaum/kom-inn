@@ -4,7 +4,8 @@
   - pro
   become: true
   tasks:
-  - user: name=deploy comment="John Doe" uid=1003 group=devs
+  - name: setup deploy user
+    user: name=deploy comment="Deploy user" uid=1003 group=devs
   - name: authorized key for sguleth
     authorized_key: user=deploy key=https://github.com/sgulseth.keys
   - name: authorized key for alkemann
