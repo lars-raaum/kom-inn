@@ -14,6 +14,7 @@ VERSION="$1"
 ENV=${2:-"dev"}
 
 echo " - Checking if environment is reachable"
+export ANSIBLE_CONFIG="./ansible/ansible.cfg"
 ansible ${ENV} -i ansible/hosts -m ping
 
 git fetch --tags
