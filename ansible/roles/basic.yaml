@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  sudo: true
+  become: true
   tasks:
   - name: Install Packages
     apt: name={{ item }} state=latest

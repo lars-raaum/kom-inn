@@ -13,6 +13,9 @@ fi
 VERSION="$1"
 ENV=${2:-"dev"}
 
+echo " - Checking if environment is reachable"
+ansible ${ENV} -i ansible/hosts -m ping
+
 git fetch --tags
 
 if [ -z $(git tag | grep $VERSION) ]; then

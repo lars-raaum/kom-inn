@@ -2,7 +2,7 @@
 - hosts:
   - dev
   - pro
-  sudo: yes
+  become: yes
   tasks:
   - name: install packages
     apt: name={{ item }} update_cache=yes state=latest

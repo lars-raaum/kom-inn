@@ -2,7 +2,7 @@
 - hosts:
   - dev
   - pro
-  sudo: yes
+  become: yes
   vars:
     doc_root: /services/kom-inn/admin-root
     server_name: admin.kom-inn.org
