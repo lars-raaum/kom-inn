@@ -50,6 +50,7 @@ class Match extends React.Component {
 
         return fetch(`/api/match/${this.props.match.id}`, {
             method: 'DELETE',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -59,6 +60,7 @@ class Match extends React.Component {
     updateMatch() {
         return fetch(`/api/match/${this.props.match.id}`, {
             method: 'POST',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -73,6 +75,7 @@ class Match extends React.Component {
         return this.cancelMatch().then(() => {
             return fetch(`/api/person/${person.id}`, {
                 method: 'POST',
+                credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -146,6 +149,7 @@ export default class Matches extends React.Component {
 
     fetchMatches() {
         return fetch(`/api/matches?status=${this.state.status}`, {
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json'
             }
