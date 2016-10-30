@@ -20,7 +20,7 @@ const browserSupport = [
 ];
 
 var webpackConfig = {
-    devtool: 'source-map',
+    devtool: 'cheap-module-source-map',
     entry: ['./src/js/app.js', './src/scss/main.scss'],
     output: {
         path: path.join(__dirname, 'public', 'js'),
@@ -38,7 +38,7 @@ var webpackConfig = {
         loaders: [
             {
                 test: /\.js$/,
-                loaders: ['babel'],
+                loaders: ['babel?cacheDirectory'],
                 include: path.join(__dirname, 'src', 'js'),
                 exclude: /node_modules/
             },
@@ -69,6 +69,7 @@ if (isProd) {
     /* eslint-disable */
     webpackConfig.plugins.push(
         new webpack.optimize.UglifyJsPlugin({
+            sourceMap: false,
             compressor: {
                 warnings: false
             }
@@ -76,7 +77,7 @@ if (isProd) {
     );
     /* eslint-enable */
 } else {
-    webpackConfig.devtool = 'eval-source-map';
+    webpackConfig.devtool = 'cheap-module-eval-source-map';
     webpackConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin());
     webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
     webpackConfig.plugins.push(new webpack.NoErrorsPlugin());

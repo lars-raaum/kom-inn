@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "NODE_ENV=development webpack-dev-server webpack.config.js",
-    "build": "NODE_ENV=production webpack webpack.config.js"
+    "build": "NODE_ENV=production webpack --progress webpack.config.js"
   },
   "devDependencies": {
     "autoprefixer": "^6.5.0",
