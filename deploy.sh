@@ -51,10 +51,10 @@ if [ -z $(git tag | grep $VERSION) ]; then
     git tag $VERSION
 
     echo " - Pushing branch and tag to github"
-    git push origin HEAD --tags
+    git push origin HEAD --tags -q
 else
     echo " - Tag exists, deploying existing tag"
-    git checkout $VERSION
+    git checkout $VERSION -q
 fi
 
 echo " - Deploying ${VERSION} to ${ENV}"
