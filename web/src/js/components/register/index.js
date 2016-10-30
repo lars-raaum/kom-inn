@@ -64,6 +64,10 @@ export default class Register extends React.Component {
             body: JSON.stringify(this.getFormData())
         }).then(() => {
             this.setState({ success: true });
+
+            // @TODO grab result from register or radio value of "type"
+            // redirect to /welcome or /thankyou pending on type
+            window.location.href= "/thankyou";
         }).catch(err => {
             this.setState({ error: err.message ? err.message : err });
         });
