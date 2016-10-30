@@ -52,7 +52,7 @@ export default class People extends React.Component {
 
     fetchPeople() {
         return fetch(`/api/people?status=${this.state.status}`, {
-            credentials: 'incldue',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             }
