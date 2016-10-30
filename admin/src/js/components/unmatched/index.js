@@ -273,7 +273,7 @@ export default class Unmatched extends React.Component {
 
     matchUsers() {
         fetch('/api/match', {
-            credentials: 'same-origin',
+            credentials: 'include',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -302,7 +302,7 @@ export default class Unmatched extends React.Component {
 
     fetchGuests() {
         return fetch('/api/guests', {
-            credentials: 'same-origin',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -334,7 +334,7 @@ export default class Unmatched extends React.Component {
 
         const queryString = query.join('&');
         return fetch(`/api/hosts?${queryString}`, {
-            credentials: 'same-origin',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             }
