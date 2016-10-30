@@ -12,6 +12,7 @@ $app->before(function (Request $request) {
         $data = json_decode($request->getContent(), true);
         $request->request->replace(is_array($data) ? $data : array());
     }
+    $_SERVER['PHP_AUTH_USER'] = $_SERVER['PHP_AUTH_USER'] ?? "NONE";
 });
 require_once __DIR__.'/../../resources/configuration.php';
 
