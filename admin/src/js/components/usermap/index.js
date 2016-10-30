@@ -123,6 +123,7 @@ export default class UserMap extends Component {
 
     fetchGuests() {
         return fetch('/api/guests', {
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -133,6 +134,7 @@ export default class UserMap extends Component {
 
     fetchHosts() {
         return fetch('/api/hosts', {
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
                 }
