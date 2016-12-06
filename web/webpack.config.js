@@ -3,7 +3,8 @@
 
 const path = require('path');
 
-const webpack = require('webpack');
+const DefinePlugin = require('webpack/lib/DefinePlugin');
+
 const autoprefixer = require('autoprefixer');
 
 const env = process.env.NODE_ENV || 'production';
@@ -53,22 +54,25 @@ var webpackConfig = {
     },
     postcss: [ autoprefixer({ browsers: browserSupport }) ],
     plugins: [
-        new webpack.DefinePlugin({
+        new DefinePlugin({
             'process.env': {
                 NODE_ENV: JSON.stringify(env)
             }
         })
     ],
     node: {
-        fs: 'empty'
+      fs: "empty"
     }
 };
 
 if (isProd) {
-    webpackConfig.plugins.push(new webpack.optimize.DedupePlugin());
+    const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+    const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
+
+    webpackConfig.plugins.push(new DedupePlugin());
     /* eslint-disable */
     webpackConfig.plugins.push(
-        new webpack.optimize.UglifyJsPlugin({
+        new UglifyJsPlugin({
             compressor: {
                 warnings: false
             }
@@ -76,10 +80,14 @@ if (isProd) {
     );
     /* eslint-enable */
 } else {
+    const NoErrorsPlugin = require('webpack/lib/NoErrorsPlugin');
+    const HotModuleReplacementPlugin = require('webpack/lib/HotModuleReplacementPlugin');
+    const OccurenceOrderPlugin = require('webpack/lib/optimize/OccurenceOrderPlugin');
+
     webpackConfig.devtool = 'cheap-module-eval-source-map';
-    webpackConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin());
-    webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
-    webpackConfig.plugins.push(new webpack.NoErrorsPlugin());
+    webpackConfig.plugins.push(new OccurenceOrderPlugin());
+    webpackConfig.plugins.push(new HotModuleReplacementPlugin());
+    webpackConfig.plugins.push(new NoErrorsPlugin());
     webpackConfig.devServer = {
         hot: true,
         port: 8000,
@@ -93,7 +101,7 @@ if (isProd) {
         historyApiFallback: {
             index: 'index.html'
         }
-    }
+    };
 }
 
 module.exports = webpackConfig;
