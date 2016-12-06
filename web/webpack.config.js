@@ -66,13 +66,12 @@ var webpackConfig = {
 };
 
 if (isProd) {
-    const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
-    const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
+    const webpack = require('webpack');
 
-    webpackConfig.plugins.push(new DedupePlugin());
+    webpackConfig.plugins.push(new webpack.optimize.DedupePlugin());
     /* eslint-disable */
     webpackConfig.plugins.push(
-        new UglifyJsPlugin({
+        new webpack.optimize.UglifyJsPlugin({
             sourceMap: false,
             mangle: false,
             test: /\.(js|jsx)$/
