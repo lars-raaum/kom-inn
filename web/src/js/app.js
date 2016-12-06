@@ -15,12 +15,9 @@ import Welcome from 'components/welcome';
 ReactDOM.render((
     <Router history={browserHistory}>
         <Route path="/" component={App}>
-            <IndexRoute component={MainPage} />
-            <Route path="/register" component={Register}/>
-            <Route path="/register/guest" component={Register}/>
-            <Route path="/register/host" component={Register}/>
-            <Route path="/thankyou" component={ThankYou}/>
-            <Route path="/welcome" component={Welcome}/>
+            <IndexRoute component={Register} />
+            <Route path="/gjest" component={Register}/>
+            <Route path="/vert" component={Register}/>
             <Route path="*" component={NotFound}/>
         </Route>
   </Router>

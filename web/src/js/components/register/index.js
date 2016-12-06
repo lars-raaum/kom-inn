@@ -6,7 +6,7 @@ export default class Register extends React.Component {
         super()
         this.form = {};
 
-        this.state = { gender: null, type: null, error: null, success: false };
+        this.state = { gender: null, type: null, error: null, success: false, pending: false };
 
         this.submit = this.submit.bind(this);
     }
@@ -56,6 +56,8 @@ export default class Register extends React.Component {
     submit(e) {
         e.preventDefault();
 
+        this.setState({ pending: true });
+
         fetch('/api/register', {
             method: 'POST',
             headers: {
@@ -63,18 +65,31 @@ export default class Register extends React.Component {
             },
             body: JSON.stringify(this.getFormData())
         }).then(() => {
-            this.setState({ success: true });
-
-            // @TODO grab result from register or radio value of "type"
-            // redirect to /welcome or /thankyou pending on type
-            window.location.href= "/thankyou";
+            this.setState({ pending: false, success: true });
         }).catch(err => {
-            this.setState({ error: err.message ? err.message : err });
+            this.setState({ pending: false, error: err.message ? err.message : err });
         });
+    }
+
+    renderPending() {
+        return (<div className="main-page">Vennligst vent...</div>);
+    }
+
+    renderSuccess() {
+        return (<div className="main-page">Takk!</div>);
     }
 
     render() {
         const translate = this.context.translate;
+
+        if (this.state.pending) {
+            return this.renderPending();
+        }
+
+        if (this.state.success) {
+            return this.renderSuccess();
+        }
+
         return (
             <div className="main-page">
                 <h1>Kom inn</h1>
