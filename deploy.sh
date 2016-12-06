@@ -34,7 +34,7 @@ if [ -z $(git tag | grep $VERSION) ]; then
 
     echo " - Building version ${VERSION}"
     sleep 1
-    ./build.sh
+    NODE_ENV="production" ./build.sh
     echo " - Built"
 
     echo " - Updating ansible version"
