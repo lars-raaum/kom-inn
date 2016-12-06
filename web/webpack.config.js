@@ -73,9 +73,9 @@ if (isProd) {
     /* eslint-disable */
     webpackConfig.plugins.push(
         new UglifyJsPlugin({
-            compressor: {
-                warnings: false
-            }
+            sourceMap: false,
+            mangle: false,
+            test: /\.(js|jsx)$/
         })
     );
     /* eslint-enable */
