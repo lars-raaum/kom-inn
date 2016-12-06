@@ -21,7 +21,7 @@ const browserSupport = [
 ];
 
 var webpackConfig = {
-    devtool: 'cheap-module-source-map',
+    devtool: 'source-map',
     entry: ['./src/js/app.js', './src/scss/main.scss'],
     output: {
         path: path.join(__dirname, 'public', 'js'),
