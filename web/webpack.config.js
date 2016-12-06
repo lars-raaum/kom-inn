@@ -7,7 +7,7 @@ const DefinePlugin = require('webpack/lib/DefinePlugin');
 
 const autoprefixer = require('autoprefixer');
 
-const env = process.env.NODE_ENV || 'production';
+const env = process.env.NODE_ENV;
 const isProd = (env === 'production');
 
 // Which browsers do we want autoprefixer to support?
