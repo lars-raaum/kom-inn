@@ -22,10 +22,13 @@ const browserSupport = [
 
 var webpackConfig = {
     devtool: 'cheap-module-source-map',
-    entry: ['./src/js/app.js', './src/scss/main.scss'],
+    entry: {
+        app: './src/js/app.js',
+        style: './src/scss/main.scss'
+    },
     output: {
         path: path.join(__dirname, 'public', 'js'),
-        filename: 'app.js',
+        filename: '[name].js',
         publicPath: '/js'
     },
     resolve: {
