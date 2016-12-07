@@ -66,6 +66,12 @@ export default class Register extends React.Component {
             body: JSON.stringify(this.getFormData())
         }).then(() => {
             this.setState({ pending: false, success: true });
+            if (this.state.type === 'host') {
+                window.location.href = '/takk/vert';
+            } else {
+                window.location.href = '/takk/gjest';
+            }
+
         }).catch(err => {
             this.setState({ pending: false, error: err.message ? err.message : err });
         });
