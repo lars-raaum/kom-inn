@@ -8,6 +8,7 @@ class Emailing {
 
     protected $client;
     protected $domain;
+    protected $admin;
 
     public function __construct() {
         $config = require_once RESOURCE_PATH . '/emails.php';
@@ -16,6 +17,17 @@ class Emailing {
         $this->client = new Mailgun($config['key']);
         $this->domain = $config['domain'];
         $this->from   = $config['from'];
+        $this->admin = isset($config['admin']) ? $config['admin'] : false;
+    }
+
+    public function sendAdminRegistrationNotice() {
+        if (empty($this->client) || empty($this->admin)) return;
+        $this->client->sendMessage($this->domain, [
+            'from'    => $this->from,
+            'to'      => $this->admin,
+            'subject' => 'Kom inn: Ny gjest',
+            'html'    => '<h1>Ny gjest</h1><p><a href="http://kom-inn.org/admin">Finn match</a></p>'
+        ]);
     }
 
     public function sendHostInform(array $match) {

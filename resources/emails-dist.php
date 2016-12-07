@@ -3,5 +3,6 @@
 return [
     // 'key'    => 'api-asdasdasd',
     // 'domain' => 'example.com',
-    // 'from'   => 'admin@example.com'
+    // 'from'   => 'admin@example.com',
+    // 'admin@kominn.no',
 ];

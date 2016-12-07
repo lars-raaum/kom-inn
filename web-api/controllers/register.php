@@ -2,7 +2,7 @@
 
 use Symfony\Component\HttpFoundation\Request;
 use app\Geo;
-use app\Sms;
+use app\Emailing;
 
 $dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
 $types = ['updated' => $dtt, 'created' => $dtt];
@@ -55,7 +55,7 @@ $app->post('/register', function(Request $request) use ($app, $types) {
         $result = $app['db']->insert('hosts', $data, $types);
         $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
     } else {
-        $sender = new Sms();
+        $sender = new Emailing();
         $sender->sendAdminRegistrationNotice();
         $data['food_concerns'] = $r->get('food_concerns');
         $result = $app['db']->insert('guests', $data, $types);
