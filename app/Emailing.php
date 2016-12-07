@@ -33,12 +33,17 @@ class Emailing {
     public function sendHostInform(array $match) {
         if (empty($this->client)) return;
         $to = $match['host']['email'];
-        $this->client->sendMessage($this->domain, [
-            'from'    => $this->from,
-            'to'      => $to,
-            'subject' => 'Kom inn: Gjester venter på invitasjon :)',
-            'html'    => $this->buildText($match)
-        ]);
+        try {
+            $this->client->sendMessage($this->domain, [
+                'from'    => $this->from,
+                'to'      => $to,
+                'subject' => 'Kom inn: Gjester venter på invitasjon :)',
+                'html'    => $this->buildText($match)
+            ]);
+        } catch (\Exception $e) {
+            error_log("Failed to mail : " . $e->getMessage());
+            return false;
+        }
     }
 
     protected function buildText(array $match) {
