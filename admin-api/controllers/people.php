@@ -103,14 +103,17 @@ $app->delete('/person/{id}', function ($id) use ($app) {
         return $app->json(null, 404);
     }
 
-    error_log("Deleting Person[$id] by [{$_SERVER['PHP_AUTH_USER']}]");
-    if ($person['type'] == 'HOST') {
-        $app['db']->delete('hosts', array('user_id' => $id));
-    } else {
-        $app['db']->delete('guests', array('user_id' => $id));
-    }
-    $app['db']->delete('people', array('id' => $id));
+    $data  = [
+        'name'      => '#DELETED#',
+        'email'     => '#DELETED#',
+        'phone'     => '#DELETED#',
+        'address'   => '#DELETED#',
+        'freetext'  => '',
+        'status'    => -1
+    ];
 
+    error_log("DELETING DATA for Person[{$id}] by [{$_SERVER['PHP_AUTH_USER']}]");
+    $result = $app['db']->update('people', $data, ['id' => (int) $id]);
     return $app->json(true);
 });
 
