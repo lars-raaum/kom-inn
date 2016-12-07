@@ -57,6 +57,36 @@ class Match extends React.Component {
         }).then(matches => this.props.fetchMatches());
     }
 
+    removeBoth(e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        return fetch(`/api/match/${this.props.match.id}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(() => {
+            return fetch(`/api/person/${this.props.match.host_id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        }).then(() => {
+            return fetch(`/api/person/${this.props.match.guest_id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        }).then(matches => this.props.fetchMatches());
+    }
+
     updateMatch() {
         return fetch(`/api/match/${this.props.match.id}`, {
             method: 'POST',
@@ -74,14 +104,11 @@ class Match extends React.Component {
     removePerson(person) {
         return this.cancelMatch().then(() => {
             return fetch(`/api/person/${person.id}`, {
-                method: 'POST',
+                method: 'DELETE',
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    status: -1
-                })
+                }
             });
         })
     }
@@ -119,6 +146,7 @@ class Match extends React.Component {
             <div className="col-sm-1">
                 <button onClick={e => this.updateMatch()}>Update match</button>
             </div>
+            <a onClick={e => this.removeBoth()} className="remove-both" href="#">Remove both persons from DB</a>
             <a onClick={e => this.cancelMatch()} className="cancel-match" href="#">Cancel match</a>
         </li>
     }
