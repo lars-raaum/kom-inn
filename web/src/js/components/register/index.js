@@ -104,14 +104,13 @@ export default class Register extends React.Component {
             return this.renderSuccess();
         }
 
-        if (this.props.params.type == 'gjest') {
-            this.state.type = 'guest';
-        } else if (this.props.params.type == 'vert') {
-            this.state.type = 'host';
-        }
-
         let typeForm;
-        if (this.state.type == 'guest' || this.state.type == 'host') {
+        if (this.props.params.type == 'gjest' || this.props.params.type == 'vert') {
+            if (this.props.params.type == 'gjest') {
+                this.state.type = 'guest';
+            } else if (this.props.params.type == 'vert') {
+                this.state.type = 'host';
+            }
         } else {
             typeForm = (
                 <div>
