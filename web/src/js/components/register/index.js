@@ -64,6 +64,14 @@ export default class Register extends React.Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(this.getFormData())
+        }).then(response => {
+            if (response.status !== 200) {
+                const error = new Error(response.statusText)
+                error.response = response
+                throw error
+            }
+
+            return response.json();
         }).then(() => {
             this.setState({ pending: false, success: true });
             if (this.state.type === 'host') {
