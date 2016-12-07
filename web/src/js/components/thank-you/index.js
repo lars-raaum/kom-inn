@@ -8,7 +8,15 @@ export default class ThankYou extends React.Component {
                 <h1>Takk {name}</h1>
                 <p>Vi har sendt den en bekreftelse på epost.</p>
                 <h3>Hva skjer nå?</h3>
-                <p>##PLACEHOLDER##</p>
+                <p>Vi vil prøve å finne noen du kan invitere på middag så fort så mulig.
+                Når vi har funnet passende gjester - hører dere fra oss!</p>
+                <p>Noen ganger går det noen dager, andre ganger bruker vi mange uker.
+                Dette kan variere veldig. Vi forsøker så godt vi kan å finne rett match
+                så opplevelsen for begge parter skal bli best mulig.
+                Om du synes det går for lang tid er det lov å sende oss en mail.</p>
+                <p>For deg som bor utenfor Oslo : Kom inn er enda ikke etablert over hele landet.
+                Vi håper å få til dette i løpet av ikke så lang tid.
+                Vi tar kontakt med deg når vi har gjester i ditt området!  </p>
                 <h3>Har du andre spørsmål?</h3>
                 <p>Les mer på kom-inn.org eller send en epost til <a href="mailto:kominnoslo@gmail.com.">kominnoslo@gmail.com.</a></p>
                 <p>Ha en fortsatt fin dag!</p>
