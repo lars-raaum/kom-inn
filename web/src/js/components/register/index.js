@@ -96,21 +96,39 @@ export default class Register extends React.Component {
             return this.renderSuccess();
         }
 
+        if (this.props.params.type == 'gjest') {
+            this.state.type = 'guest';
+        } else if (this.props.params.type == 'vert') {
+            this.state.type = 'host';
+        }
+
+        let typeForm;
+        if (this.state.type == 'guest' || this.state.type == 'host') {
+        } else {
+            typeForm = (
+                <div>
+                <h2>{translate('Hva vil du')}</h2>
+                <div className="form-group">
+                    <div className="radio-field">
+                        <label htmlFor="type-guest"><input type="radio" name="type" id="type-guest" onChange={() => this.setState({type: 'guest' })} required /> {translate('Komme til noen på middagsbesøk')}</label> <br />
+                        <label htmlFor="type-host"><input type="radio" name="type" id="type-host" onChange={() => this.setState({type: 'host' })} required /> {translate('Invitere noen på middagsbesøk')}</label>
+                    </div>
+                </div>
+                </div>
+            )
+        }
+
         return (
             <div className="main-page">
                 <h1>Kom inn</h1>
                 <p>{translate('Mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk')}.</p>
                 <p>{translate('Hvis du vil komme på middag, eller invitere noen på middag registrerer du deg nedenfor. Vi matcher dere basert på hvem dere er og hvor dere bor og setter dere i kontakt for å avtale tidspunkt.')}</p>
 
+
                 <p>{translate('Du finner mer informasjon på')} <a href="http://www.kom-inn.org">www.kom-inn.org.</a></p>
                 <form onSubmit={this.submit}>
-                    <h2>{translate('Hva vil du')}</h2>
-                    <div className="form-group">
-                        <div className="radio-field">
-                            <label htmlFor="type-guest"><input type="radio" name="type" id="type-guest" onChange={() => this.setState({type: 'guest' })} required /> {translate('Komme til noen på middagsbesøk')}</label> <br />
-                            <label htmlFor="type-host"><input type="radio" name="type" id="type-host" onChange={() => this.setState({type: 'host' })} required /> {translate('Invitere noen på middagsbesøk')}</label>
-                        </div>
-                    </div>
+
+                    {typeForm}
 
                     <h2>Hvem er du?</h2>
                     <div className="form-group">

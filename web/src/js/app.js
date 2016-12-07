@@ -16,8 +16,7 @@ ReactDOM.render((
     <Router history={browserHistory}>
         <Route path="/" component={App}>
             <IndexRoute component={Register} />
-            <Route path="/gjest" component={Register}/>
-            <Route path="/vert" component={Register}/>
+            <Route path="/som/:type" component={Register}/>
             <Route path="/takk/:type" component={ThankYou}/>
             <Route path="*" component={NotFound}/>
         </Route>
