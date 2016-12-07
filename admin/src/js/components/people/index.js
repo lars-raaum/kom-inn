@@ -16,8 +16,14 @@ class Person extends React.Component {
 
     remove(e) {
         e.preventDefault();
-
-        this.props.removePerson(this.props.person);
+        const { person } = this.props;
+        return fetch(`/api/person/${person.id}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(() => { this.props.fetchPeople() }); // TODO update people state instead of refetching
     }
 
     render() {
