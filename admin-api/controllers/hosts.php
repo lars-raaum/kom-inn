@@ -80,7 +80,7 @@ $app->get('/hosts', function(Request $request) use ($app) {
     }
     foreach ($hosts as &$host) {
         $now     = new \DateTime();
-        $updated = new \DateTime($host['updated']);
+        $updated = new \DateTime($host['created']);
         if ($updated->diff($now)->days == 0) {
             $host['waited'] = "Added today";
         } else if ($updated->diff($now)->days == 1) {

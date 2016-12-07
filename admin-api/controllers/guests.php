@@ -45,7 +45,7 @@ $app->get('/guests', function() use ($app) {
 
     foreach ($guests as &$guest) {
         $now     = new \DateTime();
-        $updated = new \DateTime($guest['updated']);
+        $updated = new \DateTime($guest['created']);
         if ($updated->diff($now)->days == 0) {
             $guest['waited'] = "Added today";
         } else if ($updated->diff($now)->days == 1) {
