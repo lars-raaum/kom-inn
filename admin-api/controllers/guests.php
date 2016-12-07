@@ -42,6 +42,19 @@ $app->get('/guests', function() use ($app) {
 
     error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
     $guests = $app['db']->fetchAll($sql, $args);
+
+    foreach ($guests as &$guest) {
+        $now     = new \DateTime();
+        $updated = new \DateTime($guest['updated']);
+        if ($updated->diff($now)->days == 0) {
+            $guest['waited'] = "Added today";
+        } else if ($updated->diff($now)->days == 1) {
+            $guest['waited'] = $updated->diff($now)->days . " day";
+        } else {
+            $guest['waited'] = $updated->diff($now)->days . " days";
+        }
+    }
+
     return $app->json($guests);
 });
 

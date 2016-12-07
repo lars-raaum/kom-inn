@@ -78,6 +78,17 @@ $app->get('/hosts', function(Request $request) use ($app) {
             return $a['distance'] > $b['distance'];
         });
     }
+    foreach ($hosts as &$host) {
+        $now     = new \DateTime();
+        $updated = new \DateTime($host['updated']);
+        if ($updated->diff($now)->days == 0) {
+            $host['waited'] = "Added today";
+        } else if ($updated->diff($now)->days == 1) {
+            $host['waited'] = $updated->diff($now)->days . " day";
+        } else {
+            $host['waited'] = $updated->diff($now)->days . " days";
+        }
+    }
 
     return $app->json($hosts);
 });

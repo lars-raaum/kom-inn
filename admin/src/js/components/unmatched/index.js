@@ -143,7 +143,7 @@ class Person extends React.Component {
             </div>
             <div className="freetext">{person.freetext || <i>No description</i>}</div>
             {this.renderDistance()}
-            <div className="updated">Updated {person.updated}</div>
+            <div className="updated">{person.waited}</div>
         </li>
     }
 }
