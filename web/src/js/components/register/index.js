@@ -22,6 +22,7 @@ export default class Register extends React.Component {
             children: this.form.children.value,
             adults_m: this.form.adults_male.value,
             adults_f: this.form.adults_female.value,
+            bringing: this.form.bringing.value,
             origin: this.form.origin.value,
             food_concerns: this.form.food_concerns ? this.form.food_concerns.value : null,
             address: this.form.address.value,
