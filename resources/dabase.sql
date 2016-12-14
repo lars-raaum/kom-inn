@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `people` (
   `children` tinyint(4) NOT NULL,
   `adults_m` tinyint(4) NOT NULL,
   `adults_f` tinyint(4) NOT NULL,
+  `bringing` text COLLATE utf8_bin,
   `origin` varchar(128) COLLATE utf8_bin NOT NULL,
   `zipcode` varchar(10) COLLATE utf8_bin NOT NULL,
   `address` varchar(256) COLLATE utf8_bin NOT NULL,

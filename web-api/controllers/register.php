@@ -26,6 +26,7 @@ $app->post('/register', function(Request $request) use ($app, $types) {
         'children'  => $r->get('children'),
         'adults_m'  => $r->get('adults_m'),
         'adults_f'  => $r->get('adults_f'),
+        'bringing'  => $r->get('bringing'),
         'origin'    => $r->get('origin'),
         'zipcode'   => $r->get('zipcode'),
         'address'   => $r->get('address'),

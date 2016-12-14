@@ -34,9 +34,11 @@ form {
     }
 
     textarea {
+        font-size: 14px;
         border: 1px solid #E1E1E1;
+        max-width: 600px;
         min-width: 300px;
-        min-height: 200px;
+        min-height: 50px;
     }
 
     button {

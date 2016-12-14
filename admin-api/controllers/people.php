@@ -57,6 +57,7 @@ $app->post('/person/{id}', function($id, Request $request) use ($app, $types) {
         'children'  => $r->get('children'),
         'adults_m'  => $r->get('adults_m'),
         'adults_f'  => $r->get('adults_f'),
+        'bringing'  => $r->get('bringing'),
         'origin'    => $r->get('origin'),
         'zipcode'   => $r->get('zipcode'),
         'address'   => $r->get('address'),
@@ -108,7 +109,8 @@ $app->delete('/person/{id}', function ($id) use ($app) {
         'email'     => '#DELETED#',
         'phone'     => '#DELETED#',
         'address'   => '#DELETED#',
-        'freetext'  => '',
+        'freetext'  => NULL,
+        'bringing'  => NULL,
         'status'    => -1
     ];
 
