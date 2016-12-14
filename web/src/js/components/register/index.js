@@ -40,7 +40,7 @@ export default class Register extends React.Component {
         return <div className="form-group">
             <div className="input-field col-1-1 no-height">
                 <label className="input-header" htmlFor="food_concerns">{this.context.translate('Er det noe mat du/dere ikke spiser')}?</label><br />
-                <input type="text" placeholder="Fyll inn" id="food_concerns" ref={(c) => this.form.food_concerns = c} required />
+                <input type="text" placeholder="Fyll inn" id="food_concerns" ref={(c) => this.form.food_concerns = c} />
             </div>
         </div>
     }
@@ -214,7 +214,7 @@ export default class Register extends React.Component {
                     <div className="form-group">
                         <div className="input-field col-1-1 no-height">
                             <label className="input-header" htmlFor="freetext">{translate('Er det noe annet vi trenger å vite om deg/dere')}?</label>
-                            <textarea id="freetext" ref={(c) => this.form.freetext = c} required></textarea>
+                            <textarea id="freetext" ref={(c) => this.form.freetext = c} ></textarea>
                         </div>
                     </div>
 
