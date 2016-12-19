@@ -20,24 +20,32 @@ class Sms {
 
     public function sendHostInform(array $match) {
         if (empty($this->client)) return;
-        return $this->client->messages->create(
-            $match['host']['phone'],
-            [
-                'from' => $this->from,
-                'body' => "Hei! En Kom inn-gjest er klar for en middagsinvitasjon fra deg! Mer informasjon på epost :)"
-            ]
-        );
+        try {
+            return $this->client->messages->create(
+                $match['host']['phone'],
+                [
+                    'from' => $this->from,
+                    'body' => "Hei! En Kom inn-gjest er klar for en middagsinvitasjon fra deg! Mer informasjon på epost :)"
+                ]
+            );
+        } catch (\Exception $e) {
+            error_log("Failed to send SMS: " . $e->getMessage());
+        }
     }
 
     public function sendAdminRegistrationNotice() {
         if (empty($this->client) || empty($this->admin)) return;
-        return $this->client->messages->create(
-            $this->admin,
-            [
-                'from' => $this->from,
-                'body' => "Ny gjest!\nHvor er det husly? Trenger hjerterom!\n - Kom-Inn"
-            ]
-        );
+        try {
+            return $this->client->messages->create(
+                $this->admin,
+                [
+                    'from' => $this->from,
+                    'body' => "Ny gjest!\nHvor er det husly? Trenger hjerterom!\n - Kom-Inn"
+                ]
+            );
+        } catch (\Exception $e) {
+            error_log("Failed to send SMS: " . $e->getMessage());
+        }
 
     }
 }
