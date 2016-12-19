@@ -83,7 +83,7 @@ export class Marker extends React.Component {
 
     handleEvent(evt) {
         return (e) => {
-            const evtName = `on${camelize(evt)}`
+            const evtName = camelize(`on-${evt}`);
             if (this.props[evtName]) {
                 this.props[evtName](this.props, this.marker, e);
             }
