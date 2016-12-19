@@ -134,7 +134,7 @@ $app->get('/people', function() use ($app) {
         $sql = "SELECT * FROM people WHERE status = ? ORDER BY updated DESC LIMIT {$offset}, $limit ";
     } else {
         $args = [];
-        $sql = "SELECT * FROM people ORDER BY updated DESC LIMIT {$offset}, $limit ";
+        $sql = "SELECT * FROM people WHERE status != -1 ORDER BY updated DESC LIMIT {$offset}, $limit ";
     }
     error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
     $people = $app['db']->fetchAll($sql, $args);
