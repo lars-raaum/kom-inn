@@ -121,12 +121,21 @@ $app->delete('/person/{id}', function ($id) use ($app) {
 
 $app->get('/people', function() use ($app) {
 
-    $status = (int) (isset($_GET['status']) ? $_GET['status'] : 1);
+    $status = false;
+    if (isset($_GET['status'])) {
+        $status = (int) $_GET['status'];
+    }
+
     $offset = (int) 0;
     $limit  = (int) 10;
 
-    $args = [$status];
-    $sql = "SELECT * FROM people WHERE status = ? ORDER BY updated DESC LIMIT {$offset}, $limit ";
+    if ($status !== false) {
+        $args = [$status];
+        $sql = "SELECT * FROM people WHERE status = ? ORDER BY updated DESC LIMIT {$offset}, $limit ";
+    } else {
+        $args = [];
+        $sql = "SELECT * FROM people ORDER BY updated DESC LIMIT {$offset}, $limit ";
+    }
     error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
     $people = $app['db']->fetchAll($sql, $args);
 

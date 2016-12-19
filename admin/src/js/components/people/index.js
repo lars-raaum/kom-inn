@@ -47,8 +47,9 @@ export default class People extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            people: [],
-            status: '1'
+            people: []
+            // ,
+            // status: '1'
         };
         this.fetchPeople = this.fetchPeople.bind(this);
     }
@@ -58,7 +59,7 @@ export default class People extends React.Component {
     }
 
     fetchPeople() {
-        return fetch(`/api/people?status=${this.state.status}`, {
+        return fetch(`/api/people`, { // ?status=${this.state.status}
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
