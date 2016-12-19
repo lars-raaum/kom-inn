@@ -88,7 +88,7 @@ class Emailing {
         $text .= "<p>Dersom du har noen spørsmål ta gjerne kontakt med oss eller se ".
         '<a href="http://www.kom-inn.org/">http://www.kom-inn.org/</a>' . " for litt mer informasjon!</p>\n".
         "<p>Takk igjen, lykke til og send oss gjerne et bilde hvis det føles naturlig - eller del det på Facebook-siden vår.</p>\n".
-        "<p>Med vennlig hilsen<br> Hell, Lars, Johan</p>";
+        "<p>Med vennlig hilsen<br> Helle, Lars, Johan</p>";
         return $text;
     }
 }
