@@ -9,6 +9,7 @@ class Emailing {
     protected $client;
     protected $domain;
     protected $admin;
+    protected $prefix;
 
     public function __construct() {
         $config = require_once RESOURCE_PATH . '/emails.php';
@@ -18,6 +19,7 @@ class Emailing {
         $this->domain = $config['domain'];
         $this->from   = $config['from'];
         $this->admin = isset($config['admin']) ? $config['admin'] : false;
+        $this->prefix = isset($config['prefix']) ? $config['prefix'] : '';
     }
 
     public function sendAdminRegistrationNotice() {
@@ -25,7 +27,7 @@ class Emailing {
         $this->client->sendMessage($this->domain, [
             'from'    => $this->from,
             'to'      => $this->admin,
-            'subject' => 'Kom inn: Ny gjest',
+            'subject' => $this->prefix . 'Kom inn: Ny gjest',
             'html'    => '<h1>Ny gjest</h1><p><a href="http://kom-inn.org/admin">Finn match</a></p>'
         ]);
     }
@@ -37,7 +39,7 @@ class Emailing {
             $this->client->sendMessage($this->domain, [
                 'from'    => $this->from,
                 'to'      => $to,
-                'subject' => 'Kom inn: Gjester venter på en invitasjon fra deg',
+                'subject' => $this->prefix . 'Kom inn: Gjester venter på en invitasjon fra deg',
                 'html'    => $this->buildText($match)
             ]);
         } catch (\Exception $e) {

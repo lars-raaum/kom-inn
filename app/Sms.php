@@ -9,6 +9,7 @@ class Sms {
     protected $client;
     protected $from;
     protected $admin;
+    protected $prefix;
 
     public function __construct() {
         $config = require_once RESOURCE_PATH . '/sms.php';
@@ -16,6 +17,7 @@ class Sms {
         $this->from = $config['phone'];
         $this->admin = isset($config['admin']) ? $config['admin'] : false;
         $this->client = new Client($config['sid'], $config['token']);
+        $this->prefix = isset($config['prefix']) ? $config['prefix'] : '';
     }
 
     public function sendHostInform(array $match) {
@@ -25,7 +27,7 @@ class Sms {
                 $match['host']['phone'],
                 [
                     'from' => $this->from,
-                    'body' => "Hei! En Kom inn-gjest er klar for en middagsinvitasjon fra deg! Mer informasjon på epost :)"
+                    'body' => $this->prefix . "Hei! En Kom inn-gjest er klar for en middagsinvitasjon fra deg! Mer informasjon på epost :)"
                 ]
             );
         } catch (\Exception $e) {
@@ -40,7 +42,7 @@ class Sms {
                 $this->admin,
                 [
                     'from' => $this->from,
-                    'body' => "Ny gjest!\nHvor er det husly? Trenger hjerterom!\n - Kom-Inn"
+                    'body' => $this->prefix . "Ny gjest!\nHvor er det husly? Trenger hjerterom!\n - Kom-Inn"
                 ]
             );
         } catch (\Exception $e) {
