@@ -1,7 +1,7 @@
 <?php
 
 $app->get('/importcsv/{name}', function($name) use ($app, $types) {
-    $counter = 0;
+    $counter = 0; $errors = [];
     $geo = new \app\Geo();
     $now = new \DateTime('now');
     $fn = realpath(__DIR__ . '/../../resources/') . '/' . $name . ".csv";
@@ -15,15 +15,15 @@ $app->get('/importcsv/{name}', function($name) use ($app, $types) {
             $data  = [
                 'status'    => $row[$headers['status']],
                 'name'      => $row[$headers['name']],
-                'gender'    => $row[$headers['gender']],
-                'age'       => $row[$headers['age']],
+                'gender'    => $row[$headers['gender']] ?: 'n/a',
+                'age'       => (int) $row[$headers['age']],
                 'children'  => $row[$headers['children']] ?: 0,
                 'adults_m'  => $row[$headers['adults_m']] ?: 0,
                 'adults_f'  => $row[$headers['adults_f']] ?: 0,
                 'address'   => $row[$headers['address']],
-                'zipcode'   => $row[$headers['zipcode']],
-                'origin'    => $row[$headers['origin']],
-                'phone'     => $row[$headers['phone']],
+                'zipcode'   => substr($row[$headers['zipcode']], 0, 10),
+                'origin'    => substr($row[$headers['origin']], 0, 128),
+                'phone'     => substr($row[$headers['phone']], 0, 16),
                 'email'     => $row[$headers['email']],
                 'freetext'  => $row[$headers['freetext']],
                 'bringing'  => $row[$headers['bringing']],
@@ -54,8 +54,12 @@ $app->get('/importcsv/{name}', function($name) use ($app, $types) {
                 die('FAILED');
             }
 
-
-            $result = $app['db']->insert('people', $data, $types);
+            try {
+                $result = $app['db']->insert('people', $data, $types);
+            } catch (Exception $e) {
+                $errors[] = $e->getMessage();
+                continue;
+            }
             if (!$result) {
               return $app->json(['result' => false]);
             }
@@ -78,6 +82,11 @@ $app->get('/importcsv/{name}', function($name) use ($app, $types) {
         }
         fclose($handle);
     }
-
-    return $app->json(['result' => true, 'imported' => $counter]);
+    $out = ['result' => true, 'imported' => $counter];
+    if ($errors) {
+        $out['result'] = false;
+        $out['fails'] = count($errors);
+        $out['errors'] = $errors;
+    }
+    return $app->json($out);
 });
