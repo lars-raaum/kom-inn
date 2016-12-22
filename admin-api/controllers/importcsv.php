@@ -6,24 +6,28 @@ $app->get('/importcsv/{name}', function($name) use ($app, $types) {
     $now = new \DateTime('now');
     $fn = realpath(__DIR__ . '/../../resources/') . '/' . $name . ".csv";
     if (($handle = fopen($fn, "r")) !== FALSE) {
-        while (($raw = fgetcsv($handle, 1000, ";")) !== FALSE) {
+        $raw = fgetcsv($handle, 0, ";");
+        if ($raw === false) die('failed to get headers');
+        $headers = array_map("utf8_encode", $raw);
+        $headers = array_flip($headers);
+        while (($raw = fgetcsv($handle, 0, ";")) !== FALSE) {
             $row = array_map("utf8_encode", $raw);
-            // print_r($row); continue;
             $data  = [
-                'status'    => $row[0],
-                'name'      => $row[2],
-                'gender'    => $row[3] == 'm' ? 'male' : 'female',
-                'age'       => $row[4],
-                'children'  => $row[5] ?: 0,
-                'adults_m'  => $row[6] ?: 0,
-                'adults_f'  => $row[7] ?: 0,
-                'address'   => $row[8],
-                'zipcode'   => $row[9],
-                'origin'    => $row[10],
-                'phone'     => $row[11],
-                'email'     => $row[12],
-                'freetext'  => $row[13],
-                'visits'    => $row[14] ?: 0,
+                'status'    => $row[$headers['status']],
+                'name'      => $row[$headers['name']],
+                'gender'    => $row[$headers['gender']],
+                'age'       => $row[$headers['age']],
+                'children'  => $row[$headers['children']] ?: 0,
+                'adults_m'  => $row[$headers['adults_m']] ?: 0,
+                'adults_f'  => $row[$headers['adults_f']] ?: 0,
+                'address'   => $row[$headers['address']],
+                'zipcode'   => $row[$headers['zipcode']],
+                'origin'    => $row[$headers['origin']],
+                'phone'     => $row[$headers['phone']],
+                'email'     => $row[$headers['email']],
+                'freetext'  => $row[$headers['freetext']],
+                'bringing'  => $row[$headers['bringing']],
+                'visits'    => $row[$headers['visits']] ?: 0,
                 'created'   => $now,
                 'updated'   => $now
             ];
@@ -32,8 +36,8 @@ $app->get('/importcsv/{name}', function($name) use ($app, $types) {
                 continue;
             }
 
-            if (!empty($row[16])) {
-                $data['created'] = new \DateTime($row[16]);
+            if (!empty($row[$headers['created']])) {
+                $data['created'] = new \DateTime($row[$headers['created']]);
             }
 
             try {
@@ -44,6 +48,12 @@ $app->get('/importcsv/{name}', function($name) use ($app, $types) {
 
             }
             // print_r($data); continue;
+            if ($data['status'] == "") {
+                print_r($data);
+                print_r($row);
+                die('FAILED');
+            }
+
 
             $result = $app['db']->insert('people', $data, $types);
             if (!$result) {
@@ -57,10 +67,10 @@ $app->get('/importcsv/{name}', function($name) use ($app, $types) {
                 'created' => $now
             ];
 
-            if ($row[1] == 'host') {
+            if ($row[$headers['type']] == 'host') {
                 $result = $app['db']->insert('hosts', $related_data, $types);
             } else {
-                $related_data['food_concerns'] = $row[15];
+                $related_data['food_concerns'] = $row[$headers['food_concerns']];
                 $result = $app['db']->insert('guests', $related_data, $types);
             }
 
