@@ -33,6 +33,9 @@ $app->post('/register', function(Request $request) use ($app, $types) {
         'freetext'  => $r->get('freetext'),
     ] + $defaults;
 
+    $data['adults_m'] += $data['gender'] == 'male' ? 1 : 0;
+    $data['adults_f'] += $data['gender'] == 'female' ? 1 : 0;
+
     $geo = new Geo();
     $coords = $geo->getCoords($data);
     $data['loc_long'] = $coords->getLongitude();
