@@ -27,7 +27,27 @@ module.exports = {
     'Er det noe mat du/dere ikke spiser': 'Is they any food you don\'t eat',
     'Adresse': 'Address',
     'Postnummer': 'Zip code',
+    'Hvem er du': "Who are you",
+    'Vil du heller invitere noen på middag,': 'Would you rather invite someone,',
+    'gå til skjema for vert.': 'go to the form for hosts.',
+    'Vil du heller bli invitert på middag,': 'Would you rather be invited,',
+    'gå til skjema for gjest.': 'go to the form for guests.',
+    'Jeg vil komme på middag!': 'I would like to be invited to a dinner!',
+    'Jeg vil invitere noen på middag!': 'I would like to invite someone over for dinner!',
+    'Vil du øve på å snakke norsk? Ideen bak Kom inn er at mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk.':
+        'Do you wish to practise speaking Norwegian? The concept behind Kom inn is to match people that speak norwegian with those who wish to practice and do so over dinner.',
+    'Vil du hjelpe noen å lære norsk? Ideen bak Kom inn er at mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk.':
+        'Do you wish to help someone learn Norwegian? The concept behind Kom inn is to match people that speak norwegian with those who wish to practice and do so over dinner.',
+    'Registrer deg nedenfor dersom du vil komme på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match ber vi verten ta kontakt for å avtale tidspunkt.':
+        'Register below if you wish to be invited to a Norwegian dinner. To find a match we need to know a little bit about you and where you live. When we find a match we, a host will contact you with an invitation.',
+    'Registrer deg nedenfor dersom du vil invitere noen på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match setter vi dere i kontakt for å avtale tidspunkt.':
+        'Register below if you wish to invite someone over for dinner. To find a match we need to know a little bit abouy you and where you live. Wehn we find a match we will ask you to contact the guest with an invitation.',
+    'Hvor mange blir med på middag i tillegg til deg': 'How many guests are you bringing with you in addition to yourself',
     'Kan du fortelle litt mer om deg selv': 'Can you tell us a bit more about yourself',
     'Er det noe annet vi trenger å vite om deg/dere': 'Is there anything else we should know about you',
     'Send inn': 'Submit',
+    'Hvem tar du med deg? Vertene vil gjerne vite hvem som kommer. Eksempelvis alder på barna.': 'Who are you bringing? The hosts like to know who is coming. For example, what is the age of your kids.',
+    'Hvordan kan vi kontakte deg': "How can we contact you",
+    'Hvor bor du': 'Where do you live',
+    'Annet': 'Anything else'
 }

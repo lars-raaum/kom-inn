@@ -105,34 +105,51 @@ export default class Register extends React.Component {
             return this.renderSuccess();
         }
 
-        let typeForm;
+        let typeForm, intro;
+
+        intro = (<div>
+            <h1>Kom inn</h1>
+            <p>{translate('Mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk')}.</p>
+            <p>{translate('Hvis du vil komme på middag, eller invitere noen på middag registrerer du deg nedenfor. Vi matcher dere basert på hvem dere er og hvor dere bor og setter dere i kontakt for å avtale tidspunkt.')}</p>
+            </div>
+        )
         if (this.props.params.type == 'gjest' || this.props.params.type == 'vert') {
             if (this.props.params.type == 'gjest') {
                 this.state.type = 'guest';
+                intro = (<div>
+                    <h1>{translate("Jeg vil komme på middag!")}</h1>
+                    <p>{translate("Vil du øve på å snakke norsk? Ideen bak Kom inn er at mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk.")}</p>
+                    <p>{translate("Registrer deg nedenfor dersom du vil komme på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match setter vi dere i kontakt for å avtale tidspunkt.")}</p>
+                    <p>{translate("Vil du heller invitere noen på middag,")} <a href="/som/vert">{translate("gå til skjema for vert.")}</a></p>
+                    </div>
+                )
             } else if (this.props.params.type == 'vert') {
                 this.state.type = 'host';
+                intro = ( <div>
+                    <h1>{translate("Jeg vil invitere noen på middag!")}</h1>
+                    <p>{translate("Vil du hjelpe noen å lære norsk? Ideen bak Kom inn er at mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk.")}</p>
+                    <p>{translate("Registrer deg nedenfor dersom du vil invitere noen på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match setter vi dere i kontakt for å avtale tidspunkt.")}</p>
+                    <p>{translate("Vil du heller bli invitert på middag,")} <a href="/som/gjest">{translate("gå til skjema for gjest.")}</a></p>
+                    </div>
+                )
             }
         } else {
             typeForm = (
                 <div>
-                <h2>{translate('Hva vil du')}</h2>
-                <div className="form-group">
-                    <div className="radio-field">
-                        <label htmlFor="type-guest"><input type="radio" name="type" id="type-guest" onChange={() => this.setState({type: 'guest' })} required /> {translate('Komme til noen på middagsbesøk')}</label> <br />
-                        <label htmlFor="type-host"><input type="radio" name="type" id="type-host" onChange={() => this.setState({type: 'host' })} required /> {translate('Invitere noen på middagsbesøk')}</label>
+                    <h2>{translate('Hva vil du')}</h2>
+                    <div className="form-group">
+                        <div className="radio-field">
+                            <label htmlFor="type-guest"><input type="radio" name="type" id="type-guest" onChange={() => this.setState({type: 'guest' })} required /> {translate('Komme til noen på middagsbesøk')}</label> <br />
+                            <label htmlFor="type-host"><input type="radio" name="type" id="type-host" onChange={() => this.setState({type: 'host' })} required /> {translate('Invitere noen på middagsbesøk')}</label>
+                        </div>
                     </div>
-                </div>
                 </div>
             )
         }
 
         return (
             <div className="main-page">
-                <h1>Kom inn</h1>
-                <p>{translate('Mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk')}.</p>
-                <p>{translate('Hvis du vil komme på middag, eller invitere noen på middag registrerer du deg nedenfor. Vi matcher dere basert på hvem dere er og hvor dere bor og setter dere i kontakt for å avtale tidspunkt.')}</p>
-
-
+                {intro}
                 <p>{translate('Du finner mer informasjon på')} <a href="http://www.kom-inn.org">www.kom-inn.org.</a></p>
                 <form onSubmit={this.submit}>
 
@@ -164,7 +181,7 @@ export default class Register extends React.Component {
                         </div>
                     </div>
 
-                    <h2>{translate('Hvor mange blir med på middag')}?</h2>
+                    <h2>{translate('Hvor mange blir med på middag i tillegg til deg')}?</h2>
                     <div className="form-group">
                         <div className="input-field col-1-3">
                             <label className="input-header" htmlFor="adults_female">{translate('Kvinner')}</label>
@@ -184,7 +201,7 @@ export default class Register extends React.Component {
 
                     <div className="form-group">
                         <div className="input-field col-1-1 no-height">
-                            <label className="input-header" htmlFor="bringing">{translate('Hvem tar du med deg? Vertene vil gjerne vite hvem som kommer. Eksempelvis alder på barna.')}?</label>
+                            <label className="input-header" htmlFor="bringing">{translate('Hvem tar du med deg? Vertene vil gjerne vite hvem som kommer. Eksempelvis alder på barna.')}</label>
                             <textarea id="bringing" ref={(c) => this.form.bringing = c}></textarea>
                         </div>
                     </div>
