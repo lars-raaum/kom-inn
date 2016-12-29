@@ -25,4 +25,19 @@ require_once __DIR__.'/../controllers/guests.php';
 require_once __DIR__.'/../controllers/people.php';
 require_once __DIR__.'/../controllers/importcsv.php';
 
+$app->error(function (\Exception $e, Request $request, $code) use ($app) {
+    switch ($code) {
+        case 404:
+            $message = 'The requested page could not be found.';
+            break;
+        default:
+            $code = 500;
+            $message = 'We are sorry, but something went terribly wrong.';
+            // $message = $e->getMessage();
+    }
+
+    return $app->json(compact('message', 'code'));
+});
+
 $app->run();
+
