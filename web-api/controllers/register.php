@@ -18,28 +18,30 @@ $app->post('/register', function(Request $request) use ($app, $types) {
         'created'   => new DateTime('now')
     ];
     $data = [
-        'email'     => $r->get('email'),
-        'name'      => $r->get('name'),
-        'phone'     => $r->get('phone'),
-        'gender'    => $r->get('gender'),
-        'age'       => $r->get('age'),
-        'children'  => $r->get('children'),
-        'adults_m'  => $r->get('adults_m'),
-        'adults_f'  => $r->get('adults_f'),
-        'bringing'  => $r->get('bringing'),
-        'origin'    => $r->get('origin'),
-        'zipcode'   => $r->get('zipcode'),
-        'address'   => $r->get('address'),
-        'freetext'  => $r->get('freetext'),
+        'email'     => $r->get('email') ?: 'N/A',
+        'name'      => $r->get('name') ?: 'N/A',
+        'phone'     => $r->get('phone') ?: 'N/A',
+        'gender'    => $r->get('gender') ?: 'n/a',
+        'age'       => $r->get('age') ?: 0,
+        'children'  => $r->get('children') ?: 0,
+        'adults_m'  => $r->get('adults_m') ?: 0,
+        'adults_f'  => $r->get('adults_f') ?: 0,
+        'bringing'  => $r->get('bringing') ?: null,
+        'origin'    => $r->get('origin') ?: '',
+        'zipcode'   => $r->get('zipcode') ?: '',
+        'address'   => $r->get('address') ?: '',
+        'freetext'  => $r->get('freetext') ?: null,
     ] + $defaults;
 
     $data['adults_m'] += $data['gender'] == 'male' ? 1 : 0;
     $data['adults_f'] += $data['gender'] == 'female' ? 1 : 0;
 
-    $geo = new Geo();
-    $coords = $geo->getCoords($data);
-    $data['loc_long'] = $coords->getLongitude();
-    $data['loc_lat'] = $coords->getLatitude();
+    if ($data['address']) {
+        $geo = new Geo();
+        $coords = $geo->getCoords($data);
+        $data['loc_long'] = $coords->getLongitude();
+        $data['loc_lat'] = $coords->getLatitude();
+    }
 
     // validation
 
