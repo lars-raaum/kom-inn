@@ -6,7 +6,7 @@
     - apache.yaml
   tasks:
   - name: Deploy
-    git: repo=https://github.com/lars-raaum/kom-inn dest=/services/kom-inn force=True version=0.1.8
+    git: repo=https://github.com/lars-raaum/kom-inn dest=/services/kom-inn force=True version=0.1.9
   - name: install web api php dependencies
     shell: composer install
     args:
