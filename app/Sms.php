@@ -27,7 +27,7 @@ class Sms {
                 $match['host']['phone'],
                 [
                     'from' => $this->from,
-                    'body' => $this->prefix . "Hei! En Kom inn-gjest er klar for en middagsinvitasjon fra deg! Mer informasjon på epost :)"
+                    'body' => $this->prefix . "Hei! En Kom inn-gjest er klar for en middagsinvitasjon fra deg! Du vil snart motta mer informasjon på epost :)"
                 ]
             );
         } catch (\Exception $e) {
