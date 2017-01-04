@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
-import 'es6-promise';
 import 'isomorphic-fetch';
 
 import App from 'components/app';
