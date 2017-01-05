@@ -114,25 +114,29 @@ export default class Register extends React.Component {
             </div>
         )
         if (this.props.params.type == 'gjest' || this.props.params.type == 'vert') {
-            if (this.props.params.type == 'gjest') {
-                this.state.type = 'guest';
-                intro = (<div>
-                    <h1>{translate("Jeg vil komme på middag!")}</h1>
-                    <p>{translate("Vil du øve på å snakke norsk? Ideen bak Kom inn er at mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk.")}</p>
-                    <p>{translate("Registrer deg nedenfor dersom du vil komme på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match setter vi dere i kontakt for å avtale tidspunkt.")}</p>
-                    <p>{translate("Vil du heller invitere noen på middag,")} <a href="/som/vert">{translate("gå til skjema for vert.")}</a></p>
-                    </div>
-                )
-            } else if (this.props.params.type == 'vert') {
-                this.state.type = 'host';
-                intro = ( <div>
-                    <h1>{translate("Jeg vil invitere noen på middag!")}</h1>
-                    <p>{translate("Vil du hjelpe noen å lære norsk? Ideen bak Kom inn er at mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk.")}</p>
-                    <p>{translate("Registrer deg nedenfor dersom du vil invitere noen på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match setter vi dere i kontakt for å avtale tidspunkt.")}</p>
-                    <p>{translate("Vil du heller bli invitert på middag,")} <a href="/som/gjest">{translate("gå til skjema for gjest.")}</a></p>
-                    </div>
-                )
-            }
+            // Good, lets proceed
+        } else {
+            // No preselected, assume guest as per #24
+            this.props.params.type = 'gjest';
+        }
+        if (this.props.params.type == 'gjest') {
+            this.state.type = 'guest';
+            intro = (<div>
+                <h1>{translate("Jeg vil komme på middag!")}</h1>
+                <p>{translate("Vil du øve på å snakke norsk? Ideen bak Kom inn er at mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk.")}</p>
+                <p>{translate("Registrer deg nedenfor dersom du vil komme på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match setter vi dere i kontakt for å avtale tidspunkt.")}</p>
+                <p>{translate("Vil du heller invitere noen på middag,")} <a href="/som/vert">{translate("gå til skjema for vert.")}</a></p>
+                </div>
+            )
+        } else if (this.props.params.type == 'vert') {
+            this.state.type = 'host';
+            intro = ( <div>
+                <h1>{translate("Jeg vil invitere noen på middag!")}</h1>
+                <p>{translate("Vil du hjelpe noen å lære norsk? Ideen bak Kom inn er at mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk.")}</p>
+                <p>{translate("Registrer deg nedenfor dersom du vil invitere noen på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match setter vi dere i kontakt for å avtale tidspunkt.")}</p>
+                <p>{translate("Vil du heller bli invitert på middag,")} <a href="/som/gjest">{translate("gå til skjema for gjest.")}</a></p>
+                </div>
+            )
         } else {
             typeForm = (
                 <div>
