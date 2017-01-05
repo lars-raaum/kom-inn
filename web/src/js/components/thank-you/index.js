@@ -6,7 +6,6 @@ export default class ThankYou extends React.Component {
         return (
             <div>
                 <h1>Takk {name}</h1>
-                <p>Vi har sendt deg en bekreftelse på epost.</p>
                 <h3>Hva skjer nå?</h3>
                 <p>Vi vil prøve å finne noen du kan invitere på middag så fort så mulig.
                 Når vi har funnet passende gjester - hører du fra oss!</p>
@@ -29,7 +28,6 @@ export default class ThankYou extends React.Component {
         return (
             <div>
                 <h1>Takk {name}</h1>
-                <p>Vi har sendt deg en bekreftelse på epost.</p>
                 <h3>Hva skjer nå?</h3>
                 <p>Vi vil prøve å finne noen som kan invitere deg på middag så snart
                 som mulig. Av og til tar det noen dager, andre ganger tar det lenger
@@ -54,7 +52,6 @@ export default class ThankYou extends React.Component {
         return (
             <div>
                 <h1>Takk {name}</h1>
-                <p>Vi har sendt deg en bekreftelse på epost.</p>
                 <h3>Har du spørsmål?</h3>
                 <p>Les mer på <a href="http://www.kom-inn.org/#hjem">kom-inn.org</a> eller send en epost til <a href="mailto:kominnoslo@gmail.com">kominnoslo@gmail.com</a>.</p>
                 <p>Ha en fortsatt fin dag!</p>
