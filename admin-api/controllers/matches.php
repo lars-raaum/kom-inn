@@ -165,7 +165,7 @@ $app->get('/matches', function(Request $request) use ($app) {
     $args = [(int) $status];
 
     // TODO join requests
-    $sql = "SELECT * FROM matches WHERE status = ?";
+    $sql = "SELECT * FROM matches WHERE status = ? ORDER BY id DESC";
     error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
     $matches = $app['db']->fetchAll($sql, $args);
 
