@@ -165,10 +165,10 @@ class Hosts extends React.Component {
                 </select>
             </label>
             <label>
-                <input type="checkbox" onChange={e => this.props.setFilter('male', e.target.checked)} /> Male
+                <input type="checkbox" onChange={e => this.props.setFilter('men', e.target.checked)} /> Male
             </label>
             <label>
-                <input type="checkbox" onChange={e => this.props.setFilter('female', e.target.checked)} /> Female
+                <input type="checkbox" onChange={e => this.props.setFilter('women', e.target.checked)} /> Female
             </label>
             <label>
                 <input type="checkbox" onChange={e => this.props.setFilter('children', e.target.checked)} /> Children
