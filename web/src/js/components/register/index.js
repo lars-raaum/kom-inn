@@ -205,7 +205,7 @@ export default class Register extends React.Component {
 
                     <div className="form-group">
                         <div className="input-field col-1-1 no-height">
-                            <label className="input-header" htmlFor="bringing">{translate('Hvem tar du med deg? Vertene vil gjerne vite hvem som kommer. Eksempelvis alder på barna.')}</label>
+                            <label className="input-header" htmlFor="bringing">{translate('Hvem tar du med deg? Vet vi mer er sjansen for at vi finner en god match større. Eksempelvis alder på barna.')}</label>
                             <textarea id="bringing" ref={(c) => this.form.bringing = c}></textarea>
                         </div>
                     </div>

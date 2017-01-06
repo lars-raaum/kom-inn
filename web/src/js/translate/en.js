@@ -46,8 +46,8 @@ module.exports = {
     'Kan du fortelle litt mer om deg selv': 'Can you tell us a bit more about yourself',
     'Er det noe annet vi trenger å vite om deg/dere': 'Is there anything else we should know about you',
     'Send inn': 'Submit',
-    'Hvem tar du med deg? Vertene vil gjerne vite hvem som kommer. Eksempelvis alder på barna.': 'Who are you bringing? The hosts like to know who is coming. For example, what is the age of your kids.',
     'Hvordan kan vi kontakte deg': "How can we contact you",
     'Hvor bor du': 'Where do you live',
-    'Annet': 'Anything else'
+    'Annet': 'Anything else',
+    'Hvem tar du med deg? Vet vi mer er sjansen for at vi finner en god match større. Eksempelvis alder på barna.': 'Who are you bringing? The more we know, the better chance for a good match. For example, what is the age of your kids.'
 }
