@@ -3,6 +3,7 @@
   - dev
   - pro
   become: yes
+  tasks:
   - name: install packages
     apt: name={{ item }} update_cache=yes state=latest
     with_items:
@@ -17,7 +18,7 @@
     shell: chmod --recursive 755 /etc/letsencrypt
     notify: restart apache
   - name: setup cronjob for letsencrypt renewal
-    cron: name="update certificates" minute="4" hour="0" user="www-data" job="letsencrypt renew > /var/log/letsencrypt-renewal.log"
+    cron: name="update certificates" minute="4" hour="0" user="root" job="letsencrypt renew > /var/log/letsencrypt-renewal.log && systemctl reload apache2"
   handlers:
   - name: restart apache
     service: name=apache2 state=restarted
