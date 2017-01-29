@@ -55,6 +55,7 @@ export default class People extends React.Component {
         this.fetchPeople = this.fetchPeople.bind(this);
         this.nextPage = this.nextPage.bind(this);
         this.prevPage = this.prevPage.bind(this);
+        this.gotoPage = this.gotoPage.bind(this);
     }
 
     componentDidMount() {
@@ -97,7 +98,15 @@ export default class People extends React.Component {
         this.fetchPeople();
     }
 
+    gotoPage(e) {
+        e.preventDefault();
+        this.state.meta.page = e.target.getAttribute("data-page");
+        this.fetchPeople();
+    }
+
     render() {
+        var N = Math.ceil(this.state.meta.total / this.state.meta.limit);
+        var pages = Array.apply(null, {length: N}).map(Number.call, Number); // + 1
         return <div>
             <div className="people">
                 <h1> People are strange </h1>
@@ -110,11 +119,10 @@ export default class People extends React.Component {
             <div  className="pagination">
                 <ul>
                     <li><button name="prev" onClick={this.prevPage}>Previous</button></li>
-                    <li><button disabled name="page-1"> 1 </button></li>
-                    <li><button name="page-2"> 2 </button></li>
-                    <li><button name="page-3"> 3 </button></li>
-                    <li><button name="page-4"> 4 </button></li>
-                    <li><button name="page-5"> 5 </button></li>
+                    {pages.map((p) => {
+                         p = p + 1;
+                        return <li key={p}><button data-page={p} onClick={this.gotoPage}> {p} </button></li>
+                    })}
                     <li><button name="next" onClick={this.nextPage}>Next</button> </li>
                 </ul>
                 <p>Showing {this.state.meta.count} of {this.state.meta.total}, page {this.state.meta.page}</p>
