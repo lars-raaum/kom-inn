@@ -121,24 +121,44 @@ $app->delete('/person/{id}', function ($id) use ($app) {
 
 $app->get('/people', function() use ($app) {
 
+    $offset = (int) 0;
+    $limit  = (int) 10;
     $status = false;
     if (isset($_GET['status'])) {
         $status = (int) $_GET['status'];
     }
+    if (isset($_GET['limit'])) {
+        $limit = (int) $_GET['limit'];
+    }
+    if (isset($_GET['page'])) {
+        $page = (int) $_GET['page'];
+        $offset = $page * $limit - $limit;
+    }
 
-    $offset = (int) 0;
-    $limit  = (int) 10;
 
     if ($status !== false) {
         $args = [$status];
-        $sql = "SELECT * FROM people WHERE status = ? ORDER BY updated DESC LIMIT {$offset}, $limit ";
+        $sql = "SELECT * FROM people WHERE status = ? ORDER BY updated DESC LIMIT {$offset}, {$limit} ";
     } else {
         $args = [];
-        $sql = "SELECT * FROM people WHERE status != -1 ORDER BY updated DESC LIMIT {$offset}, $limit ";
+        $sql = "SELECT * FROM people WHERE status != -1 ORDER BY updated DESC LIMIT {$offset}, {$limit} ";
     }
     error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
     $people = $app['db']->fetchAll($sql, $args);
 
-    return $app->json($people);
+    if ($status !== false) {
+        $args = [$status];
+        $sql = "SELECT COUNT(1) FROM people WHERE status = ?";
+    } else {
+        $args = [];
+        $sql = "SELECT COUNT(1) FROM people WHERE status != -1";
+    }
+    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
+    $total = $app['db']->fetchColumn($sql, $args, 0);
+
+    $count = count($total);
+
+    // ($data = null, $status = 200, $headers = array(), $json = false)
+    return $app->json($people, 200, ['X-Limit' => $limit, 'X-Offset' => $offset, 'X-Total' => $total, 'X-Page' => $page, 'X-Count' => $count]);
 });
 
