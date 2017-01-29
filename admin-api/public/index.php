@@ -35,7 +35,7 @@ $app->error(function (\Exception $e, Request $request, $code) use ($app) {
             $message = 'We are sorry, but something went terribly wrong.';
             // $message = $e->getMessage();
     }
-
+    error_log($e->getMessage());
     return $app->json(compact('message', 'code'));
 });
 
