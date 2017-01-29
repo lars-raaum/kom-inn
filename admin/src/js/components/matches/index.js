@@ -42,7 +42,7 @@ class Match extends React.Component {
         super()
 
         this.removePerson = this.removePerson.bind(this);
-        this.hostNag = this.hostNag.bind(this);
+        this.nagHost = this.nagHost.bind(this);
     }
 
     cancelMatch(e) {
