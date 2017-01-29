@@ -15,6 +15,7 @@ $app->before(function (Request $request) {
 });
 require_once __DIR__.'/../../resources/configuration.php';
 require_once __DIR__.'/../controllers/register.php';
+require_once __DIR__.'/../controllers/feedback.php';
 
 $app->error(function (\Exception $e, Request $request, $code) use ($app) {
     switch ($code) {

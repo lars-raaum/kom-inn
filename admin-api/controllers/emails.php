@@ -16,9 +16,13 @@ $app->post('/match/{id}/email/{type}', function($id, $type, Request $request) us
     $sql = "SELECT people.*, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
     $match['guest'] = $app['db']->fetchAssoc($sql, [(int) $match['guest_id']]);
 
+    $sender = new Emailing();
     switch ($type) {
+        case 'host_nag':
+            $result = $sender->sendNaggingMail($match);
+            break;
         case 'host_inform':
-            $result = Emailing::sendHostInform($match);
+            $result = $sender->sendHostInform($match);
             break;
         default:
             error_log("Email type [$type] not supported");

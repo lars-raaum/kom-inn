@@ -13,13 +13,20 @@ class Emailing {
 
     public function __construct() {
         $config = require_once RESOURCE_PATH . '/emails.php';
+
+        $this->admin  = isset($config['admin']) ? $config['admin'] : false;
+        $this->prefix = isset($config['prefix']) ? $config['prefix'] : '';
+        $this->salt   = isset($config['salt']) ? $config['salt'] : 'kioslo';
+
         if (empty($config)) return;
 
         $this->client = new Mailgun($config['key']);
         $this->domain = $config['domain'];
         $this->from   = $config['from'];
-        $this->admin = isset($config['admin']) ? $config['admin'] : false;
-        $this->prefix = isset($config['prefix']) ? $config['prefix'] : '';
+    }
+
+    public function createHashCode($email) {
+        return sha1($this->salt . $email);
     }
 
     public function sendAdminRegistrationNotice() {
@@ -32,6 +39,22 @@ class Emailing {
         ]);
     }
 
+    public function sendNaggingMail(array $match) {
+        if (empty($this->client)) return;
+        $to = $match['host']['email'];
+        try {
+            $this->client->sendMessage($this->domain, [
+                'from'    => $this->from,
+                'to'      => $to,
+                'subject' => $this->prefix . 'Kom inn: oppfølgning - hvordan gikk det?',
+                'html'    => $this->buildFeedbackRequestText($match)
+            ]);
+        } catch (\Exception $e) {
+            error_log("Failed to mail : " . $e->getMessage());
+            return false;
+        }
+    }
+
     public function sendHostInform(array $match) {
         if (empty($this->client)) return;
         $to = $match['host']['email'];
@@ -40,7 +63,7 @@ class Emailing {
                 'from'    => $this->from,
                 'to'      => $to,
                 'subject' => $this->prefix . 'Kom inn: Gjester venter på en invitasjon fra deg',
-                'html'    => $this->buildText($match)
+                'html'    => $this->buildHostInformText($match)
             ]);
         } catch (\Exception $e) {
             error_log("Failed to mail : " . $e->getMessage());
@@ -48,7 +71,7 @@ class Emailing {
         }
     }
 
-    protected function buildText(array $match) {
+    protected function buildHostInformText(array $match) {
         $name       = $match['host']['name'];
         $guestname  = $match['guest']['name'];
         $age        = $match['guest']['age'];
@@ -93,4 +116,26 @@ class Emailing {
         "<p>Med vennlig hilsen<br> Helle, Lars, Johan</p>";
         return $text;
     }
+
+    protected function buildFeedbackRequestText($match) {
+        $id   = $match['id'];
+        $code = $this->createHashCode($match['host']['email']);
+        $base = 'http://localhost:8000';
+        $url  = "{$base}/feedback/{$id}/{$code}";
+        $yes  = $url . '/yes';
+        $no   = $url . '/no';
+
+        $text = "<h1>Hei igjen!</h1>";
+        $text .= "<p>Takk for at du meldte deg på Kom Inn!</p>";
+        $text .= "<p>Det er nå en liten stund siden du fikk tildelt din middagsgjest.</p>";
+        $text .= "<p>Vi håper at matchen var vellykket!</p>";
+        $text .= "<p>Vi vil gjerne vite om dere har gjennomført middagen - eller laget en helt konkret avtale med gjesten. </p>";
+        $text .= "<p><a href={$yes}>Trykk her</a> – hvis dere har gjennomført middagen eller laget en helt konkret avtale</p>";
+        $text .= "<p><a href={$no}>Trykk her</a> – hvis dere av ulike årsaker ikke kommer til å gjennomføre middagen allikevel.</p>";
+        $text .= "<p>Er det noe mer du vil fortelle? Har du spørsmål, tilbakemeldinger –  eller kanskje et bilde fra middagen? Send oss gjerne en mail på kominnoslo@gmail.com</p>";
+        $text .= "<p>Med vennlig hilsen oss i Kom Inn:)</p>";
+
+        return $text;
+    }
+
 }
