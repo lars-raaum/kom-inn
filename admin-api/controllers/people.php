@@ -133,6 +133,8 @@ $app->get('/people', function() use ($app) {
     if (isset($_GET['page'])) {
         $page = (int) $_GET['page'];
         $offset = $page * $limit - $limit;
+    } else {
+        $page = 1;
     }
 
 
