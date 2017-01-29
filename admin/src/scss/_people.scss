@@ -42,3 +42,16 @@
         }
     }
 }
+.pagination {
+    text-align:center;
+    width: 100%;
+    ul {
+        li {
+            display: inline;
+            padding-right: 1em;
+            button {
+                padding: 3px 0.5em;
+            }
+        }
+    }
+}

@@ -47,11 +47,14 @@ export default class People extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            people: []
+            people: [],
+            page: 1,
+            limit: 10
             // ,
             // status: '1'
         };
         this.fetchPeople = this.fetchPeople.bind(this);
+        this.nextPage = this.nextPage.bind(this);
     }
 
     componentDidMount() {
@@ -59,7 +62,7 @@ export default class People extends React.Component {
     }
 
     fetchPeople() {
-        return fetch(`/api/people`, { // ?status=${this.state.status}
+        return fetch(`/api/people?page=${this.state.page}`, { // ?status=${this.state.status}
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
@@ -69,14 +72,33 @@ export default class People extends React.Component {
         });
     }
 
+    nextPage(e) {
+        e.preventDefault();
+        this.state.page++;
+        this.fetchPeople();
+    }
+
     render() {
-        return <div className="people">
-            <h1> People are strange </h1>
-            <ul>
-                {this.state.people.map(person => {
-                    return <Person key={person.id} person={person} fetchPeople={this.fetchPeople} />
-                })}
-            </ul>
+        return <div>
+            <div className="people">
+                <h1> People are strange </h1>
+                <ul>
+                    {this.state.people.map(person => {
+                        return <Person key={person.id} person={person} fetchPeople={this.fetchPeople} />
+                    })}
+                </ul>
+            </div>
+            <div  className="pagination">
+                <ul>
+                    <li><button disabled name="prev">Previous</button></li>
+                    <li><button disabled name="page-1"> 1 </button></li>
+                    <li><button name="page-2"> 2 </button></li>
+                    <li><button name="page-3"> 3 </button></li>
+                    <li><button name="page-4"> 4 </button></li>
+                    <li><button name="next" onClick={this.nextPage}>Next</button> </li>
+                </ul>
+            </div>
         </div>
+
     }
 }
