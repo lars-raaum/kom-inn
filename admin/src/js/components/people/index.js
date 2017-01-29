@@ -48,13 +48,13 @@ export default class People extends React.Component {
         super(props);
         this.state = {
             people: [],
-            page: 1,
-            limit: 10
+            meta: {page: 1, limit: 10}
             // ,
             // status: '1'
         };
         this.fetchPeople = this.fetchPeople.bind(this);
         this.nextPage = this.nextPage.bind(this);
+        this.prevPage = this.prevPage.bind(this);
     }
 
     componentDidMount() {
@@ -62,19 +62,38 @@ export default class People extends React.Component {
     }
 
     fetchPeople() {
-        return fetch(`/api/people?page=${this.state.page}`, { // ?status=${this.state.status}
+        return fetch(`/api/people?page=${this.state.meta.page}`, { // ?status=${this.state.status}
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(res => res.json()).then(people => {
+        }).then(res => {
+            var meta = {
+                count: res.headers.get('X-Count'),
+                page: res.headers.get('X-Page'),
+                offset: res.headers.get('X-Offset'),
+                total: res.headers.get('X-Total'),
+                limit: res.headers.get('X-Limit')
+            };
+            this.setState({meta});
+            return res.json();
+        }).then(people => { // brab meta data from Headers
             this.setState({ people })
         });
     }
 
     nextPage(e) {
         e.preventDefault();
-        this.state.page++;
+        var max = Math.ceil(this.state.meta.total / this.state.meta.limit);
+        if (this.state.meta.page < max)
+            this.state.meta.page++;
+        this.fetchPeople();
+    }
+
+    prevPage(e) {
+        e.preventDefault();
+        if (this.state.meta.page > 1)
+            this.state.meta.page--;
         this.fetchPeople();
     }
 
@@ -90,13 +109,15 @@ export default class People extends React.Component {
             </div>
             <div  className="pagination">
                 <ul>
-                    <li><button disabled name="prev">Previous</button></li>
+                    <li><button name="prev" onClick={this.prevPage}>Previous</button></li>
                     <li><button disabled name="page-1"> 1 </button></li>
                     <li><button name="page-2"> 2 </button></li>
                     <li><button name="page-3"> 3 </button></li>
                     <li><button name="page-4"> 4 </button></li>
+                    <li><button name="page-5"> 5 </button></li>
                     <li><button name="next" onClick={this.nextPage}>Next</button> </li>
                 </ul>
+                <p>Showing {this.state.meta.count} of {this.state.meta.total}, page {this.state.meta.page}</p>
             </div>
         </div>
 
