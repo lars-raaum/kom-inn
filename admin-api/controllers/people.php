@@ -158,7 +158,7 @@ $app->get('/people', function() use ($app) {
     error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
     $total = $app['db']->fetchColumn($sql, $args, 0);
 
-    $count = count($total);
+    $count = count($people);
 
     // ($data = null, $status = 200, $headers = array(), $json = false)
     return $app->json($people, 200, ['X-Limit' => $limit, 'X-Offset' => $offset, 'X-Total' => $total, 'X-Page' => $page, 'X-Count' => $count]);
