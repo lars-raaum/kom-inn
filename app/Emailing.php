@@ -3,6 +3,7 @@
 namespace app;
 
 use Mailgun\Mailgun;
+use app\Environment;
 
 class Emailing {
 
@@ -53,6 +54,7 @@ class Emailing {
             error_log("Failed to mail : " . $e->getMessage());
             return false;
         }
+        return true;
     }
 
     public function sendHostInform(array $match) {
@@ -69,6 +71,7 @@ class Emailing {
             error_log("Failed to mail : " . $e->getMessage());
             return false;
         }
+        return true;
     }
 
     protected function buildHostInformText(array $match) {
@@ -120,7 +123,7 @@ class Emailing {
     protected function buildFeedbackRequestText($match) {
         $id   = $match['id'];
         $code = $this->createHashCode($match['host']['email']);
-        $base = 'http://localhost:8000';
+        $base = Environment::get('base_url');
         $url  = "{$base}/feedback/{$id}/{$code}";
         $yes  = $url . '/yes';
         $no   = $url . '/no';
