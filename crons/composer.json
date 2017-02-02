@@ -1,0 +1,13 @@
+{
+    "require": {
+        "silex/silex": "~2.0",
+        "Doctrine/DBAL": "^2.5",
+        "mailgun/mailgun-php": "@stable",
+        "php-http/curl-client": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "app\\": "app/"
+        }
+    }
+}

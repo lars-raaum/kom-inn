@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../admin-api/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 $options = app\Cli::get_console_commands();
 if ($options['help']) {
