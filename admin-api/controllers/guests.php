@@ -12,7 +12,6 @@ $app->get('/guest/{id}', function ($id) use ($app) {
     if (!$guest) {
         return $app->json(null, 404);
     }
-    $guest = Environment::get('base_url');
     return $app->json($guest);
 });
 
