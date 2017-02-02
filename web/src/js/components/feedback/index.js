@@ -7,13 +7,15 @@ export default class Feedback extends React.Component {
         this.reactivate = this.reactivate.bind(this);
     }
 
-    reactivate(e) {
-        e.preventDefault();
+    componentDidMount() {
+        this.sendFeedback();
+    }
 
+    sendFeedback() {
         var data = {
-            id: this.props.params['id'],
-            code: this.props.params['code'],
-            status: this.props.params['completed'] == 'yes' ? 2 : -1
+            id: this.props.params.id,
+            code: this.props.params.code,
+            status: this.props.params.completed == 'yes' ? 2 : -1
         };
 
         // @TODO this should be done on page view, but only once!
@@ -29,11 +31,17 @@ export default class Feedback extends React.Component {
             console.error(err);
             this.setState({ error: err.message ? err.message : err });
         });
+    }
+
+    reactivate(e) {
+        e.preventDefault();
 
         // @TODO how to get person id of host
-
         // Actual action of this page
-        var data = {id: this.props.params['id'], code: this.props.params['code']};
+        var data = {
+            id: this.props.params.id,
+            code: this.props.params.code
+        };
         fetch('/api/reactivate', {
             method: 'POST',
             headers: {
@@ -41,7 +49,7 @@ export default class Feedback extends React.Component {
             },
             body: JSON.stringify(data)
         }).then(response => {
-            console.log(response);
+            window.location.href = '/takk/vert';
         }).catch(err => {
             console.error(err);
             this.setState({ error: err.message ? err.message : err });
