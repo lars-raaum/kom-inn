@@ -104,7 +104,7 @@ export default class People extends React.Component {
     nextPage(e) {
         e.preventDefault();
         const max = Math.ceil(this.state.meta.total / this.state.meta.limit);
-        const page = this.state.meta.page;
+        let page = this.state.meta.page;
 
         if (page < max) {
             page++;
@@ -115,7 +115,7 @@ export default class People extends React.Component {
 
     prevPage(e) {
         e.preventDefault();
-        const page = this.state.meta.page;
+        let page = this.state.meta.page;
 
         if (page > 1) {
             page--;
