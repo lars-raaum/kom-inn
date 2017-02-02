@@ -13,9 +13,6 @@ $app->post('/match/{id}/email/{type}', function($id, $type, Request $request) us
     $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
     $match['host'] = $app['db']->fetchAssoc($sql, [(int) $match['host_id']]);
 
-    $sql = "SELECT people.*, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
-    $match['guest'] = $app['db']->fetchAssoc($sql, [(int) $match['guest_id']]);
-
     $sender = new Emailing();
     switch ($type) {
         case 'host_nag':
