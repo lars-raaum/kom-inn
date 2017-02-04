@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\models\People;
+use DateTime;
 
 class Hosts implements \Pimple\ServiceProviderInterface
 {
@@ -137,8 +138,8 @@ class Hosts implements \Pimple\ServiceProviderInterface
             });
         }
         foreach ($hosts as &$host) {
-            $now     = new \DateTime();
-            $updated = new \DateTime($host['created']);
+            $now     = new DateTime();
+            $updated = new DateTime($host['created']);
             if ($updated->diff($now)->days == 0) {
                 $host['waited'] = "Added today";
             } else if ($updated->diff($now)->days == 1) {

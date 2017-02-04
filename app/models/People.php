@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use DateTime;
+
 class People implements \Pimple\ServiceProviderInterface
 {
     const STATUS_DELETED = -1;
@@ -129,7 +131,7 @@ class People implements \Pimple\ServiceProviderInterface
         }
 
         $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
-        $data['updated'] = new \DateTime('now');
+        $data['updated'] = new DateTime('now');
 
         error_log("Update person {$id} - by [{$this->app['PHP_AUTH_USER']}]");
         $result = $this->app['db']->update('people', $data, ['id' => $id], $types);
@@ -158,8 +160,10 @@ class People implements \Pimple\ServiceProviderInterface
             'address'   => '#DELETED#',
             'freetext'  => NULL,
             'bringing'  => NULL,
-            'status'    => People::STATUS_DELETED
+            'status'    => People::STATUS_DELETED,
+            'updated'   => new DateTime('now')
         ];
+        $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
 
         error_log("DELETING DATA for Person[{$id}] by [{$this->app['PHP_AUTH_USER']}]");
         $result = $this->app['db']->update('people', $data, ['id' => (int) $id]);
