@@ -2,29 +2,19 @@
 
 use Symfony\Component\HttpFoundation\Request;
 
+$app->get('/match/{id}', function ($id) use ($app) {
+    $match = $app['matches']->get((int) $id);
+    if (!$match) return $app->json(null, 404, ['X-Error-Message' => "Match $id not found!"]);
+    return $app->json($match);
+});
 
-function getMatch($id, $app) {
+$app->get('/matches', function(Request $request) use ($app) {
+    $status = isset($_GET['status']) ? (int) $_GET['status'] : 0;
 
-    $args = [(int) $id];
-    $sql = "SELECT * FROM matches WHERE id = ?";
-    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
-    $match = $app['db']->fetchAssoc($sql, $args);
-    if (!$match) {
-        return false;
-    }
-
-    $args = [(int) $match['host_id']];
-    $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
-    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
-    $match['host'] = $app['db']->fetchAssoc($sql, $args);
-
-    $args = [(int) $match['guest_id']];
-    $sql = "SELECT people.*, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
-    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
-    $match['guest'] = $app['db']->fetchAssoc($sql, $args);
-
-    return $match;
-}
+    // @TODO add pagination
+    $matches = $app['matches']->find($status);
+    return $app->json($matches);
+});
 
 $app->post('/match', function(Request $request) use ($app, $types, $dtt) {
     $r = $request->request;
@@ -57,7 +47,7 @@ $app->post('/match', function(Request $request) use ($app, $types, $dtt) {
         return $app->json(['result' => false]);
     }
 
-    $match = getMatch($id, $app);
+    $match = $app['matches']->get($id);
     if (!$match) {
         return $app->json(['result' => false]);
     }
@@ -71,42 +61,25 @@ $app->post('/match', function(Request $request) use ($app, $types, $dtt) {
     return $app->json(['result' => true]);
 });
 
-$app->get('/match/{id}', function ($id) use ($app) {
-    $match = getMatch($id, $app);
-    if (!$match) return $app->json(null, 404);
-    return $app->json($match);
-});
-
 $app->post('/match/{id}', function ($id, Request $request) use ($app) {
 
-    $args = [(int) $id];
-    $sql = "SELECT * FROM matches WHERE id = ?";
-    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
-    $match = $app['db']->fetchAssoc($sql, $args);
+    $id = (int) $id;
+    $match = $app['matches']->get($id, false, false);
     if (!$match) {
-        return $app->json(null, 404);
+        return $app->json(null, 404, ['X-Error-Message' => "Match $id not found"]);
     }
 
     $r = $request->request;
-    $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
     $data  = [
         'status'  => $r->get('status'),
-        'comment' => $r->get('comment'),
-        'updated' => new DateTime('now')
+        'comment' => $r->get('comment')
     ];
-
-    error_log("Update Match[{$id}] by [{$_SERVER['PHP_AUTH_USER']}]");
-    $result = $app['db']->update('matches', $data, ['id' => (int) $id], $types);
-    if (!$result) {
-        error_log("Failed to update match {$id}");
-        return $app->json(null, 500);
+    $saved = $app['matches']->update($id, $data);
+    if (!$saved) {
+        return $app->json(null, 500, ['X-Error-Message' => "Unable to update Match $id"]);
     }
 
-    $match = getMatch($id, $app);
-    if (!$match) {
-        return $app->json(null, 500);
-    }
-
+    $match = $app['matches']->get($id);
     return $app->json($match);
 });
 
@@ -150,34 +123,11 @@ $app->delete('/match/{id}', function ($id, Request $request) use ($app) {
         return $app->json(['result' => false]);
     }
 
-    $match = getMatch($id, $app);
+    $match = $app['matches']->get($id);
     if (!$match) {
         return $app->json(null, 500);
     }
 
     return $app->json($match);
 
-});
-
-$app->get('/matches', function(Request $request) use ($app) {
-    $status = isset($_GET['status']) ? $_GET['status'] : 0;
-
-    $args = [(int) $status];
-
-    // TODO join requests
-    $sql = "SELECT * FROM matches WHERE status = ? ORDER BY id DESC";
-    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
-    $matches = $app['db']->fetchAll($sql, $args);
-
-    $hosts_sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
-    error_log("SQL [ $hosts_sql ] [x] foreach match - by [{$_SERVER['PHP_AUTH_USER']}]");
-
-    $guests_sql = "SELECT people.*, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
-    error_log("SQL [ $guests_sql ] [x] foreach match - by [{$_SERVER['PHP_AUTH_USER']}]");
-
-    foreach ($matches as $k => $match) {
-        $matches[$k]['host'] = $app['db']->fetchAssoc($hosts_sql, [(int) $match['host_id']]);
-        $matches[$k]['guest'] = $app['db']->fetchAssoc($guests_sql, [(int) $match['guest_id']]);
-    }
-    return $app->json($matches);
 });

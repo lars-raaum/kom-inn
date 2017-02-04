@@ -29,9 +29,13 @@ class Guests implements \Pimple\ServiceProviderInterface
     public function get(int $id)
     {
         $args = [$id];
-        $sql = "SELECT people.*, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
+        $sql = "SELECT people.*, guests.id AS `guest_id`, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
         error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
         $guest = $this->app['db']->fetchAssoc($sql, $args);
+        if (!$guest) {
+            return false;
+        }
+        $guest['type'] = People::TYPE_GUEST;
         return $guest;
     }
 
