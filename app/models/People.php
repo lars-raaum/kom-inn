@@ -63,15 +63,32 @@ class People implements \Pimple\ServiceProviderInterface
      */
     public function find($status, int $limit = 10, int $offset = 0)
     {
+        $sql = "SELECT p.*, g.id as `guest_id`, g.food_concerns, h.id as `host_id` ".
+               "FROM people AS p LEFT JOIN guests AS g ON (p.id = g.user_id) LEFT JOIN hosts  AS h ON (p.id = h.user_id) ";
         if ($status !== false) {
             $args = [$status];
-            $sql = "SELECT * FROM people WHERE status = ? ORDER BY updated DESC LIMIT {$offset}, {$limit} ";
+            $sql .= "WHERE status = ?";
         } else {
             $args = [People::STATUS_DELETED];
-            $sql = "SELECT * FROM people WHERE status != ? ORDER BY updated DESC LIMIT {$offset}, {$limit} ";
+            $sql .= "WHERE status != ?";
         }
+        $sql .= " ORDER BY updated DESC LIMIT {$offset}, {$limit}";
+
         error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
-        $people = $this->app['db']->fetchAll($sql, $args);
+        $people = (array) $this->app['db']->fetchAll($sql, $args);
+
+        foreach ($people as &$person) {
+            if ($person['guest_id'] === NULL) {
+                unset($person['guest_id']);
+                unset($person['food_concerns']);
+                $person['type'] = People::TYPE_HOST;
+            }
+            if ($person['host_id'] === NULL) {
+                unset($person['host_id']);
+                $person['type'] = People::TYPE_GUEST;
+            }
+        }
+
         return $people;
     }
 
