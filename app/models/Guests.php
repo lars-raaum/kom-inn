@@ -79,7 +79,7 @@ class Guests implements \Pimple\ServiceProviderInterface
             if ($women == 'yes') {
                 $sql .= ' AND people.adults_f <> ?';
                 $args[] = 0;
-            } elseif ($men == 'no') {
+            } elseif ($women == 'no') {
                 $sql .= ' AND people.adults_f = ?';
                 $args[] = 0;
             }
