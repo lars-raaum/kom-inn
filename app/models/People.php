@@ -158,6 +158,20 @@ class People implements \Pimple\ServiceProviderInterface
     }
 
     /**
+     * Updates a person's status to USED
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function setToUsed(int $id)
+    {
+        $data = [
+            'status' => People::STATUS_USED
+        ];
+        return $this->update($id, $data);
+    }
+
+    /**
      * Soft delete, but anonymize person data.
      *
      * Removes `name`, `email`, `phone`, `address`, `freetext` and  `bringing`

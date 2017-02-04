@@ -71,6 +71,26 @@ class Matches implements \Pimple\ServiceProviderInterface
         return $matches;
     }
 
+    public function insert(array $data)
+    {
+        $now = new DateTime('now');
+        $data['updated'] = $now;
+        $data['created'] = $now;
+        $dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
+        $types = ['updated' => $dtt, 'created' => $dtt];
+
+        error_log("INSERT match Guest[{$data['guest_id']}] Host[{$data['host_id']}] by [{$this->app['PHP_AUTH_USER']}]");
+        $result = $this->app['db']->insert('matches', $data, $types);
+        if (!$result) {
+            error_log("ERROR: Failed to insert new match!");
+            return false;
+        }
+        $id = $this->app['db']->lastInsertId();
+
+
+        return $id;
+    }
+
     public function update(int $id, array $data)
     {
         $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];

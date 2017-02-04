@@ -22,28 +22,23 @@ $app->post('/match', function(Request $request) use ($app) {
     $r = $request->request;
     $guest_id = $r->get('guest_id');
     $host_id  = $r->get('host_id');
-    $now      = new DateTime('now');
     $data = [
         'guest_id' => $guest_id,
         'host_id'  => $host_id,
         'comment'  => $r->get('comment'),
-        'updated'  => $now,
-        'created'  => $now
     ];
-    error_log("INSERT match Guest[{$data['guest_id']}] Host[{$data['host_id']}] by [{$app['PHP_AUTH_USER']}]");
-    $result = $app['db']->insert('matches', $data, $types);
-    if (!$result) {
+    $id = $app['matches']->insert($data);
+    if ($id === false) {
         return $app->json(['result' => false], 500, ['X-Error-Message' => 'Failed to insert match']);
     }
-    $id = $app['db']->lastInsertId();
 
-    $data = ['status' => 2, 'updated' => $now->format('Y-m-d H:i:s')];
-    $result = $app['db']->update('people', $data, ['id' => $guest_id]);
+    $result = $app['people']->setToUsed($guest_id);
     if (!$result) {
-        error_log("Failed to updated person {$guest_id} to be used!");
+        error_log("ERROR: Failed to updated person {$guest_id} to be used!");
         return $app->json(['result' => false], 500, ['X-Error-Message' => 'Failed to update guest']);
     }
-    $result = $app['db']->update('people', $data, ['id' => $host_id]);
+
+    $result = $app['people']->setToUsed($host_id);
     if (!$result) {
         error_log("Failed to updated person {$host_id} to be used!");
         return $app->json(['result' => false], 500, ['X-Error-Message' => 'Failed to update host']);
@@ -54,11 +49,8 @@ $app->post('/match', function(Request $request) use ($app) {
         return $app->json(['result' => false], 500, ['X-Error-Message' => 'Inserted match not found!']);
     }
 
-    $sms_sender = new \app\Sms();
-    $result = $sms_sender->sendHostInform($match);
-
-    $email_sender = new \app\Emailing();
-    $result = $email_sender->sendHostInform($match);
+    $result = $app['sms']->sendHostInform($match);
+    $result = $app['email']->sendHostInform($match);
 
     return $app->json(['result' => true]);
 });
