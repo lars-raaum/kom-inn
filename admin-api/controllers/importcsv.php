@@ -1,6 +1,6 @@
 <?php
 
-$app->get('/importcsv/{name}', function($name) use ($app, $types) {
+$app->get('/importcsv/{name}', function($name) use ($app) {
     $counter = 0; $errors = [];
     $geo = new \app\Geo();
     $now = new \DateTime('now');
@@ -53,6 +53,9 @@ $app->get('/importcsv/{name}', function($name) use ($app, $types) {
                 print_r($row);
                 die('FAILED');
             }
+
+            $dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
+            $types = ['updated' => $dtt, 'created' => $dtt];
 
             try {
                 $result = $app['db']->insert('people', $data, $types);

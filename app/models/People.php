@@ -180,7 +180,7 @@ class People implements \Pimple\ServiceProviderInterface
         $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
 
         error_log("DELETING DATA for Person[{$id}] by [{$this->app['PHP_AUTH_USER']}]");
-        $result = $this->app['db']->update('people', $data, ['id' => $id]);
+        $result = $this->app['db']->update('people', $data, ['id' => $id], $types);
         if ($result == 0) {
             error_log("ERROR: Failed to update person");
             return false;

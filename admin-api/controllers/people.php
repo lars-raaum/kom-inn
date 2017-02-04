@@ -12,7 +12,7 @@ $app->get('/person/{id}', function($id, Request $request) use ($app) {
 });
 
 
-$app->post('/person/{id}', function($id, Request $request) use ($app, $types) {
+$app->post('/person/{id}', function($id, Request $request) use ($app) {
     $id = (int) $id;
 
     $person = $app['people']->get($id);

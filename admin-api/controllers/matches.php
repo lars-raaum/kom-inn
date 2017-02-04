@@ -18,7 +18,7 @@ $app->get('/matches', function(Request $request) use ($app) {
 });
 
 // @TODO move to model and add transactions / validations
-$app->post('/match', function(Request $request) use ($app, $types, $dtt) {
+$app->post('/match', function(Request $request) use ($app) {
     $r = $request->request;
     $guest_id = $r->get('guest_id');
     $host_id  = $r->get('host_id');

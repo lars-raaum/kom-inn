@@ -95,7 +95,7 @@ class Matches implements \Pimple\ServiceProviderInterface
             'updated' => new DateTime('now')
         ];
         error_log("Soft delete Match[{$id}] by [{$this->app['PHP_AUTH_USER']}]");
-        $result = $app['db']->update('matches', $data, ['id' => $id], $types);
+        $result = $this->app['db']->update('matches', $data, ['id' => $id], $types);
         if (!$result) {
             error_log("ERROR: Failed to update match");
             return false;

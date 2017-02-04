@@ -16,9 +16,6 @@ $app->before(function (Request $request) use ($app) {
 });
 require_once __DIR__.'/../../resources/configuration.php';
 
-$dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
-$types = ['updated' => $dtt, 'created' => $dtt];
-
 $app->register(new \app\models\People());
 $app->register(new \app\models\Guests());
 $app->register(new \app\models\Hosts());
