@@ -4,10 +4,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 $app->get('/host/{id}', function ($id) use ($app) {
 
-    $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
-    $host = $app['db']->fetchAssoc($sql, [(int) $id]);
+    $host = $app['hosts']->get($id);
     if (!$host) {
-        return $app->json(null, 404);
+        return $app->json(null, 404, ['X-Error-Message' => "Host $id not found!"]);
     }
 
     return $app->json($host);

@@ -21,6 +21,7 @@ $types = ['updated' => $dtt, 'created' => $dtt];
 
 $app->register(new \app\models\People());
 $app->register(new \app\models\Guests());
+$app->register(new \app\models\Hosts());
 
 require_once __DIR__.'/../controllers/matches.php';
 require_once __DIR__.'/../controllers/hosts.php';
