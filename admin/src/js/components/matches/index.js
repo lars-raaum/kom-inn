@@ -42,6 +42,7 @@ class Match extends React.Component {
         super()
 
         this.removePerson = this.removePerson.bind(this);
+        this.nagHost = this.nagHost.bind(this);
     }
 
     cancelMatch(e) {
@@ -114,6 +115,20 @@ class Match extends React.Component {
         })
     }
 
+    nagHost(e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        return fetch(`/api/match/${this.props.match.id}/email/host_nag`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(d => console.log("Mailed"));
+    }
+
     render() {
         const { match } = this.props;
 
@@ -147,6 +162,7 @@ class Match extends React.Component {
             <div className="col-sm-1">
                 <button onClick={e => this.updateMatch()}>Update match</button>
             </div>
+            <a onClick={e => this.nagHost()} className="send-nag-mail" href="#">Send nagging mail to host</a>
             <a onClick={e => this.removeBoth()} className="remove-both" href="#">Remove both persons from DB</a>
             <a onClick={e => this.cancelMatch()} className="cancel-match" href="#">Cancel match</a>
         </li>

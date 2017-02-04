@@ -6,6 +6,7 @@ import 'isomorphic-fetch';
 import App from 'components/app';
 import MainPage from 'components/main-page';
 import Register from 'components/register';
+import Feedback from 'components/feedback';
 import NotFound from 'components/not-found';
 import ThankYou from 'components/thank-you';
 import Welcome from 'components/welcome';
@@ -19,6 +20,7 @@ ReactDOM.render((
             <IndexRoute component={Register} />
             <Route path="/som/:type" component={Register}/>
             <Route path="/takk/:type" component={ThankYou}/>
+            <Route path="/feedback/:id/:code/:completed" component={Feedback}/>
             <Route path="*" component={NotFound}/>
         </Route>
   </Router>

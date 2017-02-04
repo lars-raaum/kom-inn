@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\HttpFoundation\Request;
+use app\Environment;
 
 $app->get('/guest/{id}', function ($id) use ($app) {
 
@@ -11,7 +12,6 @@ $app->get('/guest/{id}', function ($id) use ($app) {
     if (!$guest) {
         return $app->json(null, 404);
     }
-
     return $app->json($guest);
 });
 
