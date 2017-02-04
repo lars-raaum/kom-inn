@@ -43,7 +43,7 @@ class Emailing implements \Pimple\ServiceProviderInterface
     }
 
     public function sendAdminRegistrationNotice() {
-        if (empty($this->client) || empty($this->admin)) return;
+        if (empty($this->client) || empty($this->admin)) return false;
         $this->client->sendMessage($this->domain, [
             'from'    => $this->from,
             'to'      => $this->admin,
@@ -53,7 +53,7 @@ class Emailing implements \Pimple\ServiceProviderInterface
     }
 
     public function sendNaggingMail(array $match) {
-        if (empty($this->client)) return;
+        if (empty($this->client)) return false;
         $to = $match['host']['email'];
         try {
             $this->client->sendMessage($this->domain, [
@@ -70,7 +70,7 @@ class Emailing implements \Pimple\ServiceProviderInterface
     }
 
     public function sendHostInform(array $match) {
-        if (empty($this->client)) return;
+        if (empty($this->client)) return false;
         $to = $match['host']['email'];
         try {
             $this->client->sendMessage($this->domain, [

@@ -15,8 +15,12 @@ $app->post('/match/{id}/email/{type}', function($id, $type, Request $request) us
             break;
         default:
             error_log("Email type [$type] not supported");
-            return $app->json(null, 500);
+            return $app->json(null, 500, ['X-Error-Message' => "Email type [$type] not supported"]);
     }
 
-    return $app->json(['sent' => $result]);
+    if ($result) {
+        return $app->json(['sent' => true]);
+    } else {
+        return $app->json(['sent' => false], 500, ['X-Error-Message' => 'Not sent, is it configured?']);
+    }
 });
