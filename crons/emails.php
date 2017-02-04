@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 $options = app\Cli::get_console_commands();
 if ($options['help']) {
@@ -17,7 +17,12 @@ if ($options['help']) {
 }
 
 $app = new app\Cli($options);
-require_once __DIR__ . '/../../resources/cli_configuration.php';
+
+$connection = require_once __DIR__ . '/../resources/connections.php';
+
+$app->register(new Silex\Provider\DoctrineServiceProvider(), [
+    'db.options' => $connection
+]);
 
 // @TODO refactor to pattern similar to controllers for the api app?
 $app->run(function($app) {

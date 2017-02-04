@@ -15,3 +15,7 @@
     shell: composer install
     args:
       chdir: /services/kom-inn/admin-api/
+  - name: install cron php dependencies
+    shell: composer install
+    args:
+      chdir: /services/kom-inn/crons/
