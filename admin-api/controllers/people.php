@@ -2,37 +2,11 @@
 
 use Symfony\Component\HttpFoundation\Request;
 
-function get_person($id, $app) {
-
-    $args = [(int) $id];
-    $sql = "SELECT p.*, g.id as `guest_id`, g.food_concerns, h.id as `host_id` FROM people AS p ".
-           "LEFT JOIN guests AS g ON (p.id = g.user_id) ".
-           "LEFT JOIN hosts  AS h ON (p.id = h.user_id) ".
-           "WHERE p.id = ?";
-    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
-    $person = $app['db']->fetchAssoc($sql, $args);
-
-    if (!$person) return null;
-    if ($person['guest_id'] === NULL) {
-        unset($person['guest_id']);
-        unset($person['food_concerns']);
-        $person['type'] = 'HOST';
-    }
-    if ($person['host_id'] === NULL) {
-        unset($person['host_id']);
-        $person['type'] = 'GUEST';
-    }
-
-    return $person;
-}
-
 $app->get('/person/{id}', function($id, Request $request) use ($app) {
-
-    $person = get_person($id, $app);
+    $person = $app['people']->get($id);
     if (!$person) {
-        return $app->json(null, 404);
+        return $app->json(null, 404, ['X-Error-Message' => "Person {$id} not found"]);
     }
-
     return $app->json($person);
 });
 
@@ -40,14 +14,12 @@ $app->get('/person/{id}', function($id, Request $request) use ($app) {
 $app->post('/person/{id}', function($id, Request $request) use ($app, $types) {
     $id = (int) $id;
 
-    $person = get_person($id, $app);
+    $person = $app['people']->get($id);
     if (!$person) {
         return $app->json(null, 404);
     }
 
-    $updated = new DateTime('now');
     $r = $request->request;
-    $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
     $data  = [
         'email'     => $r->get('email'),
         'name'      => $r->get('name'),
@@ -64,33 +36,15 @@ $app->post('/person/{id}', function($id, Request $request) use ($app, $types) {
         'status'    => $r->get('status'),
         'visits'    => $r->get('visits'),
         'freetext'  => $r->get('freetext'),
-        'updated'   => $updated
     ];
 
-    foreach ($data as $key => $value) {
-        if ($value === null) {
-            unset($data[$key]);
-        }
-    }
+    $result = $app['people']->update($id, $data);
 
-    error_log("Update person {$id} - by [{$_SERVER['PHP_AUTH_USER']}]");
-    $result = $app['db']->update('people', $data, ['id' => $id], $types);
     if (!$result) {
-        error_log("Failed to update person {$id}");
-        return $app->json(null, 500);
+        return $app->json(null, 500, ['X-Error-Message' => 'Unable to save']);
     }
 
-    $food_concerns = $r->get('food_concerns');
-    if ($food_concerns) {
-        error_log("Update guest {$person['guest_id']} - by [{$_SERVER['PHP_AUTH_USER']}]");
-        $result = $app['db']->update('guests', compact('food_concerns', 'updated'), ['id' => $person['guest_id']], $types);
-
-        if (!$result) {
-            error_log("Failed to update guest {$person['guest_id']}");
-        }
-    }
-
-    $person = get_person($id, $app);
+    $person = $app['people']->get($id);
 
     return $app->json($person);
 });
@@ -99,24 +53,12 @@ $app->post('/person/{id}', function($id, Request $request) use ($app, $types) {
 $app->delete('/person/{id}', function ($id) use ($app) {
     $id = (int) $id;
 
-    $person = get_person($id, $app);
+    $person = $app['people']->get($id);
     if (!$person) {
         return $app->json(null, 404);
     }
-
-    $data  = [
-        'name'      => '#DELETED#',
-        'email'     => '#DELETED#',
-        'phone'     => '#DELETED#',
-        'address'   => '#DELETED#',
-        'freetext'  => NULL,
-        'bringing'  => NULL,
-        'status'    => -1
-    ];
-
-    error_log("DELETING DATA for Person[{$id}] by [{$_SERVER['PHP_AUTH_USER']}]");
-    $result = $app['db']->update('people', $data, ['id' => (int) $id]);
-    return $app->json(true);
+    $result = $app['people']->delete($id);
+    return $app->json($result);
 });
 
 $app->get('/people', function() use ($app) {
@@ -137,26 +79,8 @@ $app->get('/people', function() use ($app) {
         $page = 1;
     }
 
-
-    if ($status !== false) {
-        $args = [$status];
-        $sql = "SELECT * FROM people WHERE status = ? ORDER BY updated DESC LIMIT {$offset}, {$limit} ";
-    } else {
-        $args = [];
-        $sql = "SELECT * FROM people WHERE status != -1 ORDER BY updated DESC LIMIT {$offset}, {$limit} ";
-    }
-    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
-    $people = $app['db']->fetchAll($sql, $args);
-
-    if ($status !== false) {
-        $args = [$status];
-        $sql = "SELECT COUNT(1) FROM people WHERE status = ?";
-    } else {
-        $args = [];
-        $sql = "SELECT COUNT(1) FROM people WHERE status != -1";
-    }
-    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
-    $total = $app['db']->fetchColumn($sql, $args, 0);
+    $people = $app['people']->find($status, $limit, $offset);
+    $total = $app['people']->total($status);
 
     $count = count($people);
 

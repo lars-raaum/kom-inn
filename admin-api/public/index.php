@@ -19,6 +19,8 @@ require_once __DIR__.'/../../resources/configuration.php';
 $dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
 $types = ['updated' => $dtt, 'created' => $dtt];
 
+$app->register(new \app\models\People());
+
 require_once __DIR__.'/../controllers/matches.php';
 require_once __DIR__.'/../controllers/hosts.php';
 require_once __DIR__.'/../controllers/emails.php';
