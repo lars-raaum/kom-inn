@@ -8,6 +8,9 @@ class People implements \Pimple\ServiceProviderInterface
     const STATUS_ACTIVE = 1;
     const STATUS_USED = 2;
 
+    const TYPE_GUEST = 'GUEST';
+    const TYPE_HOST = 'HOST';
+
     protected $app;
 
     /**
@@ -41,11 +44,11 @@ class People implements \Pimple\ServiceProviderInterface
         if ($person['guest_id'] === NULL) {
             unset($person['guest_id']);
             unset($person['food_concerns']);
-            $person['type'] = 'HOST';
+            $person['type'] = People::TYPE_HOST;
         }
         if ($person['host_id'] === NULL) {
             unset($person['host_id']);
-            $person['type'] = 'GUEST';
+            $person['type'] = People::TYPE_GUEST;
         }
         return $person;
     }

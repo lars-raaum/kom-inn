@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\HttpFoundation\Request;
+use app\models\People;
 
 $app->get('/person/{id}', function($id, Request $request) use ($app) {
     $person = $app['people']->get($id);
@@ -38,10 +39,21 @@ $app->post('/person/{id}', function($id, Request $request) use ($app, $types) {
         'freetext'  => $r->get('freetext'),
     ];
 
-    $result = $app['people']->update($id, $data);
+    $saved = $app['people']->update($id, $data);
 
-    if (!$result) {
-        return $app->json(null, 500, ['X-Error-Message' => 'Unable to save']);
+    if (!$saved) {
+        return $app->json(null, 500, ['X-Error-Message' => 'Unable to save person data']);
+    }
+
+    if ($person['type'] === People::TYPE_GUEST) {
+        $food_concerns = $r->get('food_concerns');
+        if ($food_concerns) {
+            $guest_id = $person['guest_id'];
+            $saved = $app['guests']->update($guest_id, compact('food_concerns'));
+            if (!$saved) {
+                return $app->json(null, 500, ['X-Error-Message' => 'Unable to save guest data']);
+            }
+        }
     }
 
     $person = $app['people']->get($id);
