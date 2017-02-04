@@ -16,6 +16,7 @@ $app->get('/matches', function(Request $request) use ($app) {
     return $app->json($matches);
 });
 
+// @TODO move to model and add transactions / validations
 $app->post('/match', function(Request $request) use ($app, $types, $dtt) {
     $r = $request->request;
     $guest_id = $r->get('guest_id');
@@ -31,7 +32,7 @@ $app->post('/match', function(Request $request) use ($app, $types, $dtt) {
     error_log("INSERT match Guest[{$data['guest_id']}] Host[{$data['host_id']}] by [{$app['PHP_AUTH_USER']}]");
     $result = $app['db']->insert('matches', $data, $types);
     if (!$result) {
-        return $app->json(['result' => false]);
+        return $app->json(['result' => false], 500, ['X-Error-Message' => 'Failed to insert match']);
     }
     $id = $app['db']->lastInsertId();
 
@@ -39,17 +40,17 @@ $app->post('/match', function(Request $request) use ($app, $types, $dtt) {
     $result = $app['db']->update('people', $data, ['id' => $guest_id]);
     if (!$result) {
         error_log("Failed to updated person {$guest_id} to be used!");
-        return $app->json(['result' => false]);
+        return $app->json(['result' => false], 500, ['X-Error-Message' => 'Failed to update guest']);
     }
     $result = $app['db']->update('people', $data, ['id' => $host_id]);
     if (!$result) {
         error_log("Failed to updated person {$host_id} to be used!");
-        return $app->json(['result' => false]);
+        return $app->json(['result' => false], 500, ['X-Error-Message' => 'Failed to update host']);
     }
 
     $match = $app['matches']->get($id);
     if (!$match) {
-        return $app->json(['result' => false]);
+        return $app->json(['result' => false], 500, ['X-Error-Message' => 'Inserted match not found!']);
     }
 
     $sms_sender = new \app\Sms();
@@ -83,6 +84,7 @@ $app->post('/match/{id}', function ($id, Request $request) use ($app) {
     return $app->json($match);
 });
 
+// @TODO move to model
 $app->delete('/match/{id}', function ($id, Request $request) use ($app) {
     $args = [(int) $id];
     $sql = "SELECT * FROM matches WHERE id = ?";
