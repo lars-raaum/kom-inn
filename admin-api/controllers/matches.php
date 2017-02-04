@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\HttpFoundation\Request;
+use app\models\Matches;
 
 $app->get('/match/{id}', function ($id) use ($app) {
     $match = $app['matches']->get((int) $id);
@@ -84,52 +85,31 @@ $app->post('/match/{id}', function ($id, Request $request) use ($app) {
     return $app->json($match);
 });
 
-// @TODO move to model
 $app->delete('/match/{id}', function ($id, Request $request) use ($app) {
-    $args = [(int) $id];
-    $sql = "SELECT * FROM matches WHERE id = ?";
-    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$app['PHP_AUTH_USER']}]");
-    $match = $app['db']->fetchAssoc($sql, $args);
+    $match = $app['matches']->get((int) $id, false, false);
     if (!$match) {
-        return $app->json(null, 404);
+        return $app->json(null, 404, ['X-Error-Message' => "Match $id not found"]);
+    }
+    if ($match['status'] == Matches::STATUS_DELETED) {
+        return $app->json(null, 400, ['X-Error-Message' => "Match $id is already deleted"]);
     }
 
-    $r     = $request->request;
-    $now   = new DateTime('now');
-    $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
-    $data  = [
-        'status'  => -1,
-        'updated' => new DateTime('now')
-    ];
-    error_log("Soft delete Match[{$id}] by [{$app['PHP_AUTH_USER']}]");
-    $result = $app['db']->update('matches', $data, ['id' => (int) $id], $types);
+    $result = $app['matches']->delete($match['id']);
     if (!$result) {
-        error_log("Failed to update match {$id}");
-        return $app->json(null, 500);
+        return $app->json(null, 500, ['X-Error-Message' => "Could not delete match $id"]);
     }
-    $guest_id = $match['guest_id'];
-    $host_id  = $match['host_id'];
 
-    $data = ['status' => 1, 'updated' => $now->format('Y-m-d H:i:s')];
-    error_log("Set Person[{$guest_id}] to used by [{$app['PHP_AUTH_USER']}]");
-    $result = $app['db']->update('people', $data, ['id' => $guest_id]);
+    $result = $app['people']->setToActive($match['guest_id']);
     if (!$result) {
-        error_log("Failed to updated person {$guest_id} to be used!");
-        return $app->json(['result' => false]);
+        error_log("Failed to updated person {$match['guest_id']} to be used!");
+        return $app->json(null, 500, ['X-Error-Message' => "Failed to updated person {$match['guest_id']} to be used!"]);
     }
-
-    error_log("Set Person[{$host_id}] to used by [{$app['PHP_AUTH_USER']}]");
-    $result = $app['db']->update('people', $data, ['id' => $host_id]);
+    $result = $app['people']->setToActive($match['host_id']);
     if (!$result) {
-        error_log("Failed to updated person {$host_id} to be used!");
-        return $app->json(['result' => false]);
+        error_log("Failed to updated person {$match['host_id']} to be used!");
+        return $app->json(null, 500, ['X-Error-Message' => "Failed to updated person {$match['host_id']} to be used!"]);
     }
 
-    $match = $app['matches']->get($id);
-    if (!$match) {
-        return $app->json(null, 500);
-    }
-
-    return $app->json($match);
+    return $app->json(['result' => true]);
 
 });

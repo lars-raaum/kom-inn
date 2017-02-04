@@ -6,6 +6,11 @@ use DateTime;
 
 class Matches implements \Pimple\ServiceProviderInterface
 {
+    const STATUS_DELETED = -1;
+    const STATUS_NEW = 0;
+    const STATUS_CONFIRMED = 1;
+    const STATUS_EXECUTED = 2;
+
     protected $app;
 
     /**
@@ -75,7 +80,24 @@ class Matches implements \Pimple\ServiceProviderInterface
         $result = $this->app['db']->update('matches', $data, ['id' => $id], $types);
         if (!$result) {
             // @TODO grab sql error to log?
-            error_log("Failed to update match {$id}");
+            error_log("ERROR: Failed to update match {$id}");
+            return false;
+        }
+        return true;
+    }
+
+    public function delete(int $id)
+    {
+        $now   = new DateTime('now');
+        $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
+        $data  = [
+            'status'  => Matches::STATUS_DELETED,
+            'updated' => new DateTime('now')
+        ];
+        error_log("Soft delete Match[{$id}] by [{$this->app['PHP_AUTH_USER']}]");
+        $result = $app['db']->update('matches', $data, ['id' => $id], $types);
+        if (!$result) {
+            error_log("ERROR: Failed to update match");
             return false;
         }
         return true;

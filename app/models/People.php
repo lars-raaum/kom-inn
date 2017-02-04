@@ -136,11 +136,25 @@ class People implements \Pimple\ServiceProviderInterface
         error_log("Update person {$id} - by [{$this->app['PHP_AUTH_USER']}]");
         $result = $this->app['db']->update('people', $data, ['id' => $id], $types);
         if (!$result) {
-            error_log("Failed to update person {$id}");
+            error_log("ERROR: Failed to update person {$id}");
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Updates a person's status to ACTIVE
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function setToActive(int $id)
+    {
+        $data = [
+            'status' => People::STATUS_ACTIVE
+        ];
+        return $this->update($id, $data);
     }
 
     /**
@@ -151,7 +165,7 @@ class People implements \Pimple\ServiceProviderInterface
      * @param int $int
      * @return boolean
      */
-    public function delete($id)
+    public function delete(int $id)
     {
         $data  = [
             'name'      => '#DELETED#',
@@ -166,7 +180,11 @@ class People implements \Pimple\ServiceProviderInterface
         $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
 
         error_log("DELETING DATA for Person[{$id}] by [{$this->app['PHP_AUTH_USER']}]");
-        $result = $this->app['db']->update('people', $data, ['id' => (int) $id]);
-        return $result === 1;
+        $result = $this->app['db']->update('people', $data, ['id' => $id]);
+        if ($result == 0) {
+            error_log("ERROR: Failed to update person");
+            return false;
+        }
+        return true;
     }
 }
