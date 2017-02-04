@@ -28,7 +28,7 @@ class Matches implements \Pimple\ServiceProviderInterface
 
         $args = [$id];
         $sql = "SELECT * FROM matches WHERE id = ?";
-        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
+        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $match = $this->app['db']->fetchAssoc($sql, $args);
         if (!$match) {
             return false;
@@ -48,7 +48,7 @@ class Matches implements \Pimple\ServiceProviderInterface
         // TODO join requests
         $args = [$status];
         $sql = "SELECT * FROM matches WHERE status = ? ORDER BY id DESC";
-        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
+        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $matches = $this->app['db']->fetchAll($sql, $args);
 
         if ($with_guest || $with_host) {
@@ -69,7 +69,7 @@ class Matches implements \Pimple\ServiceProviderInterface
         $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
         $data['updated'] = new DateTime('now');
 
-        error_log("Update Match[{$id}] by [{$_SERVER['PHP_AUTH_USER']}]");
+        error_log("Update Match[{$id}] by [{$this->app['PHP_AUTH_USER']}]");
         $result = $this->app['db']->update('matches', $data, ['id' => $id], $types);
         if (!$result) {
             // @TODO grab sql error to log?

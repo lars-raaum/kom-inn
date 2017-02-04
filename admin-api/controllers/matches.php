@@ -28,7 +28,7 @@ $app->post('/match', function(Request $request) use ($app, $types, $dtt) {
         'updated'  => $now,
         'created'  => $now
     ];
-    error_log("INSERT match Guest[{$data['guest_id']}] Host[{$data['host_id']}] by [{$_SERVER['PHP_AUTH_USER']}]");
+    error_log("INSERT match Guest[{$data['guest_id']}] Host[{$data['host_id']}] by [{$app['PHP_AUTH_USER']}]");
     $result = $app['db']->insert('matches', $data, $types);
     if (!$result) {
         return $app->json(['result' => false]);
@@ -86,7 +86,7 @@ $app->post('/match/{id}', function ($id, Request $request) use ($app) {
 $app->delete('/match/{id}', function ($id, Request $request) use ($app) {
     $args = [(int) $id];
     $sql = "SELECT * FROM matches WHERE id = ?";
-    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
+    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$app['PHP_AUTH_USER']}]");
     $match = $app['db']->fetchAssoc($sql, $args);
     if (!$match) {
         return $app->json(null, 404);
@@ -99,7 +99,7 @@ $app->delete('/match/{id}', function ($id, Request $request) use ($app) {
         'status'  => -1,
         'updated' => new DateTime('now')
     ];
-    error_log("Soft delete Match[{$id}] by [{$_SERVER['PHP_AUTH_USER']}]");
+    error_log("Soft delete Match[{$id}] by [{$app['PHP_AUTH_USER']}]");
     $result = $app['db']->update('matches', $data, ['id' => (int) $id], $types);
     if (!$result) {
         error_log("Failed to update match {$id}");
@@ -109,14 +109,14 @@ $app->delete('/match/{id}', function ($id, Request $request) use ($app) {
     $host_id  = $match['host_id'];
 
     $data = ['status' => 1, 'updated' => $now->format('Y-m-d H:i:s')];
-    error_log("Set Person[{$guest_id}] to used by [{$_SERVER['PHP_AUTH_USER']}]");
+    error_log("Set Person[{$guest_id}] to used by [{$app['PHP_AUTH_USER']}]");
     $result = $app['db']->update('people', $data, ['id' => $guest_id]);
     if (!$result) {
         error_log("Failed to updated person {$guest_id} to be used!");
         return $app->json(['result' => false]);
     }
 
-    error_log("Set Person[{$host_id}] to used by [{$_SERVER['PHP_AUTH_USER']}]");
+    error_log("Set Person[{$host_id}] to used by [{$app['PHP_AUTH_USER']}]");
     $result = $app['db']->update('people', $data, ['id' => $host_id]);
     if (!$result) {
         error_log("Failed to updated person {$host_id} to be used!");

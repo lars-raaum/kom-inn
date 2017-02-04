@@ -23,6 +23,7 @@ $connection = require_once __DIR__ . '/../resources/connections.php';
 $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => $connection
 ]);
+$app['PHP_AUTH_USER'] = __FILE__;
 
 // @TODO refactor to pattern similar to controllers for the api app?
 $app->run(function($app) {

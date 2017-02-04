@@ -27,7 +27,7 @@ $app->get('/hosts', function(Request $request) use ($app) {
     if ($guest_id != NULL && $distance != NULL) {
         $sub_args = [$guest_id];
         $sub_sql = "SELECT people.loc_lat, people.loc_long FROM people WHERE people.id = ?";
-        error_log("SQL [ $sub_sql ] [" . join(', ', $sub_args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
+        error_log("SQL [ $sub_sql ] [" . join(', ', $sub_args) . "] - by [{$app['PHP_AUTH_USER']}]");
         $people = $app['db']->fetchAll($sub_sql, $sub_args);
 
         if (isset($people[0])) {
@@ -62,7 +62,7 @@ $app->get('/hosts', function(Request $request) use ($app) {
         $args[] = 0;
     }
 
-    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$_SERVER['PHP_AUTH_USER']}]");
+    error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$app['PHP_AUTH_USER']}]");
     $hosts = $app['db']->fetchAll($sql, $args);
 
     if ($target_longitude && $target_latitude) {
