@@ -5,16 +5,28 @@ namespace app;
 use Mailgun\Mailgun;
 use app\Environment;
 
-class Emailing {
+class Emailing implements \Pimple\ServiceProviderInterface
+{
 
     protected $client;
     protected $domain;
     protected $admin;
     protected $prefix;
 
-    public function __construct() {
-        $config = require_once RESOURCE_PATH . '/emails.php';
+    protected $app;
 
+    /**
+     * Registers this model in the app and gives it access to @app
+     *
+     * @param \Pimple\Container $app
+     */
+    public function register(\Pimple\Container $app)
+    {
+        $this->app = $app;
+        $app['email'] = $this;
+    }
+
+    public function __construct(array $config) {
         $this->admin  = isset($config['admin']) ? $config['admin'] : false;
         $this->prefix = isset($config['prefix']) ? $config['prefix'] : '';
         $this->salt   = isset($config['salt']) ? $config['salt'] : 'kioslo';

@@ -24,6 +24,9 @@ $app->register(new \app\models\Guests());
 $app->register(new \app\models\Hosts());
 $app->register(new \app\models\Matches());
 
+$email_config = require_once RESOURCE_PATH . '/emails.php';
+$app->register(new app\Emailing($email_config));
+
 require_once __DIR__.'/../controllers/matches.php';
 require_once __DIR__.'/../controllers/hosts.php';
 require_once __DIR__.'/../controllers/emails.php';
