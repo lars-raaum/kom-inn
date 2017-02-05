@@ -23,6 +23,7 @@ $app->register(new app\Sms($sms_config));
 $app->register(new \app\models\People());
 $app->register(new \app\models\Guests());
 $app->register(new \app\models\Hosts());
+$app->register(new \app\models\Matches());
 
 $app['PHP_AUTH_USER'] = 'PUBLIC';
 
