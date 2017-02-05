@@ -14,28 +14,22 @@ $app->post('/reactivate', function(Request $request) use ($app) {
     }
 
     // @TODO ideally id should be person id and not match id
-    $match = $app['matches']->get($id, false, false);
+    $match = $app['matches']->get($id, true, false);
     if (!$match) {
         return $app->json(null, 404, ['X-Error-Message' => "Match $id not found"]);
     }
 
-    $host = $app['hosts']->get($id);
-
-    if (!$host) {
-        return $app->json(null, 404, ['X-Error-Message' => 'Person not found!']);
-    }
-
-    $hash = $app['email']->createHashCode($host['email']);
-
+    $hash = $app['email']->createHashCode($match['host']['email']);
     if ($hash != $code) {
-        error_log("Feedback request with invalid code [{$code}] != [{$hash}] for person [{$$host['id']}]");
+        error_log("Feedback request with invalid code [{$code}] != [{$hash}] for person [{$$match['host']['id']}]");
         return $app->json(null, 400, ['X-Error-Message' => 'Invalid code!']);
     }
 
+    $host_id = $match['host_id'];
     $data = ['status' => People::STATUS_ACTIVE];
-    $result = $app['people']->update($id, $data);
+    $result = $app['people']->update($host_id, $data);
     if (!$result) {
-        error_log("Failed to update match {$id}");
+        error_log("Failed to update person {$host_id}");
         return $app->json(null, 500, ['X-Error-Message' => 'Could not update person']);
     }
 

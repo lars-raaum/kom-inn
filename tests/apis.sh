@@ -98,7 +98,7 @@ reactivate_response=$(curl -H "Content-Type: application/json" -X POST -d "$reac
 validate "404 NOT FOUND /reactivate POST" $(echo $reactivate_response | grep HTTP | awk '{print $2}') 404
 
 code='21e8712e64284677eb65550cddb8756d584cfe45' # autogenerate in case salt is changed?
-reactivate_json="{\"id\": ${hostid}, \"code\": \"${code}\"}"
+reactivate_json="{\"id\": ${matchid}, \"code\": \"${code}\"}"
 reactivate_response=$(curl -H "Content-Type: application/json" -X POST -d "$reactivate_json" "http://localhost:8001/reactivate" -si)
 validate "200 OK /reactivate POST" $(echo $reactivate_response | grep HTTP | awk '{print $2}') 200
 # todo check status of person?
