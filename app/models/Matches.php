@@ -51,6 +51,14 @@ class Matches implements \Pimple\ServiceProviderInterface
         return $match;
     }
 
+    /**
+     * Find list of matches based on status, optionally include hosts and guests
+     *
+     * @param int $status
+     * @param bool $with_host
+     * @param bool $with_guest
+     * @return array
+     */
     public function find(int $status, bool $with_host = true, bool $with_guest = true)
     {
         // TODO join requests
@@ -72,6 +80,12 @@ class Matches implements \Pimple\ServiceProviderInterface
         return $matches;
     }
 
+    /**
+     * Insert a new match
+     *
+     * @param array $data
+     * @return int pk
+     */
     public function insert(array $data)
     {
         $now = new DateTime('now');
@@ -86,12 +100,18 @@ class Matches implements \Pimple\ServiceProviderInterface
             error_log("ERROR: Failed to insert new match!");
             return false;
         }
+
         $id = $this->app['db']->lastInsertId();
-
-
         return $id;
     }
 
+    /**
+     * Update match
+     *
+     * @param int $id
+     * @param array $data
+     * @return nool
+     */
     public function update(int $id, array $data)
     {
         $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
@@ -107,6 +127,12 @@ class Matches implements \Pimple\ServiceProviderInterface
         return true;
     }
 
+    /**
+     * Soft delete match
+     *
+     * @param int $id
+     * @return bool
+     */
     public function delete(int $id)
     {
         $now   = new DateTime('now');
