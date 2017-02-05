@@ -28,6 +28,8 @@ class Guests implements \Pimple\ServiceProviderInterface
      */
     public function get(int $id)
     {
+        if ($id === 0) return false;
+
         $args = [$id];
         $sql = "SELECT people.*, guests.id AS `guest_id`, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
         error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
@@ -104,8 +106,16 @@ class Guests implements \Pimple\ServiceProviderInterface
         return $guests;
     }
 
+    /**
+     * Update a guest data
+     *
+     * @param int $id
+     * @param array $data
+     * @return bool
+     */
     public function update(int $id, array $data)
     {
+        if ($id === 0) return false;
 
         $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
         $data['updated'] = new \DateTime('now');

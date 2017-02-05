@@ -34,6 +34,8 @@ class People implements \Pimple\ServiceProviderInterface
      */
     public function get(int $id)
     {
+        if ($id === 0) return false;
+
         $args = [(int) $id];
         $sql = "SELECT p.*, g.id as `guest_id`, g.food_concerns, h.id as `host_id` FROM people AS p ".
                "LEFT JOIN guests AS g ON (p.id = g.user_id) ".

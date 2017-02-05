@@ -29,6 +29,8 @@ class Hosts implements \Pimple\ServiceProviderInterface
      */
     public function get(int $id)
     {
+        if ($id === 0) return false;
+
         $args = [$id];
         $sql = "SELECT people.*, hosts.id AS `host_id` FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
         error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");

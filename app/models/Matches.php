@@ -32,6 +32,7 @@ class Matches implements \Pimple\ServiceProviderInterface
      */
     public function get(int $id, bool $with_host = true, bool $with_guest = true)
     {
+        if ($id === 0) return false;
 
         $args = [$id];
         $sql = "SELECT * FROM matches WHERE id = ?";
