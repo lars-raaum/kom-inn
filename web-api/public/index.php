@@ -14,6 +14,13 @@ $app->before(function (Request $request) {
     }
 });
 require_once __DIR__.'/../../resources/configuration.php';
+
+$email_config = require_once RESOURCE_PATH . '/emails.php';
+$app->register(new app\Emailing($email_config));
+$sms_config = require_once RESOURCE_PATH . '/sms.php';
+$app->register(new app\Sms($sms_config));
+
+
 require_once __DIR__.'/../controllers/register.php';
 require_once __DIR__.'/../controllers/feedback.php';
 
