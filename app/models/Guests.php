@@ -107,6 +107,26 @@ class Guests implements \Pimple\ServiceProviderInterface
     }
 
     /**
+     * Insert guest record for person
+     *
+     * @param array $data
+     * @return int pk
+     */
+    public function insert(array $data)
+    {
+        $dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
+        $types = ['updated' => $dtt, 'created' => $dtt];
+        $data['updated'] = new DateTime('now');
+        $data['created'] = new DateTime('now');
+        $result = $this->app['db']->insert('guests', $data, $types);
+        if (!$result) {
+            return false;
+        }
+        $id = $this->app['db']->lastInsertId();
+        return $id;
+    }
+
+    /**
      * Update a guest data
      *
      * @param int $id

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use DateTime;
+use app\Geo;
 
 class People implements \Pimple\ServiceProviderInterface
 {
@@ -115,6 +116,39 @@ class People implements \Pimple\ServiceProviderInterface
         $total = $this->app['db']->fetchColumn($sql, $args, 0);
 
         return $total;
+    }
+
+    /**
+     * Insert person
+     *
+     * @param array $data
+     * @return int primary key of person
+     */
+    public function insert(array $data)
+    {
+        $dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
+        $types = ['updated' => $dtt, 'created' => $dtt];
+        $data['updated'] = new DateTime('now');
+        $data['created'] = new DateTime('now');
+        $data['status']  = People::STATUS_ACTIVE;
+
+        if ($data['address']) {
+            $geo = new Geo();
+            try {
+                $coords = $geo->getCoords($data);
+                $data['loc_long'] = $coords->getLongitude();
+                $data['loc_lat'] = $coords->getLatitude();
+            } catch (\Exception $e) {
+                error_log($e->getMessage());
+            }
+        }
+
+        $result = $this->app['db']->insert('people', $data , $types);
+        if (!$result) {
+            return false;
+        }
+        $id = $this->app['db']->lastInsertId();
+        return $id;
     }
 
     /**

@@ -58,6 +58,26 @@ class Hosts implements \Pimple\ServiceProviderInterface
     }
 
     /**
+     * Create host record for person
+     *
+     * @param array $data
+     * @return int pk
+     */
+    public function insert(array $data)
+    {
+        $dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
+        $types = ['updated' => $dtt, 'created' => $dtt];
+        $data['updated'] = new DateTime('now');
+        $data['created'] = new DateTime('now');
+        $result = $this->app['db']->insert('hosts', $data, $types);
+        if (!$result) {
+            return false;
+        }
+        $id = $this->app['db']->lastInsertId();
+        return $id;
+    }
+
+    /**
      * Find hosts that are useful for a guest
      *
      * @param int $guest_id
