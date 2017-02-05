@@ -17,7 +17,6 @@ $app->get('/matches', function(Request $request) use ($app) {
     return $app->json($matches);
 });
 
-// @TODO move to model and add transactions / validations
 $app->post('/match', function(Request $request) use ($app) {
     $r = $request->request;
     $guest_id = $r->get('guest_id');
@@ -25,7 +24,6 @@ $app->post('/match', function(Request $request) use ($app) {
 
     #validation
     if (empty($guest_id) || empty($host_id)) {
-        error_log(print_r(compact('guest_id', 'host_id'), true));
         return $app->json(null, 400, ['X-Error-Message' => 'Missing required fields guest_id and host_id']);
     }
 
