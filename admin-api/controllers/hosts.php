@@ -4,7 +4,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 $app->get('/host/{id}', function ($id) use ($app) {
 
-    $host = $app['hosts']->get($id);
+    $host = $app['hosts']->get((int) $id);
     if (!$host) {
         return $app->json(null, 404, ['X-Error-Message' => "Host $id not found!"]);
     }

@@ -4,7 +4,7 @@ use Symfony\Component\HttpFoundation\Request;
 use app\models\People;
 
 $app->get('/person/{id}', function($id, Request $request) use ($app) {
-    $person = $app['people']->get($id);
+    $person = $app['people']->get((int) $id);
     if (!$person) {
         return $app->json(null, 404, ['X-Error-Message' => "Person {$id} not found"]);
     }

@@ -36,14 +36,20 @@ $app->post('/register', function(Request $request) use ($app, $types) {
     $data['adults_m'] += $data['gender'] == 'male' ? 1 : 0;
     $data['adults_f'] += $data['gender'] == 'female' ? 1 : 0;
 
+    // validation
+    if (!$type || !in_array($type, ['host', 'guest'])) {
+        return $app->json(null, 400, ['X-Error-Message' => 'No `type` provided']);
+    }
+    if ($data['email'] == 'N/A' && $data['phone'] == 'N/A') {
+        return $app->json(null, 400, ['X-Error-Message' => 'No data provided']);
+    }
+
     if ($data['address']) {
         $geo = new Geo();
         $coords = $geo->getCoords($data);
         $data['loc_long'] = $coords->getLongitude();
         $data['loc_lat'] = $coords->getLatitude();
     }
-
-    // validation
 
     $result = $app['db']->insert('people', $data , $types);
 
