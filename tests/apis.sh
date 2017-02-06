@@ -107,6 +107,10 @@ validate "200 OK /reactivate POST" $(echo $reactivate_response | grep HTTP | awk
 printf "\nPUBLIC API - Feedback\n"
 validate "405 NOT ALLOWED /feedback GET" $(curl -X GET "http://localhost:8001/feedback" -si | grep HTTP | awk '{print $2}') 405
 validate "400 BAD REQUEST /feedback POST" $(curl -X POST "http://localhost:8001/feedback" -si | grep HTTP | awk '{print $2}') 400
+code='21e8712e64284677eb65550cddb8756d584cfe45' # autogenerate in case salt is changed?
+feedback_json="{\"id\": ${matchid}, \"code\": \"${code}\", \"status\": 2}"
+feedback_response=$(curl -H "Content-Type: application/json" -X POST -d "$feedback_json" "http://localhost:8001/feedback" -si)
+validate "200 OK /feedback POST" $(echo $feedback_response | grep HTTP | awk '{print $2}') 200
 
 # ADMIN API - Delete match
 printf "\nADMIN API - Deleting Match\n"
