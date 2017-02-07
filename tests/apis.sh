@@ -88,6 +88,23 @@ matchupdateresponse=$(curl -H "Content-Type: application/json" -X POST -d "$matc
 matchupdateresponsejson=$(echo $matchupdateresponse | grep "{\"id\":" )
 validate "Comment updated on match" $(node -pe 'JSON.parse(process.argv[1]).comment' $matchupdateresponsejson) "Automated api test - Updated"
 
+# PUBLIC API - Feedback
+printf "\nPUBLIC API - Feedback\n"
+validate "405 NOT ALLOWED /feedback GET" $(curl -X GET "http://localhost:8001/feedback" -si | grep HTTP | awk '{print $2}') 405
+validate "400 BAD REQUEST /feedback POST" $(curl -X POST "http://localhost:8001/feedback" -si | grep HTTP | awk '{print $2}') 400
+code='21e8712e64284677eb65550cddb8756d584cfe45' # autogenerate in case salt is changed?
+feedback_json="{\"id\": ${matchid}, \"code\": \"${code}\", \"status\": 2}"
+feedback_response=$(curl -H "Content-Type: application/json" -X POST -d "$feedback_json" "http://localhost:8001/feedback" -si)
+validate "200 OK /feedback POST" $(echo $feedback_response | grep HTTP | awk '{print $2}') 200
+
+# ADMIN API - Delete match
+printf "\nADMIN API - Deleting Match\n"
+validate "200 OK DELETE /match/${matchid}" $(curl -X DELETE "http://localhost:9001/match/${matchid}" -si | grep HTTP | awk '{print $2}') 200
+
+updatejson='{"status": 2}'
+updateresponse=$(curl -H "Content-Type: application/json" -X POST -d "$updatejson" "http://localhost:9001/person/${hostid}" -si)
+validate "200 OK POST /person/${hostid}" $(echo $updateresponse | grep HTTP | awk '{print $2}') 200
+
 # PUBLIC API - Reactivate user
 printf "\nPUBLIC API - Reactivate\n"
 validate "405 NOT ALLOWED /reactivate GET" $(curl -X GET "http://localhost:8001/reactivate" -si | grep HTTP | awk '{print $2}') 405
@@ -102,19 +119,6 @@ reactivate_json="{\"id\": ${matchid}, \"code\": \"${code}\"}"
 reactivate_response=$(curl -H "Content-Type: application/json" -X POST -d "$reactivate_json" "http://localhost:8001/reactivate" -si)
 validate "200 OK /reactivate POST" $(echo $reactivate_response | grep HTTP | awk '{print $2}') 200
 # todo check status of person?
-
-# PUBLIC API - Feedback
-printf "\nPUBLIC API - Feedback\n"
-validate "405 NOT ALLOWED /feedback GET" $(curl -X GET "http://localhost:8001/feedback" -si | grep HTTP | awk '{print $2}') 405
-validate "400 BAD REQUEST /feedback POST" $(curl -X POST "http://localhost:8001/feedback" -si | grep HTTP | awk '{print $2}') 400
-code='21e8712e64284677eb65550cddb8756d584cfe45' # autogenerate in case salt is changed?
-feedback_json="{\"id\": ${matchid}, \"code\": \"${code}\", \"status\": 2}"
-feedback_response=$(curl -H "Content-Type: application/json" -X POST -d "$feedback_json" "http://localhost:8001/feedback" -si)
-validate "200 OK /feedback POST" $(echo $feedback_response | grep HTTP | awk '{print $2}') 200
-
-# ADMIN API - Delete match
-printf "\nADMIN API - Deleting Match\n"
-validate "200 OK DELETE /match/${matchid}" $(curl -X DELETE "http://localhost:9001/match/${matchid}" -si | grep HTTP | awk '{print $2}') 200
 
 # ADMIN API - Delete registered test persons
 printf "\nADMIN API - Deleting People\n"
