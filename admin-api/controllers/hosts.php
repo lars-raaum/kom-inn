@@ -13,14 +13,14 @@ $app->get('/host/{id}', function ($id) use ($app) {
 });
 
 $app->get('/hosts', function(Request $request) use ($app) {
-    $guest_id = isset($_GET['guest_id']) ? (int) $_GET['guest_id'] : NULL;
-    $distance = isset($_GET['distance']) ? (float) floatval($_GET['distance']) : 20; // distance in nautical miles squared
+    $guest_id = (int) $_GET['guest_id']  ?? NULL;
+    $distance = (float) floatval($_GET['distance']) ?? 20; // distance in nautical miles squared
 
     if ($guest_id) {
         $filters = [
-            'children'  => isset($_GET['children']) ? $_GET['children'] : null,
-            'men'       => isset($_GET['men']) ? $_GET['men'] : null,
-            'women'     => isset($_GET['women']) ? $_GET['women'] : null
+            'children'  => $_GET['children']  ?? null,
+            'men'       => $_GET['men']  ?? null,
+            'women'     => $_GET['women']  ?? null
         ];
         try {
             $hosts = $app['hosts']->findHostForGuest($guest_id, $distance, $filters);

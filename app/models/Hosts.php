@@ -47,7 +47,7 @@ class Hosts implements \Pimple\ServiceProviderInterface
      *
      * @return array
      */
-    public function find()
+    public function find() : array
     {
         $args = [People::STATUS_ACTIVE];
         $sql = "SELECT people.*, hosts.id AS `host_id` FROM people, hosts WHERE people.id = hosts.user_id AND people.status = ?";
@@ -84,7 +84,7 @@ class Hosts implements \Pimple\ServiceProviderInterface
      * @param float $distance range in km away from guest that we should look for host
      * @return array
      */
-    public function findHostForGuest(int $guest_id, float $distance_in_km = 20.0, array $filters = [])
+    public function findHostForGuest(int $guest_id, float $distance_in_km = 20.0, array $filters = []) : array
     {
         $distance = pow($distance_in_km * 0.539956803 / 60, 2);
         $args = [People::STATUS_ACTIVE];

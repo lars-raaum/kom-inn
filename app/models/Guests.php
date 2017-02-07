@@ -48,7 +48,7 @@ class Guests implements \Pimple\ServiceProviderInterface
      * @param int $status
      * @return array
      */
-    public function find(int $status, array $filters = [])
+    public function find(int $status, array $filters = []) : array
     {
         $args = [$status];
         $sql = "SELECT people.*, guests.user_id FROM people, guests WHERE people.id = guests.user_id AND people.status = ?";
@@ -133,7 +133,7 @@ class Guests implements \Pimple\ServiceProviderInterface
      * @param array $data
      * @return bool
      */
-    public function update(int $id, array $data)
+    public function update(int $id, array $data) : bool
     {
         if ($id === 0) return false;
 

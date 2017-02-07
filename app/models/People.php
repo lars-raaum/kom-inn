@@ -66,7 +66,7 @@ class People implements \Pimple\ServiceProviderInterface
      * @param int $offset
      * @return array
      */
-    public function find($status, int $limit = 10, int $offset = 0)
+    public function find($status, int $limit = 10, int $offset = 0) : array
     {
         $sql = "SELECT p.*, g.id as `guest_id`, g.food_concerns, h.id as `host_id` ".
                "FROM people AS p LEFT JOIN guests AS g ON (p.id = g.user_id) LEFT JOIN hosts  AS h ON (p.id = h.user_id) ";
@@ -103,7 +103,7 @@ class People implements \Pimple\ServiceProviderInterface
      * @param int|boolean $status
      * @return int
      */
-    public function total($status)
+    public function total($status) : int
     {
         if ($status !== false) {
             $args = [$status];
@@ -156,9 +156,9 @@ class People implements \Pimple\ServiceProviderInterface
      *
      * @param int $id
      * @param array $data
-     * @return boolean
+     * @return bool
      */
-    public function update(int $id, array $data)
+    public function update(int $id, array $data) : bool
     {
         foreach ($data as $key => $value) {
             if ($value === null) {
@@ -185,7 +185,7 @@ class People implements \Pimple\ServiceProviderInterface
      * @param int $id
      * @return bool
      */
-    public function setToActive(int $id)
+    public function setToActive(int $id) : bool
     {
         $data = [
             'status' => People::STATUS_ACTIVE
@@ -199,7 +199,7 @@ class People implements \Pimple\ServiceProviderInterface
      * @param int $id
      * @return bool
      */
-    public function setToUsed(int $id)
+    public function setToUsed(int $id) : bool
     {
         $data = [
             'status' => People::STATUS_USED
@@ -215,7 +215,7 @@ class People implements \Pimple\ServiceProviderInterface
      * @param int $int
      * @return boolean
      */
-    public function delete(int $id)
+    public function delete(int $id) : bool
     {
         $data  = [
             'name'      => '#DELETED#',

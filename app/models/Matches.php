@@ -59,7 +59,7 @@ class Matches implements \Pimple\ServiceProviderInterface
      * @param bool $with_guest
      * @return array
      */
-    public function find(int $status, bool $with_host = true, bool $with_guest = true)
+    public function find(int $status, bool $with_host = true, bool $with_guest = true) : array
     {
         // TODO join requests
         $args = [$status];
@@ -110,9 +110,9 @@ class Matches implements \Pimple\ServiceProviderInterface
      *
      * @param int $id
      * @param array $data
-     * @return nool
+     * @return bool
      */
-    public function update(int $id, array $data)
+    public function update(int $id, array $data) : bool
     {
         $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
         $data['updated'] = new DateTime('now');
@@ -133,7 +133,7 @@ class Matches implements \Pimple\ServiceProviderInterface
      * @param int $id
      * @return bool
      */
-    public function delete(int $id)
+    public function delete(int $id) : bool
     {
         $now   = new DateTime('now');
         $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];

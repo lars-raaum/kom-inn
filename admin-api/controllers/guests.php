@@ -12,11 +12,11 @@ $app->get('/guest/{id}', function ($id) use ($app) {
 });
 
 $app->get('/guests', function() use ($app) {
-    $status = isset($_GET['status']) ? (int) $_GET['status'] : 1;
+    $status = (int) $_GET['status'] ?? 1;
     $filters = [];
-    $filters['children'] = isset($_GET['children']) ? $_GET['children'] : null;
-    $filters['men'] = isset($_GET['men']) ? $_GET['men'] : null;
-    $filters['women'] = isset($_GET['women']) ? $_GET['women'] : null;
+    $filters['children'] = $_GET['children'] ?? null;
+    $filters['men'] = $_GET['men'] ?? null;
+    $filters['women'] = $_GET['women'] ?? null;
 
     $guests = $app['guests']->find($status, $filters);
     return $app->json($guests);

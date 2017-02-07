@@ -87,7 +87,7 @@ class Cli extends \Pimple\Container
      * @param  array  $valueToWords  array of single character to word for combining to word
      * @return array
      */
-    public static function get_console_commands($customCharacters = '', $customWords = [], $existToWords = [], $valueToWords = [])
+    public static function get_console_commands($customCharacters = '', $customWords = [], $existToWords = [], $valueToWords = []) : array
     {
         $keyWords = [
             // options
