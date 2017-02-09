@@ -31,12 +31,13 @@ $app->run(function($app) {
         $limit = (int) $app['max'];
     }
     if (isset($limit)) {
-        $sql = "SELECT * FROM matches WHERE status = 0 AND created < DATE_ADD(CURDATE(), INTERVAL - 10 DAY) ORDER BY id DESC LIMIT {$limit}";
+        $sql = "SELECT * FROM matches WHERE status = 0 AND created < DATE_ADD(CURDATE(), INTERVAL - 2 DAY) ORDER BY id DESC LIMIT {$limit}";
     } else {
-        $sql = "SELECT * FROM matches WHERE status = 0 AND created < DATE_ADD(CURDATE(), INTERVAL - 10 DAY) ORDER BY id DESC";
+        $sql = "SELECT * FROM matches WHERE status = 0 AND created < DATE_ADD(CURDATE(), INTERVAL - 2 DAY) ORDER BY id DESC";
     }
     $app->verbose("SQL [ $sql ] - by [CRON]");
     $matches = $app['db']->fetchAll($sql);
+    $sender = new Emailing();
 
     foreach ($matches as $match) {
         $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
