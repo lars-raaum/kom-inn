@@ -20,6 +20,8 @@ $app = new app\Cli($options);
 
 $connection = require_once __DIR__ . '/../resources/connections.php';
 
+define('RESOURCE_PATH', realpath(__DIR__ . '/../resources'));
+
 $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => $connection
 ]);
@@ -37,7 +39,7 @@ $app->run(function($app) {
     }
     $app->verbose("SQL [ $sql ] - by [CRON]");
     $matches = $app['db']->fetchAll($sql);
-    $sender = new Emailing();
+    $sender = new app\Emailing();
 
     foreach ($matches as $match) {
         $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
