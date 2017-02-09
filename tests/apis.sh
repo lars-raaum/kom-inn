@@ -110,7 +110,11 @@ printf "\nPUBLIC API - Reactivate\n"
 validate "405 NOT ALLOWED /reactivate GET" $(curl -X GET "http://localhost:8001/reactivate" -si | grep HTTP | awk '{print $2}') 405
 validate "400 BAD REQUEST /reactivate POST" $(curl -X POST "http://localhost:8001/reactivate" -si | grep HTTP | awk '{print $2}') 400
 
-reactivate_json="{\"id\": ${hostid}, \"code\": \"NOTCODE\"}"
+reactivate_json="{\"id\": ${matchid}, \"code\": \"NOTCODE\"}"
+reactivate_response=$(curl -H "Content-Type: application/json" -X POST -d "$reactivate_json" "http://localhost:8001/reactivate" -si)
+validate "400 BAD CODE /reactivate POST" $(echo $reactivate_response | grep HTTP | awk '{print $2}') 400
+
+reactivate_json="{\"id\": -1, \"code\": \"NOTCODE\"}"
 reactivate_response=$(curl -H "Content-Type: application/json" -X POST -d "$reactivate_json" "http://localhost:8001/reactivate" -si)
 validate "404 NOT FOUND /reactivate POST" $(echo $reactivate_response | grep HTTP | awk '{print $2}') 404
 

@@ -21,7 +21,7 @@ $app->post('/reactivate', function(Request $request) use ($app) {
 
     $hash = $app['email']->createHashCode($match['host']['email']);
     if ($hash != $code) {
-        error_log("Feedback request with invalid code [{$code}] != [{$hash}] for person [{$$match['host']['id']}]");
+        error_log("Feedback request with invalid code [{$code}] != [{$hash}] for person [{$match['host']['id']}]");
         return $app->json(null, 400, ['X-Error-Message' => 'Invalid code!']);
     }
 
