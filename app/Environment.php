@@ -2,10 +2,21 @@
 
 namespace app;
 
+/**
+ * Class Environment
+ *
+ */
 class Environment
 {
 
-    public static function get($name)
+    /**
+     * Get an environment config by name
+     *
+     * @param $name
+     * @return mixed
+     * @throws \Exception if $name is not set
+     */
+    public static function get(string $name)
     {
         $env = static::env();
         $all = require_once RESOURCE_PATH . '/environments.php';
@@ -22,6 +33,9 @@ class Environment
         return $all[$env][$name];
     }
 
+    /**
+     * @return string
+     */
     private static function env()
     {
         switch ($_SERVER['HTTP_HOST']) {

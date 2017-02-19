@@ -2,13 +2,38 @@
 
 namespace app;
 
+/**
+ * Class Cli
+ *
+ * Application container for cli command tasks like cron jobs
+ *
+ * Used in crons like so:
+ *
+ * ```
+ * $app = new Cli(Cli::get_console_commands());
+ * $app->register(< your services >);
+ * $app->run(function() { < your cron logic here >});
+ *
+ */
 class Cli extends \Pimple\Container
 {
 
-    public function run(callable $task) {
+    /**
+     * Execute callable, injecting itself as the argument
+     *
+     * @param callable $task
+     * @return mixed result of $task()
+     */
+    public function run(callable $task)
+    {
         return $task($this);
     }
 
+    /**
+     * Outputs to out if debug option is set
+     *
+     * @param mixed **
+     */
     public function debug()
     {
         if (!$this->debug) return;
@@ -16,6 +41,11 @@ class Cli extends \Pimple\Container
         call_user_func_array([$this, 'out'], $args);
     }
 
+    /**
+     * Output to out if verbose option is set
+     *
+     * @param mixed **
+     */
     public function verbose()
     {
         if ($this->offsetGet('verbose')) {
@@ -24,6 +54,11 @@ class Cli extends \Pimple\Container
         }
     }
 
+    /**
+     * Outputs string versions of all params provided
+     *
+     * @param mixed **
+     */
     public function out()
     {
         $args = func_get_args();
@@ -43,6 +78,11 @@ class Cli extends \Pimple\Container
         }
     }
 
+    /**
+     * Outputs string versions of all params
+     *
+     * @param mixed **
+     */
     public function error()
     {
         $args = func_get_args();

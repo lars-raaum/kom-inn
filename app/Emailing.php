@@ -5,14 +5,33 @@ namespace app;
 use Mailgun\Mailgun;
 use app\Environment;
 
+/**
+ * Class Emailing
+ *
+ */
 class Emailing implements \Pimple\ServiceProviderInterface
 {
 
+    /**
+     * @var Mailgun
+     */
     protected $client;
+    /**
+     * @var string
+     */
     protected $domain;
+    /**
+     * @var bool|mixed
+     */
     protected $admin;
+    /**
+     * @var string
+     */
     protected $prefix;
 
+    /**
+     * @var Pimple\Container
+     */
     protected $app;
 
     /**
@@ -26,7 +45,14 @@ class Emailing implements \Pimple\ServiceProviderInterface
         $app['email'] = $this;
     }
 
-    public function __construct(array $config) {
+    /**
+     * Emailing constructor, if config is empty, no emails will be called
+     * even if called
+     *
+     * @param array $config
+     */
+    public function __construct(array $config)
+    {
         $this->admin  = isset($config['admin']) ? $config['admin'] : false;
         $this->prefix = isset($config['prefix']) ? $config['prefix'] : '';
         $this->salt   = isset($config['salt']) ? $config['salt'] : 'kioslo';
@@ -38,11 +64,26 @@ class Emailing implements \Pimple\ServiceProviderInterface
         $this->from   = $config['from'];
     }
 
-    public function createHashCode($email) {
+    /**
+     * Support method that generates salted hashcode from provided emails
+     *
+     * @param string $email
+     * @return string
+     */
+    public function createHashCode(string $email) : string
+    {
         return sha1($this->salt . $email);
     }
 
-    public function sendAdminRegistrationNotice() {
+    /**
+     * Send admin mail notice that a new guest has registered
+     *
+     * Automatically disabled if `admin` is not configured
+     *
+     * @return bool
+     */
+    public function sendAdminRegistrationNotice() : bool
+    {
         if (empty($this->client) || empty($this->admin)) return false;
         $this->client->sendMessage($this->domain, [
             'from'    => $this->from,
@@ -50,9 +91,17 @@ class Emailing implements \Pimple\ServiceProviderInterface
             'subject' => $this->prefix . 'Kom inn: Ny gjest',
             'html'    => '<h1>Ny gjest</h1><p><a href="http://kom-inn.org/admin">Finn match</a></p>'
         ]);
+        return true;
     }
 
-    public function sendNaggingMail(array $match) {
+    /**
+     * Send update request mail to host after match has been verified some time ago
+     *
+     * @param array $match
+     * @return bool
+     */
+    public function sendNaggingMail(array $match) : bool
+    {
         if (empty($this->client)) return false;
         $to = $match['host']['email'];
         try {
@@ -69,7 +118,14 @@ class Emailing implements \Pimple\ServiceProviderInterface
         return true;
     }
 
-    public function sendHostInform(array $match) {
+    /**
+     * Send mail to host upon match created
+     *
+     * @param array $match
+     * @return bool
+     */
+    public function sendHostInform(array $match) : bool
+    {
         if (empty($this->client)) return false;
         $to = $match['host']['email'];
         try {
@@ -86,7 +142,14 @@ class Emailing implements \Pimple\ServiceProviderInterface
         return true;
     }
 
-    protected function buildHostInformText(array $match) {
+    /**
+     * Build text to use in HostInform mail
+     *
+     * @param array $match
+     * @return string
+     */
+    protected function buildHostInformText(array $match) : string
+    {
         $name       = $match['host']['name'];
         $guestname  = $match['guest']['name'];
         $age        = $match['guest']['age'];
@@ -132,7 +195,14 @@ class Emailing implements \Pimple\ServiceProviderInterface
         return $text;
     }
 
-    protected function buildFeedbackRequestText($match) {
+    /**
+     * Build feedback request text
+     *
+     * @param $match
+     * @return string
+     */
+    protected function buildFeedbackRequestText($match) : string
+    {
         $id   = $match['id'];
         $code = $this->createHashCode($match['host']['email']);
         $base = Environment::get('base_url');
@@ -152,5 +222,4 @@ class Emailing implements \Pimple\ServiceProviderInterface
 
         return $text;
     }
-
 }

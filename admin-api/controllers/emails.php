@@ -2,6 +2,14 @@
 
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Triggers email sending for match
+ *
+ * @path /match/{id}/email/{type}
+ * @param int $id
+ * @param string $type
+ * @return Response
+ */
 $app->post('/match/{id}/email/{type}', function($id, $type, Request $request) use ($app) {
 
     $match = $app['matches']->get((int) $id, true, false); // Only include host

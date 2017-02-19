@@ -92,6 +92,20 @@ $app->post('/match/{id}', function ($id, Request $request) use ($app) {
     return $app->json($match);
 });
 
+/**
+ * Soft deletes a match and sets both host and guest back to active
+ *
+ * @path /match/{id}
+ * @arg int $id Match id
+ * @error 404 Match not found
+ * @error 400 Match already deleted
+ * @error 500 Could not delete (db error)
+ * @error 500 Failed to update host or guest (db error)
+ * $response 200 {"result": true}
+ * @param int $id
+ * @param Request $request
+ * @return Response
+ */
 $app->delete('/match/{id}', function ($id, Request $request) use ($app) {
     $match = $app['matches']->get((int) $id, false, false);
     if (!$match) {
