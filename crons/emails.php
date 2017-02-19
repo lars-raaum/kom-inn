@@ -4,7 +4,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $options = app\Cli::get_console_commands();
 if ($options['help']) {
-    echo PHP_EOL;
+    echo PHP_EOL.
     "Usage:".
     PHP_EOL . PHP_EOL .
     "  $ php emails.php [-(v|h|d)] [--(verbose|help|dry)] [-(m)=<value>] [--(max) <value>]" .
