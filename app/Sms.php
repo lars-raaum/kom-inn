@@ -4,14 +4,32 @@ namespace app;
 
 use Twilio\Rest\Client;
 
+/**
+ * Class Sms
+ */
 class Sms implements \Pimple\ServiceProviderInterface
 {
 
+    /**
+     * @var \Twilio\Rest\Client
+     */
     protected $client;
+    /**
+     * @var string
+     */
     protected $from;
+    /**
+     * @var bool|string
+     */
     protected $admin;
+    /**
+     * @var string
+     */
     protected $prefix;
 
+    /**
+     * @var \Silex\Application
+     */
     protected $app;
 
     /**
@@ -25,6 +43,10 @@ class Sms implements \Pimple\ServiceProviderInterface
         $app['sms'] = $this;
     }
 
+    /**
+     * Sms constructor.
+     * @param array $config
+     */
     public function __construct(array $config) {
         if (empty($config)) return;
         $this->from = $config['phone'];
@@ -33,6 +55,10 @@ class Sms implements \Pimple\ServiceProviderInterface
         $this->prefix = isset($config['prefix']) ? $config['prefix'] : '';
     }
 
+    /**
+     * @param array $match
+     * @return bool|\Twilio\Rest\Api\V2010\Account\MessageInstance
+     */
     public function sendHostInform(array $match) {
         if (empty($this->client)) return false;
         try {
@@ -50,6 +76,9 @@ class Sms implements \Pimple\ServiceProviderInterface
         }
     }
 
+    /**
+     * @return bool|\Twilio\Rest\Api\V2010\Account\MessageInstance
+     */
     public function sendAdminRegistrationNotice() {
         if (empty($this->client) || empty($this->admin)) return false;
         try {

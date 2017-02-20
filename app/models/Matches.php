@@ -3,6 +3,7 @@
 namespace app\models;
 
 use DateTime;
+use Doctrine\DBAL\Types\Type;
 
 class Matches implements \Pimple\ServiceProviderInterface
 {
@@ -11,6 +12,9 @@ class Matches implements \Pimple\ServiceProviderInterface
     const STATUS_CONFIRMED = 1;
     const STATUS_EXECUTED = 2;
 
+    /**
+     * @var \Silex\Application
+     */
     protected $app;
 
     /**
@@ -28,7 +32,9 @@ class Matches implements \Pimple\ServiceProviderInterface
      * Returns a single Guest
      *
      * @param int $id
-     * @return array
+     * @param bool $with_host
+     * @param bool $with_guest
+     * @return array|false
      */
     public function get(int $id, bool $with_host = true, bool $with_guest = true)
     {
@@ -91,7 +97,7 @@ class Matches implements \Pimple\ServiceProviderInterface
         $now = new DateTime('now');
         $data['updated'] = $now;
         $data['created'] = $now;
-        $dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
+        $dtt = Type::getType('datetime');
         $types = ['updated' => $dtt, 'created' => $dtt];
 
         error_log("INSERT match Guest[{$data['guest_id']}] Host[{$data['host_id']}] by [{$this->app['PHP_AUTH_USER']}]");
@@ -114,7 +120,7 @@ class Matches implements \Pimple\ServiceProviderInterface
      */
     public function update(int $id, array $data) : bool
     {
-        $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
+        $types = ['updated' => Type::getType('datetime')];
         $data['updated'] = new DateTime('now');
 
         error_log("Update Match[{$id}] by [{$this->app['PHP_AUTH_USER']}]");
@@ -135,8 +141,7 @@ class Matches implements \Pimple\ServiceProviderInterface
      */
     public function delete(int $id) : bool
     {
-        $now   = new DateTime('now');
-        $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
+        $types = ['updated' => Type::getType('datetime')];
         $data  = [
             'status'  => Matches::STATUS_DELETED,
             'updated' => new DateTime('now')

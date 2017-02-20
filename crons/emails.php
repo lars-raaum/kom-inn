@@ -29,7 +29,7 @@ $app->register(new app\models\Hosts());
 $app['PHP_AUTH_USER'] = __FILE__;
 
 // @TODO refactor to pattern similar to controllers for the api app?
-$app->run(function($app) {
+$app->run(function(\app\Cli $app) {
 
     if (isset($app['max'])) {
         $limit = (int) $app['max'];

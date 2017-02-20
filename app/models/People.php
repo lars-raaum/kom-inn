@@ -4,6 +4,7 @@ namespace app\models;
 
 use DateTime;
 use app\Geo;
+use Doctrine\DBAL\Types\Type;
 
 class People implements \Pimple\ServiceProviderInterface
 {
@@ -14,6 +15,9 @@ class People implements \Pimple\ServiceProviderInterface
     const TYPE_GUEST = 'GUEST';
     const TYPE_HOST = 'HOST';
 
+    /**
+     * @var \Silex\Application
+     */
     protected $app;
 
     /**
@@ -31,7 +35,7 @@ class People implements \Pimple\ServiceProviderInterface
      * Returns a single person, with host or guest data as approriate
      *
      * @param int $id
-     * @return array
+     * @return array|false
      */
     public function get(int $id)
     {
@@ -126,7 +130,7 @@ class People implements \Pimple\ServiceProviderInterface
      */
     public function insert(array $data)
     {
-        $dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
+        $dtt = Type::getType('datetime');
         $types = ['updated' => $dtt, 'created' => $dtt];
         $data['updated'] = new DateTime('now');
         $data['created'] = new DateTime('now');
@@ -166,7 +170,7 @@ class People implements \Pimple\ServiceProviderInterface
             }
         }
 
-        $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
+        $types = ['updated' => Type::getType('datetime')];
         $data['updated'] = new DateTime('now');
 
         error_log("Update person {$id} - by [{$this->app['PHP_AUTH_USER']}]");
@@ -212,8 +216,8 @@ class People implements \Pimple\ServiceProviderInterface
      *
      * Removes `name`, `email`, `phone`, `address`, `freetext` and  `bringing`
      *
-     * @param int $int
-     * @return boolean
+     * @param int $id
+     * @return bool
      */
     public function delete(int $id) : bool
     {
@@ -227,7 +231,7 @@ class People implements \Pimple\ServiceProviderInterface
             'status'    => People::STATUS_DELETED,
             'updated'   => new DateTime('now')
         ];
-        $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
+        $types = ['updated' => Type::getType('datetime')];
 
         error_log("DELETING DATA for Person[{$id}] by [{$this->app['PHP_AUTH_USER']}]");
         $result = $this->app['db']->update('people', $data, ['id' => $id], $types);

@@ -2,12 +2,13 @@
 
 namespace app\models;
 
-use app\models\People;
 use DateTime;
 
 class Hosts implements \Pimple\ServiceProviderInterface
 {
-
+    /**
+     * @var \Silex\Application
+     */
     protected $app;
 
     /**
@@ -25,7 +26,7 @@ class Hosts implements \Pimple\ServiceProviderInterface
      * Returns a single Host
      *
      * @param int $id
-     * @return array
+     * @return array|false
      */
     public function get(int $id)
     {
@@ -81,8 +82,10 @@ class Hosts implements \Pimple\ServiceProviderInterface
      * Find hosts that are useful for a guest
      *
      * @param int $guest_id
-     * @param float $distance range in km away from guest that we should look for host
+     * @param float $distance_in_km range in km away from guest that we should look for host
+     * @param array $filters
      * @return array
+     * @throws \Exception
      */
     public function findHostForGuest(int $guest_id, float $distance_in_km = 20.0, array $filters = []) : array
     {

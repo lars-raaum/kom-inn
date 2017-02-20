@@ -3,10 +3,14 @@
 namespace app\models;
 
 use DateTime;
+use Doctrine\DBAL\Types\Type;
 
 class Guests implements \Pimple\ServiceProviderInterface
 {
 
+    /**
+     * @var \Silex\Application
+     */
     protected $app;
 
     /**
@@ -24,7 +28,7 @@ class Guests implements \Pimple\ServiceProviderInterface
      * Returns a single Guest
      *
      * @param int $id
-     * @return array
+     * @return array|false
      */
     public function get(int $id)
     {
@@ -46,6 +50,7 @@ class Guests implements \Pimple\ServiceProviderInterface
      *
      * @TODO Add pagination
      * @param int $status
+     * @param array $filters
      * @return array
      */
     public function find(int $status, array $filters = []) : array
@@ -114,7 +119,7 @@ class Guests implements \Pimple\ServiceProviderInterface
      */
     public function insert(array $data)
     {
-        $dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
+        $dtt = Type::getType('datetime');
         $types = ['updated' => $dtt, 'created' => $dtt];
         $data['updated'] = new DateTime('now');
         $data['created'] = new DateTime('now');
@@ -137,13 +142,13 @@ class Guests implements \Pimple\ServiceProviderInterface
     {
         if ($id === 0) return false;
 
-        $types = ['updated' => \Doctrine\DBAL\Types\Type::getType('datetime')];
+        $types = ['updated' => Type::getType('datetime')];
         $data['updated'] = new \DateTime('now');
         error_log("Update guest {$id} - by [{$this->app['PHP_AUTH_USER']}]");
         $result = $this->app['db']->update('guests', $data, ['id' => $id], $types);
 
         if (!$result) {
-            error_log("Failed to update guest {$person['guest_id']}");
+            error_log("Failed to update guest {$id}");
             return false;
         }
         return true;

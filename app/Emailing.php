@@ -3,7 +3,6 @@
 namespace app;
 
 use Mailgun\Mailgun;
-use app\Environment;
 
 /**
  * Class Emailing
@@ -28,11 +27,18 @@ class Emailing implements \Pimple\ServiceProviderInterface
      * @var string
      */
     protected $prefix;
-
     /**
-     * @var Pimple\Container
+     * @var \Pimple\Container
      */
     protected $app;
+    /**
+     * @var string
+     */
+    protected $salt;
+    /**
+     * @var string
+     */
+    protected $from;
 
     /**
      * Registers this model in the app and gives it access to @app
