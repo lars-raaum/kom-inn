@@ -48,10 +48,7 @@ export default class People extends React.Component {
         super(props);
         this.state = {
             people: [],
-            meta: {
-                page: 1,
-                limit: 10
-            }
+            meta: {page: 1, limit: 10}
             // ,
             // status: '1'
         };
@@ -72,68 +69,44 @@ export default class People extends React.Component {
                 'Content-Type': 'application/json'
             }
         }).then(res => {
-            this.setState({
-                meta: {
-                    count: res.headers.get('X-Count'),
-                    page: res.headers.get('X-Page'),
-                    offset: res.headers.get('X-Offset'),
-                    total: res.headers.get('X-Total'),
-                    limit: res.headers.get('X-Limit')
-                }
-            });
+            var meta = {
+                count: res.headers.get('X-Count'),
+                page: res.headers.get('X-Page'),
+                offset: res.headers.get('X-Offset'),
+                total: res.headers.get('X-Total'),
+                limit: res.headers.get('X-Limit')
+            };
+            this.setState({meta});
             return res.json();
         }).then(people => { // brab meta data from Headers
-            this.setState({
-                people
-            })
+            this.setState({ people })
         });
-    }
-
-    setPage(page) {
-        if (page === this.state.meta.page) {
-            return;
-        }
-
-        this.setState({
-            meta: Object.assign(this.state.meta, {
-                page: page
-            })
-        }, this.fetchPeople);
     }
 
     nextPage(e) {
         e.preventDefault();
-        const max = Math.ceil(this.state.meta.total / this.state.meta.limit);
-        const page = this.state.meta.page;
-
-        if (page < max) {
-            page++;
-        }
-
-        this.setPage(page);
+        var max = Math.ceil(this.state.meta.total / this.state.meta.limit);
+        if (this.state.meta.page < max)
+            this.state.meta.page++;
+        this.fetchPeople();
     }
 
     prevPage(e) {
         e.preventDefault();
-        const page = this.state.meta.page;
-
-        if (page > 1) {
-            page--;
-        }
-
-        this.setPage(page);
+        if (this.state.meta.page > 1)
+            this.state.meta.page--;
+        this.fetchPeople();
     }
 
     gotoPage(e) {
         e.preventDefault();
-        const page = e.target.getAttribute('data-page');
-        this.setPage(page);
+        this.state.meta.page = e.target.getAttribute("data-page");
+        this.fetchPeople();
     }
 
     render() {
-        const N = Math.ceil(this.state.meta.total / this.state.meta.limit);
-        const pages = [...Array(N).keys()]; // + 1
-
+        var N = Math.ceil(this.state.meta.total / this.state.meta.limit);
+        var pages = Array.apply(null, {length: N}).map(Number.call, Number); // + 1
         return <div>
             <div className="people">
                 <h1> People are strange </h1>
@@ -145,18 +118,12 @@ export default class People extends React.Component {
             </div>
             <div  className="pagination">
                 <ul>
-                    <li>
-                        <button name="prev" onClick={this.prevPage}>Previous</button>
-                    </li>
+                    <li><button name="prev" onClick={this.prevPage}>Previous</button></li>
                     {pages.map((p) => {
                          p = p + 1;
-                        return (<li key={p}>
-                            <button data-page={p} onClick={this.gotoPage}> {p} </button>
-                        </li>)
+                        return <li key={p}><button data-page={p} onClick={this.gotoPage}> {p} </button></li>
                     })}
-                    <li>
-                        <button name="next" onClick={this.nextPage}>Next</button>
-                    </li>
+                    <li><button name="next" onClick={this.nextPage}>Next</button> </li>
                 </ul>
                 <p>Showing {this.state.meta.count} of {this.state.meta.total}, page {this.state.meta.page}</p>
             </div>
