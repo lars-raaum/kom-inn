@@ -54,8 +54,8 @@ $app->post('/match', function(Request $request) use ($app) {
         return $app->json(null, 500, ['X-Error-Message' => 'Inserted match not found!']);
     }
 
-    $result = $app['sms']->sendHostInform($match);
-    $result = $app['email']->sendHostInform($match);
+    $app['sms']->sendHostInform($match);
+    $app['email']->sendHostInform($match);
 
     return $app->json($match);
 });

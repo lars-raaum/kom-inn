@@ -29,6 +29,7 @@ $app->post('/match/{id}/email/{type}', function($id, $type, Request $request) us
     if ($result) {
         return $app->json(['sent' => true]);
     } else {
+        error_log("Email sending failed!");
         return $app->json(['sent' => false], 500, ['X-Error-Message' => 'Not sent, is it configured?']);
     }
 });
