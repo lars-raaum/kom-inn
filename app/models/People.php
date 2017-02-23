@@ -36,6 +36,7 @@ class People implements \Pimple\ServiceProviderInterface
      *
      * @param int $id
      * @return array|false
+     * @throws \app\exceptions\ApiException if not found
      */
     public function get(int $id)
     {
@@ -49,7 +50,10 @@ class People implements \Pimple\ServiceProviderInterface
         error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $person = $this->app['db']->fetchAssoc($sql, $args);
 
-        if (!$person) return null;
+        if (!$person) {
+            throw new \app\exceptions\ApiException("Person $id not found", 404);
+        }
+
         if ($person['guest_id'] === NULL) {
             unset($person['guest_id']);
             unset($person['food_concerns']);

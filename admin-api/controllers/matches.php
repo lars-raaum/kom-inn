@@ -12,9 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @error 404 Match not found
  */
 $app->get('/match/{id}', function ($id) use ($app) {
-    $match = $app['matches']->get((int) $id);
-    if (!$match) return $app->json(null, 404, ['X-Error-Message' => "Match $id not found!"]);
-    return $app->json($match);
+    return $app->json($app['matches']->get((int) $id));
 });
 
 /**
@@ -95,12 +93,7 @@ $app->post('/match', function(Request $request) use ($app) {
  * @error 500 Failed to save
  */
 $app->post('/match/{id}', function ($id, Request $request) use ($app) {
-
-    $id = (int) $id;
-    $match = $app['matches']->get($id, false, false);
-    if (!$match) {
-        return $app->json(null, 404, ['X-Error-Message' => "Match $id not found"]);
-    }
+    $match = $app['matches']->get((int) $id, false, false);
 
     $r = $request->request;
 
@@ -142,9 +135,7 @@ $app->post('/match/{id}', function ($id, Request $request) use ($app) {
  */
 $app->delete('/match/{id}', function ($id) use ($app) {
     $match = $app['matches']->get((int) $id, false, false);
-    if (!$match) {
-        return $app->json(null, 404, ['X-Error-Message' => "Match $id not found"]);
-    }
+
     if ($match['status'] == Matches::STATUS_DELETED) {
         return $app->json(null, 400, ['X-Error-Message' => "Match $id is already deleted"]);
     }

@@ -29,6 +29,7 @@ class Guests implements \Pimple\ServiceProviderInterface
      *
      * @param int $id
      * @return array|false
+     * @throws \app\exceptions\ApiException if not found
      */
     public function get(int $id)
     {
@@ -39,7 +40,7 @@ class Guests implements \Pimple\ServiceProviderInterface
         error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $guest = $this->app['db']->fetchAssoc($sql, $args);
         if (!$guest) {
-            return false;
+            throw new \app\exceptions\ApiException("Guest $id not found", 404);
         }
         $guest['type'] = People::TYPE_GUEST;
         return $guest;

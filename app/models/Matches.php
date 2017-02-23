@@ -35,6 +35,7 @@ class Matches implements \Pimple\ServiceProviderInterface
      * @param bool $with_host
      * @param bool $with_guest
      * @return array|false
+     * @throws \app\exceptions\ApiException if not found
      */
     public function get(int $id, bool $with_host = true, bool $with_guest = true)
     {
@@ -45,7 +46,7 @@ class Matches implements \Pimple\ServiceProviderInterface
         error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $match = $this->app['db']->fetchAssoc($sql, $args);
         if (!$match) {
-            return false;
+            throw new \app\exceptions\ApiException("Match $id not found", 404);
         }
         if ($with_host) {
             $match['host'] = $this->app['hosts']->get((int) $match['host_id']);

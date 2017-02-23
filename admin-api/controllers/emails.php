@@ -11,11 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @return Response
  */
 $app->post('/match/{id}/email/{type}', function($id, $type) use ($app) {
-
     $match = $app['matches']->get((int) $id, true, false); // Only include host
-    if (!$match) {
-        return $app->json(null, 404, ['X-Error-Message' => 'Match $id not found']);
-    }
 
     switch ($type) {
         case 'host_nag':

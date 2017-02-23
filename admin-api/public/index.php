@@ -31,18 +31,24 @@ require_once __DIR__.'/../controllers/emails.php';
 require_once __DIR__.'/../controllers/guests.php';
 require_once __DIR__.'/../controllers/people.php';
 
-$app->error(function (\Exception $e, Request $request, $code) use ($app) {
-    switch ($code) {
-        case 404:
-            $message = 'The requested page could not be found.';
-            break;
-        default:
-            $code = 500;
-            $message = 'We are sorry, but something went terribly wrong.';
-            // $message = $e->getMessage();
+$app->error(function (\Exception $e, Request $request) use ($app) {
+    if ($e instanceof app\Exception) {
+        error_log("API ERROR: {$e->getCode()} : {$e->getMessage()}");
+        return $app->json(null, $e->getCode(), ['X-Error-Message' => $e->getMessage()]);
+    } else {
+        $code = $e->getCode();
+        switch ($code) {
+            case 404:
+                $message = 'The requested page could not be found.';
+                break;
+            default:
+                $code = 500;
+                $message = 'We are sorry, but something went terribly wrong.';
+                // $message = $e->getMessage();
+        }
+        error_log($e->getMessage());
+        return $app->json(compact('message', 'code'));
     }
-    error_log($e->getMessage());
-    return $app->json(compact('message', 'code'));
 });
 
 $app->run();
