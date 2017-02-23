@@ -31,9 +31,11 @@ require_once __DIR__.'/../controllers/emails.php';
 require_once __DIR__.'/../controllers/guests.php';
 require_once __DIR__.'/../controllers/people.php';
 
-$app->error(function (\Exception $e, Request $request) use ($app) {
-    if ($e instanceof app\Exception) {
-        error_log("API ERROR: {$e->getCode()} : {$e->getMessage()}");
+$app->error(function (\Exception $e) use ($app) {
+    if ($e instanceof app\exceptions\ApiException) {
+        return $app->json(null, $e->getCode(), ['X-Error-Message' => $e->getMessage()]);
+    } elseif ($e instanceof app\Exception) {
+        error_log("ERROR: {$e->getCode()} : {$e->getMessage()}");
         return $app->json(null, $e->getCode(), ['X-Error-Message' => $e->getMessage()]);
     } else {
         $code = $e->getCode();
