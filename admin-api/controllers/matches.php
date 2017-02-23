@@ -4,12 +4,24 @@ use Symfony\Component\HttpFoundation\Request;
 use app\models\Matches;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Get match by id
+ *
+ * @param int $id
+ * @return Response
+ * @error 404 Match not found
+ */
 $app->get('/match/{id}', function ($id) use ($app) {
     $match = $app['matches']->get((int) $id);
     if (!$match) return $app->json(null, 404, ['X-Error-Message' => "Match $id not found!"]);
     return $app->json($match);
 });
 
+/**
+ * Get all matches
+ *
+ * @return Response
+ */
 $app->get('/matches', function() use ($app) {
     $status = (int) ($_GET['status'] ?? 0);
 
@@ -18,6 +30,17 @@ $app->get('/matches', function() use ($app) {
     return $app->json($matches);
 });
 
+/**
+ * Create new match
+ *
+ * @param Request $request
+ * @return Response
+ * @error 400 Missing required fields
+ * @error 500 Failed to insert match
+ * @error 500 Failed to update guest
+ * @error 500 Failed to update host
+ * @error 500 Could not get inserted match
+ */
 $app->post('/match', function(Request $request) use ($app) {
     $r = $request->request;
     $guest_id = $r->get('guest_id');
@@ -61,6 +84,16 @@ $app->post('/match', function(Request $request) use ($app) {
     return $app->json($match);
 });
 
+/**
+ * Update match
+ *
+ * @param int $id
+ * @param Request $request
+ * @return Response
+ * @error 404 Match not found
+ * @error 400 No save needed or valid
+ * @error 500 Failed to save
+ */
 $app->post('/match/{id}', function ($id, Request $request) use ($app) {
 
     $id = (int) $id;
