@@ -2,7 +2,10 @@
 
 namespace app;
 
+use InvalidArgumentException;
 use Mailgun\Mailgun;
+
+use app\mails\Reminders;
 
 /**
  * Class Emailing
@@ -104,24 +107,42 @@ class Emailing implements \Pimple\ServiceProviderInterface
      * Send update request mail to host after match has been verified some time ago
      *
      * @param array $match
+     * @param string $type
      * @return bool
+     * @throws \app\Exception if email is not configured
+     * @throws InvalidArgumentException if $type is not a valid type
      */
-    public function sendNaggingMail(array $match) : bool
+    public function sendReminderMail(array $match, string $type = Reminders::NEUTRAL) : bool
     {
-        if (empty($this->client)) return false;
-        $to = $match['host']['email'];
-        try {
-            $this->client->sendMessage($this->domain, [
-                'from'    => $this->from,
-                'to'      => $to,
-                'subject' => $this->prefix . 'Kom inn: oppfølgning - hvordan gikk det?',
-                'html'    => $this->buildFeedbackRequestText($match)
-            ]);
-        } catch (\Exception $e) {
-            error_log("Failed to mail : " . $e->getMessage());
-            return false;
+        if (empty($this->client)) {
+            throw new \app\Exception("Emailing is not configured");
         }
-        return true;
+        if (!in_array($type, Reminders::$TYPES)) {
+            throw new InvalidArgumentException("Type $type is not valid Reminder type");
+        }
+        $templates = new Reminders($this);
+        switch ($type) {
+            case Reminders::FIRST:
+                $body = $templates->buildFeedbackRequestText2days($match);
+                break;
+            case Reminders::SECOND:
+                $body = $templates->buildFeedbackRequestText4days($match);
+                break;
+            case Reminders::THIRD:
+                $body = $templates->buildFeedbackRequestText7days($match);
+                break;
+            case Reminders::NEUTRAL:
+            default:
+                $body = $templates->buildFeedbackRequestText($match);
+        }
+
+        $to = $match['host']['email'];
+        $this->client->sendMessage($this->domain, [
+            'from'    => $this->from,
+            'to'      => $to,
+            'subject' => $this->prefix . 'Kom inn: oppfølgning - hvordan gikk det?',
+            'html'    => $body
+        ]);
     }
 
     /**
@@ -201,31 +222,4 @@ class Emailing implements \Pimple\ServiceProviderInterface
         return $text;
     }
 
-    /**
-     * Build feedback request text
-     *
-     * @param $match
-     * @return string
-     */
-    protected function buildFeedbackRequestText($match) : string
-    {
-        $id   = $match['id'];
-        $code = $this->createHashCode($match['host']['email']);
-        $base = Environment::get('base_url');
-        $url  = "{$base}/feedback/{$id}/{$code}";
-        $yes  = $url . '/yes';
-        $no   = $url . '/no';
-
-        $text = "<h1>Hei igjen!</h1>";
-        $text .= "<p>Takk for at du meldte deg på Kom Inn!</p>";
-        $text .= "<p>Det er nå en liten stund siden du fikk tildelt din middagsgjest.</p>";
-        $text .= "<p>Vi håper at matchen var vellykket!</p>";
-        $text .= "<p>Vi vil gjerne vite om dere har gjennomført middagen - eller laget en helt konkret avtale med gjesten. </p>";
-        $text .= "<p><a href={$yes}>Trykk her</a> – hvis dere har gjennomført middagen eller laget en helt konkret avtale</p>";
-        $text .= "<p><a href={$no}>Trykk her</a> – hvis dere av ulike årsaker ikke kommer til å gjennomføre middagen allikevel.</p>";
-        $text .= "<p>Er det noe mer du vil fortelle? Har du spørsmål, tilbakemeldinger –  eller kanskje et bilde fra middagen? Send oss gjerne en mail på kominnoslo@gmail.com</p>";
-        $text .= "<p>Med vennlig hilsen oss i Kom Inn:)</p>";
-
-        return $text;
-    }
 }
