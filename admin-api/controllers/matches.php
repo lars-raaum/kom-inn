@@ -10,7 +10,7 @@ $app->get('/match/{id}', function ($id) use ($app) {
 });
 
 $app->get('/matches', function(Request $request) use ($app) {
-    $status = isset($_GET['status']) ? (int) $_GET['status'] : 0;
+    $status = (int) ($_GET['status'] ?? 0);
 
     // @TODO add pagination
     $matches = $app['matches']->find($status);

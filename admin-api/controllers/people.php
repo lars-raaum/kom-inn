@@ -74,16 +74,12 @@ $app->delete('/person/{id}', function ($id) use ($app) {
 });
 
 $app->get('/people', function() use ($app) {
-
-    $offset = (int) 0;
-    $limit  = (int) 10;
+    $offset = 0;
     $status = false;
     if (isset($_GET['status'])) {
         $status = (int) $_GET['status'];
     }
-    if (isset($_GET['limit'])) {
-        $limit = (int) $_GET['limit'];
-    }
+    $limit = (int) ($_GET['limit'] ?? 10);
     if (isset($_GET['page'])) {
         $page = (int) $_GET['page'];
         $offset = $page * $limit - $limit;
