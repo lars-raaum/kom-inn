@@ -4,7 +4,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $options = app\Cli::get_console_commands();
 if ($options['help']) {
-    echo PHP_EOL;
+    echo PHP_EOL.
     "Usage:".
     PHP_EOL . PHP_EOL .
     "  $ php emails.php [-(v|h|d)] [--(verbose|help|dry)] [-(m)=<value>] [--(max) <value>]" .
@@ -15,19 +15,21 @@ if ($options['help']) {
     "  m | max : limits the amount of mails to send to this number passed as value" . PHP_EOL;
     die();
 }
+define('RESOURCE_PATH', __DIR__ . '/../resources');
 
 $app = new app\Cli($options);
 
-$connection = require_once __DIR__ . '/../resources/connections.php';
+$connection = require_once RESOURCE_PATH . '/connections.php';
+$app->register(new Silex\Provider\DoctrineServiceProvider(), ['db.options' => $connection]);
 
-define('RESOURCE_PATH', realpath(__DIR__ . '/../resources'));
+$email_config = require_once RESOURCE_PATH . '/emails.php';
+$app->register(new app\Emailing($email_config));
 
-$app->register(new Silex\Provider\DoctrineServiceProvider(), [
-    'db.options' => $connection
-]);
+$app->register(new app\models\Hosts());
+$app['PHP_AUTH_USER'] = __FILE__;
 
 // @TODO refactor to pattern similar to controllers for the api app?
-$app->run(function($app) {
+$app->run(function(\app\Cli $app) {
 
     if (isset($app['max'])) {
         $limit = (int) $app['max'];
@@ -42,14 +44,13 @@ $app->run(function($app) {
     $sender = new app\Emailing();
 
     foreach ($matches as $match) {
-        $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
-        $match['host'] = $app['db']->fetchAssoc($sql, [(int) $match['host_id']]);
+        $match['host'] = $app['hosts']->get($match['host_id']);
 
         $e = $match['host']['email'];
         if ($app['dry']) {
             $app->out("Sending nagging mail to host: [$e]");
         } else {
-            $result = $sender->sendNaggingMail($match);
+            $result = $app['email']->sendNaggingMail($match);
             if ($result) {
                 $app->verbose("Mail sent to [$e]");
             } else {

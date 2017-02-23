@@ -5,26 +5,31 @@ require_once __DIR__.'/../vendor/autoload.php';
 $app = new Silex\Application();
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
-$app->before(function (Request $request) {
+$app->before(function (Request $request) use ($app) {
     if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
         $data = json_decode($request->getContent(), true);
         $request->request->replace(is_array($data) ? $data : array());
     }
-    $_SERVER['PHP_AUTH_USER'] = $_SERVER['PHP_AUTH_USER'] ?? "NONE";
+    $app['PHP_AUTH_USER'] = $_SERVER['PHP_AUTH_USER'] ?? "NONE";
 });
 require_once __DIR__.'/../../resources/configuration.php';
 
-$dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
-$types = ['updated' => $dtt, 'created' => $dtt];
+$app->register(new \app\models\People());
+$app->register(new \app\models\Guests());
+$app->register(new \app\models\Hosts());
+$app->register(new \app\models\Matches());
+
+$email_config = require_once RESOURCE_PATH . '/emails.php';
+$app->register(new app\Emailing($email_config));
+$sms_config = require_once RESOURCE_PATH . '/sms.php';
+$app->register(new app\Sms($sms_config));
 
 require_once __DIR__.'/../controllers/matches.php';
 require_once __DIR__.'/../controllers/hosts.php';
 require_once __DIR__.'/../controllers/emails.php';
 require_once __DIR__.'/../controllers/guests.php';
 require_once __DIR__.'/../controllers/people.php';
-require_once __DIR__.'/../controllers/importcsv.php';
 
 $app->error(function (\Exception $e, Request $request, $code) use ($app) {
     switch ($code) {

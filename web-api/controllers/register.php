@@ -1,22 +1,12 @@
 <?php
 
 use Symfony\Component\HttpFoundation\Request;
-use app\Geo;
-use app\Emailing;
 
-$dtt = \Doctrine\DBAL\Types\Type::getType('datetime');
-$types = ['updated' => $dtt, 'created' => $dtt];
-
-$app->post('/register', function(Request $request) use ($app, $types) {
+$app->post('/register', function(Request $request) use ($app) {
     $r = $request->request;
 
     $type = $r->get('type');
 
-    $defaults = [
-        'status'    => 1,
-        'updated'   => new DateTime('now'),
-        'created'   => new DateTime('now')
-    ];
     $data = [
         'email'     => $r->get('email') ?: 'N/A',
         'name'      => $r->get('name') ?: 'N/A',
@@ -31,44 +21,39 @@ $app->post('/register', function(Request $request) use ($app, $types) {
         'zipcode'   => $r->get('zipcode') ?: '',
         'address'   => $r->get('address') ?: '',
         'freetext'  => $r->get('freetext') ?: null,
-    ] + $defaults;
+    ];
 
     $data['adults_m'] += $data['gender'] == 'male' ? 1 : 0;
     $data['adults_f'] += $data['gender'] == 'female' ? 1 : 0;
 
-    if ($data['address']) {
-        $geo = new Geo();
-        $coords = $geo->getCoords($data);
-        $data['loc_long'] = $coords->getLongitude();
-        $data['loc_lat'] = $coords->getLatitude();
-    }
-
     // validation
-
-    $result = $app['db']->insert('people', $data , $types);
-
-    if (!$result) {
-        return $app->json(['result' => false]);
+    if (!$type || !in_array($type, ['host', 'guest'])) {
+        return $app->json(null, 400, ['X-Error-Message' => 'No `type` provided']);
     }
-    $user_id = $app['db']->lastInsertId();
+    if ($data['email'] == 'N/A' && $data['phone'] == 'N/A') {
+        return $app->json(null, 400, ['X-Error-Message' => 'Required data missing']);
+    }
 
-    $data = [
-        'user_id' => $user_id,
-        'updated' => new DateTime('now'),
-        'created' => new DateTime('now')
-    ];
+    $id = $app['people']->insert($data);
+
+    if (!$id) {
+        return $app->json(null, 500, ['X-Error-Message' => 'Unable to create person']);
+    }
+
+    $data = ['user_id' => $id];
+
     if ($type == 'host') {
-        $result = $app['db']->insert('hosts', $data, $types);
-        $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
+        $result = $app['hosts']->insert($data);
     } else {
-        $sender = new Emailing();
-        $sender->sendAdminRegistrationNotice();
         $data['food_concerns'] = $r->get('food_concerns');
-        $result = $app['db']->insert('guests', $data, $types);
-        $sql = "SELECT people.*, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
+        $result = $app['guests']->insert($data);
+        $app['email']->sendAdminRegistrationNotice();
+    }
+    if (!$result) {
+        error_log("Failed to create $type record for person {$id}");
+        return $app->json(null, 500, ['X-Error-Message' => "Unable to create $type person"]);
     }
 
-    $person = $app['db']->fetchAssoc($sql, [(int) $user_id]);
-
+    $person = $app['people']->get($id);
     return $app->json($person);
 });

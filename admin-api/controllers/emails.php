@@ -1,30 +1,35 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Request;
-use app\Emailing;
+use Symfony\Component\HttpFoundation\Response;
 
-$app->post('/match/{id}/email/{type}', function($id, $type, Request $request) use ($app) {
-    $sql = "SELECT * FROM matches WHERE id = ?";
-    $match = $app['db']->fetchAssoc($sql, [(int) $id]);
+/**
+ * Triggers email sending for match
+ *
+ * @path /match/{id}/email/{type}
+ * @param int $id
+ * @param string $type
+ * @return Response
+ */
+$app->post('/match/{id}/email/{type}', function($id, $type) use ($app) {
+
+    $match = $app['matches']->get((int) $id, true, false); // Only include host
     if (!$match) {
-        return $app->json(null, 404);
+        return $app->json(null, 404, ['X-Error-Message' => 'Match $id not found']);
     }
 
-    $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
-    $match['host'] = $app['db']->fetchAssoc($sql, [(int) $match['host_id']]);
-
-    $sender = new Emailing();
     switch ($type) {
         case 'host_nag':
-            $result = $sender->sendNaggingMail($match);
-            break;
-        case 'host_inform':
-            $result = $sender->sendHostInform($match);
+            $result = $app['email']->sendNaggingMail($match);
             break;
         default:
             error_log("Email type [$type] not supported");
-            return $app->json(null, 500);
+            return $app->json(null, 500, ['X-Error-Message' => "Email type [$type] not supported"]);
     }
 
-    return $app->json(['sent' => $result]);
+    if ($result) {
+        return $app->json(['sent' => true]);
+    } else {
+        error_log("Email sending failed!");
+        return $app->json(['sent' => false], 500, ['X-Error-Message' => 'Not sent, is it configured?']);
+    }
 });

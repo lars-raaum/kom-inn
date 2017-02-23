@@ -14,6 +14,19 @@ $app->before(function (Request $request) {
     }
 });
 require_once __DIR__.'/../../resources/configuration.php';
+
+$email_config = require_once RESOURCE_PATH . '/emails.php';
+$app->register(new app\Emailing($email_config));
+$sms_config = require_once RESOURCE_PATH . '/sms.php';
+$app->register(new app\Sms($sms_config));
+
+$app->register(new \app\models\People());
+$app->register(new \app\models\Guests());
+$app->register(new \app\models\Hosts());
+$app->register(new \app\models\Matches());
+
+$app['PHP_AUTH_USER'] = 'PUBLIC';
+
 require_once __DIR__.'/../controllers/register.php';
 require_once __DIR__.'/../controllers/feedback.php';
 
@@ -26,6 +39,7 @@ $app->error(function (\Exception $e, Request $request, $code) use ($app) {
             $code = 500;
             $message = 'We are sorry, but something went terribly wrong.';
             // $message = $e->getMessage();
+            error_log($e->getMessage());
     }
 
     return $app->json(compact('message', 'code'));
