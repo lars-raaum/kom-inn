@@ -32,7 +32,7 @@ class Hosts implements \Pimple\ServiceProviderInterface
      */
     public function get(int $id)
     {
-        if ($id === 0) return false;
+        if ($id === 0) throw new ApiException("Id not valid", 404);
 
         $args = [$id];
         $sql = "SELECT people.*, hosts.id AS `host_id` FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
