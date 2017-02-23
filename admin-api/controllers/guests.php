@@ -12,7 +12,7 @@ $app->get('/guest/{id}', function ($id) use ($app) {
 });
 
 $app->get('/guests', function() use ($app) {
-    $status = (int) $_GET['status'] ?? 1;
+    $status = (int) ($_GET['status'] ?? 1);
     $filters = [];
     $filters['children'] = $_GET['children'] ?? null;
     $filters['men'] = $_GET['men'] ?? null;
