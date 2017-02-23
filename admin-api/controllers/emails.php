@@ -1,6 +1,6 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Triggers email sending for match
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @param string $type
  * @return Response
  */
-$app->post('/match/{id}/email/{type}', function($id, $type, Request $request) use ($app) {
+$app->post('/match/{id}/email/{type}', function($id, $type) use ($app) {
 
     $match = $app['matches']->get((int) $id, true, false); // Only include host
     if (!$match) {

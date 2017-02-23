@@ -1,7 +1,5 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Request;
-
 $app->get('/host/{id}', function ($id) use ($app) {
 
     $host = $app['hosts']->get((int) $id);
@@ -12,7 +10,7 @@ $app->get('/host/{id}', function ($id) use ($app) {
     return $app->json($host);
 });
 
-$app->get('/hosts', function(Request $request) use ($app) {
+$app->get('/hosts', function() use ($app) {
     $guest_id = (int) ($_GET['guest_id'] ?? NULL);
     $distance = (float) (floatval($_GET['distance']) ?? 20); // distance in nautical miles squared
 

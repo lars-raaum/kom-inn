@@ -1,8 +1,5 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Request;
-use app\Environment;
-
 $app->get('/guest/{id}', function ($id) use ($app) {
     $guest = $app['guests']->get((int) $id);
     if (!$guest) {

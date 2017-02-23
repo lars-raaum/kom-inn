@@ -2,6 +2,7 @@
 
 use Symfony\Component\HttpFoundation\Request;
 use app\models\Matches;
+use Symfony\Component\HttpFoundation\Response;
 
 $app->get('/match/{id}', function ($id) use ($app) {
     $match = $app['matches']->get((int) $id);
@@ -9,7 +10,7 @@ $app->get('/match/{id}', function ($id) use ($app) {
     return $app->json($match);
 });
 
-$app->get('/matches', function(Request $request) use ($app) {
+$app->get('/matches', function() use ($app) {
     $status = (int) ($_GET['status'] ?? 0);
 
     // @TODO add pagination
@@ -106,7 +107,7 @@ $app->post('/match/{id}', function ($id, Request $request) use ($app) {
  * @param Request $request
  * @return Response
  */
-$app->delete('/match/{id}', function ($id, Request $request) use ($app) {
+$app->delete('/match/{id}', function ($id) use ($app) {
     $match = $app['matches']->get((int) $id, false, false);
     if (!$match) {
         return $app->json(null, 404, ['X-Error-Message' => "Match $id not found"]);
