@@ -134,10 +134,11 @@ export default class People extends React.Component {
     }
 
     render() {
-        if (this.state.people.length === 0)
+        if (this.state.people.length === 0) {
             return <div className="loading-gif">
                 <span>LOADING</span>
             </div>;
+        }
 
         const N = Math.ceil(this.state.meta.total / this.state.meta.limit);
         const pages = [...Array(N).keys()]; // + 1
