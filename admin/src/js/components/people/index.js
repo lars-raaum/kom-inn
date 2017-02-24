@@ -49,9 +49,11 @@ export default class People extends React.Component {
         this.state = {
             people: [],
             meta: {
+                count: 0,
                 page: 1,
-                limit: 10,
-                total: 0
+                offset: 0,
+                total: 0,
+                limit: 10
             }
             // ,
             // status: '1'
