@@ -50,7 +50,8 @@ export default class People extends React.Component {
             people: [],
             meta: {
                 page: 1,
-                limit: 10
+                limit: 10,
+                total: 0
             }
             // ,
             // status: '1'
@@ -131,6 +132,11 @@ export default class People extends React.Component {
     }
 
     render() {
+        if (this.state.people.length === 0)
+            return <div className="loading-gif">
+                <span>LOADING</span>
+            </div>;
+
         const N = Math.ceil(this.state.meta.total / this.state.meta.limit);
         const pages = [...Array(N).keys()]; // + 1
 
