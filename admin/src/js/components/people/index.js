@@ -1,5 +1,5 @@
 import React from 'react';
-import Person from './person'
+import Person from '../common/person'
 
 export default class People extends React.Component {
     constructor(props) {
@@ -20,6 +20,7 @@ export default class People extends React.Component {
         this.nextPage = this.nextPage.bind(this);
         this.prevPage = this.prevPage.bind(this);
         this.gotoPage = this.gotoPage.bind(this);
+        this.removePerson = this.removePerson.bind(this);
     }
 
     componentDidMount() {
@@ -91,6 +92,13 @@ export default class People extends React.Component {
         this.setPage(page);
     }
 
+    removePerson(personComponent) {
+        return personComponent.remove()
+            .then(() => { this.props.fetchPeople() });
+
+        // @TODO update people state instead of refetching
+    }
+
     render() {
         if (this.state.people.length === 0) {
             return <div className="loading-gif">
@@ -104,11 +112,11 @@ export default class People extends React.Component {
         return <div>
             <div className="people">
                 <h1> People are strange </h1>
-                <ul>
+                <div>
                     {this.state.people.map(person => {
-                        return <Person key={person.id} person={person} fetchPeople={this.fetchPeople} />
+                        return <Person key={person.id} person={person} fetchPeople={this.fetchPeople} handleRemove={this.removePerson} />
                     })}
-                </ul>
+                </div>
             </div>
             <div  className="pagination">
                 <ul>

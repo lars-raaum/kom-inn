@@ -1,9 +1,9 @@
 import React from 'react';
-import Person from './person';
+import Person from '../common/person';
 
 export default class Match extends React.Component {
     constructor() {
-        super()
+        super();
 
         this.removePerson = this.removePerson.bind(this);
         this.nagHost = this.nagHost.bind(this);
@@ -67,16 +67,9 @@ export default class Match extends React.Component {
         }).then(matches => this.props.fetchMatches());
     }
 
-    removePerson(person) {
-        return this.cancelMatch().then(() => {
-            return fetch(`/api/person/${person.id}`, {
-                method: 'DELETE',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-        })
+    removePerson(personComponent) {
+        return personComponent.remove()
+            .then(this.cancelMatch());
     }
 
     nagHost(e) {
