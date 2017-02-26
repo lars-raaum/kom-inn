@@ -25,7 +25,7 @@ $connection = require_once RESOURCE_PATH . '/connections.php';
 $app->register(new Silex\Provider\DoctrineServiceProvider(), ['db.options' => $connection]);
 
 $email_config = require_once RESOURCE_PATH . '/emails.php';
-$app->register(new app\Emailing($email_config));
+$app->register(new app\Mailer($email_config));
 
 $app->register(new app\models\Hosts());
 $app->register(new app\models\Matches());
@@ -55,8 +55,8 @@ $app->run(function(\app\Cli $app) {
     $fn = function($o, $v) { $o[$v] = 0; return $o; };
     $counters = array_reduce($counter_keys, $fn, []);
 
-    /** @var \app\Emailing $mailer */
-    $mailer = $app['email'];
+    /** @var \app\Mailer $mailer */
+    $mailer = $app['mailer'];
     foreach ($matches as $match) {
         $match['host'] = $app['hosts']->get($match['host_id']);
         $app->verbose("Match {$match['id']}");

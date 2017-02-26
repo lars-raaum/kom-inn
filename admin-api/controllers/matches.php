@@ -79,7 +79,7 @@ $app->post('/match', function(Request $request) use ($app) {
     }
 
     $app['sms']->sendHostInform($match);
-    $app['email']->sendHostInform($match);
+    $app['mailer']->sendHostInform($match);
 
     return $app->json($match);
 });

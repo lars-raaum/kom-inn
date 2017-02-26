@@ -21,7 +21,7 @@ $app->register(new \app\models\Hosts());
 $app->register(new \app\models\Matches());
 
 $email_config = require_once RESOURCE_PATH . '/emails.php';
-$app->register(new app\Emailing($email_config));
+$app->register(new app\Mailer($email_config));
 $sms_config = require_once RESOURCE_PATH . '/sms.php';
 $app->register(new app\Sms($sms_config));
 

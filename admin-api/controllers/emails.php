@@ -19,7 +19,7 @@ $app->post('/match/{id}/email/{type}', function($id, $type) use ($app) {
 
     switch ($type) {
         case 'reminder':
-            $result = $app['email']->sendReminderMail($match);
+            $result = $app['mailer']->sendReminderMail($match);
             break;
         default:
             error_log("Email type [$type] not supported");

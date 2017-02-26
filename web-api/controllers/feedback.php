@@ -19,7 +19,7 @@ $app->post('/reactivate', function(Request $request) use ($app) {
         return $app->json(null, 404, ['X-Error-Message' => "Match $id not found"]);
     }
 
-    $hash = $app['email']->createHashCode($match['host']['email']);
+    $hash = $app['mailer']->createHashCode($match['host']['email']);
     if ($hash != $code) {
         error_log("Feedback request with invalid code [{$code}] != [{$hash}] for person [{$match['host']['id']}]");
         return $app->json(null, 400, ['X-Error-Message' => 'Invalid code!']);
@@ -52,7 +52,7 @@ $app->post('/feedback', function(Request $request) use ($app) {
         return $app->json([], 404, ['X-Error-Message' => 'Match not found']);
     }
 
-    $hash = $app['email']->createHashCode($match['host']['email']);
+    $hash = $app['mailer']->createHashCode($match['host']['email']);
     if ($hash != $code) {
         error_log("Feedback request with invalid code [{$code}] != [{$hash}] for match [{$id}]");
         return $app->json(null, 400, ['X-Error-Message' => 'Invalid code!']);

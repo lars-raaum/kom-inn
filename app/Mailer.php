@@ -11,7 +11,7 @@ use app\mails\Reminders;
  * Class Emailing
  *
  */
-class Emailing implements \Pimple\ServiceProviderInterface
+class Mailer implements \Pimple\ServiceProviderInterface
 {
 
     /**
@@ -51,7 +51,7 @@ class Emailing implements \Pimple\ServiceProviderInterface
     public function register(\Pimple\Container $app)
     {
         $this->app = $app;
-        $app['email'] = $this;
+        $app['mailer'] = $this;
     }
 
     /**

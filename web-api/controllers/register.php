@@ -47,7 +47,7 @@ $app->post('/register', function(Request $request) use ($app) {
     } else {
         $data['food_concerns'] = $r->get('food_concerns');
         $result = $app['guests']->insert($data);
-        $app['email']->sendAdminRegistrationNotice();
+        $app['mailer']->sendAdminRegistrationNotice();
     }
     if (!$result) {
         error_log("Failed to create $type record for person {$id}");

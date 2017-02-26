@@ -2,7 +2,7 @@
 
 namespace app\mails;
 
-use app\Emailing;
+use app\Mailer;
 use app\Environment;
 
 class Reminders
@@ -15,7 +15,7 @@ class Reminders
     public static $TYPES = [self::NEUTRAL, self::FIRST, self::SECOND, self::THIRD];
     protected $mailer;
 
-    public function __construct(Emailing $mailer)
+    public function __construct(Mailer $mailer)
     {
         $this->mailer = $mailer;
     }
