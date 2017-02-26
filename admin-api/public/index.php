@@ -19,6 +19,7 @@ $app->register(new \app\models\People());
 $app->register(new \app\models\Guests());
 $app->register(new \app\models\Hosts());
 $app->register(new \app\models\Matches());
+$app->register(new \app\models\Emails());
 
 $email_config = require_once RESOURCE_PATH . '/emails.php';
 $app->register(new app\Mailer($email_config));

@@ -2,9 +2,9 @@
 
 namespace app;
 
+use app\models\Emails;
 use InvalidArgumentException;
 use Mailgun\Mailgun;
-
 use app\mails\Reminders;
 use app\mails\HostInform;
 
@@ -156,6 +156,11 @@ class Mailer implements \Pimple\ServiceProviderInterface
     {
         if (empty($this->client)) return false;
         $to = $match['host']['email'];
+        $email_data = [
+            'user_id' => $match['host_id'],
+            'match_id' => $match['id'],
+            'type' => HostInform::HOST_INFORM
+        ];
         try {
             $templater = new HostInform($this);
             $body = $templater->buildHostInformText($match);
@@ -165,11 +170,14 @@ class Mailer implements \Pimple\ServiceProviderInterface
                 'subject' => $this->prefix . 'Kom inn: Gjester venter på en invitasjon fra deg',
                 'html'    => $body
             ]);
+            $sent = true;
         } catch (\Exception $e) {
             error_log("Failed to mail : " . $e->getMessage());
-            return false;
+            $email_data['status'] = Emails::STATUS_FAILED;
+            $sent = false;
         }
-        return true;
+        $this->app['emails']->insert($email_data);
+        return $sent;
     }
 
 }

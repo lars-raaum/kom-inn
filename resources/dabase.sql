@@ -76,7 +76,8 @@ CREATE TABLE IF NOT EXISTS `matches` (
 CREATE TABLE `emails` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
-  `type` varchar(32) NOT NULL DEFAULT '',
+  `match_id` int(11) DEFAULT NULL,
+  `type` varchar(32) NOT NULL,
   `status` enum('SENT','CONFIRMED','FAILED') NOT NULL DEFAULT 'SENT',
   `updated` datetime NOT NULL,
   `created` datetime NOT NULL,
