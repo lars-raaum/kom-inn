@@ -7,10 +7,10 @@ use app\Environment;
 
 class Reminders
 {
-    const NEUTRAL = 'NEUTRAL';
-    const FIRST = 'FIRST';
-    const SECOND = 'SECOND';
-    const THIRD = 'THIRD';
+    const NEUTRAL = 'NEUTRAL REMINDER';
+    const FIRST = 'FIRST REMINDER';
+    const SECOND = 'SECOND REMINDER';
+    const THIRD = 'THIRD REMINDER';
 
     public static $TYPES = [self::NEUTRAL, self::FIRST, self::SECOND, self::THIRD];
     protected $mailer;
