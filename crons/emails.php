@@ -30,9 +30,10 @@ $app->register(new app\Mailer($email_config));
 $app->register(new app\models\Hosts());
 $app->register(new app\models\Matches());
 $app->register(new app\models\People());
+$app->register(new app\models\Emails());
 $app['PHP_AUTH_USER'] = __FILE__;
 
-ini_set("error_log", "emails.log"); // Get the
+ini_set("error_log", "emails.log"); // Stop stdout from geting stderr when run as CLI
 
 // @TODO refactor to pattern similar to controllers for the api app?
 $app->run(function(\app\Cli $app) {
@@ -81,18 +82,30 @@ $app->run(function(\app\Cli $app) {
                 $app->verbose("Cancelling match [{$match['id']}]");
                 $counters['DELETE']++;
             } elseif ($created >= 2 && $created <= 3) {
+                if ($app->getEmailsModel()->find($match['host_id'], Reminders::FIRST)) {
+                    $counters['SKIP']++;
+                    continue;
+                }
                 if ($app['dry'] == false) {
                     $mailer->sendReminderMail($match, Reminders::FIRST);
                 }
                 $app->verbose("First reminder sent to [{$match['host']['email']}]");
                 $counters[Reminders::FIRST]++;
             } elseif ($created >= 4 && $created <= 6) {
+                if ($app->getEmailsModel()->find($match['host_id'], Reminders::SECOND)) {
+                    $counters['SKIP']++;
+                    continue;
+                }
                 if ($app['dry'] == false) {
                     $mailer->sendReminderMail($match, Reminders::SECOND);
                 }
                 $app->verbose("Second reminder sent to [{$match['host']['email']}]");
                 $counters[Reminders::SECOND]++;
             } elseif ($created >= 7 && $created <= 9) {
+                if ($app->getEmailsModel()->find($match['host_id'], Reminders::THIRD)) {
+                    $counters['SKIP']++;
+                    continue;
+                }
                 if ($app['dry'] == false) {
                     $mailer->sendReminderMail($match, Reminders::THIRD);
                 }

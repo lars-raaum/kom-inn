@@ -19,6 +19,14 @@ class Cli extends \Pimple\Container
 {
 
     /**
+     * @return models\Emails
+     */
+    public function getEmailsModel() : models\Emails
+    {
+        return $this->app['emails'];
+    }
+
+    /**
      * Execute callable, injecting itself as the argument
      *
      * @param callable $task
