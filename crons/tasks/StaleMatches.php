@@ -4,7 +4,7 @@ namespace crons\tasks;
 
 use app\mails\Reminders;
 
-class EmailsTask {
+class StaleMatches {
 
     /** @var \app\Cli */
     protected $app;
