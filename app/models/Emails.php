@@ -62,7 +62,7 @@ class Emails implements \Pimple\ServiceProviderInterface
     public function find(int $person_id, string $type) : array
     {
         $args = [$person_id, $type];
-        $sql = "SELECT * FROM matches WHERE user_id = ? AND type = ? ";
+        $sql = "SELECT * FROM emails WHERE user_id = ? AND type = ? ";
         error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         return $this->app['db']->fetchAll($sql, $args);
     }
