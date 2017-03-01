@@ -38,14 +38,15 @@ class Environment
      */
     private static function env()
     {
-        switch ($_SERVER['HTTP_HOST']) {
-            case 'localhost:9001':
-                return 'local';
+        $http_host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        switch ($http_host) {
             case 'admin.dev.kom-inn.org':
                 return 'dev';
-            default:
             case 'admin.kom-inn.org':
                 return 'pro';
+            default:
+            case 'localhost:9001':
+                return 'local';
         }
     }
 }

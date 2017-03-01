@@ -23,7 +23,7 @@ class Cli extends \Pimple\Container
      */
     public function getEmailsModel() : models\Emails
     {
-        return $this->app['emails'];
+        return $this['emails'];
     }
 
     /**
