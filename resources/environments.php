@@ -2,7 +2,7 @@
 
 $sms = file_exists(RESOURCE_PATH . '/sms.php') ? require RESOURCE_PATH . '/sms.php' : [];
 $emails = file_exists(RESOURCE_PATH . '/emails.php') ? require RESOURCE_PATH . '/emails.php' : [];
-$connections = file_exists(RESOURCE_PATH . '/connections.php') ? require RESOURCE_PATH . '/connections.php' : [];
+$connections = require RESOURCE_PATH . '/connections.php';
 
 return [
     'dev' => [
@@ -28,11 +28,11 @@ return [
     'pre' => [
         'base_url' => 'https://dev.kom-inn.org',
         'sms' => $sms + [
-            'enabled' => true,
+            'enabled' => false,
             'prefix' => 'PRE: '
         ],
         'emails' => $emails + [
-            'enabled' => true,
+            'enabled' => false,
             'prefix' => 'PRE: ',
         ],
         'connections' => $connections + [
@@ -46,11 +46,11 @@ return [
     'pro' => [
         'base_url' => 'https://kom-inn.org',
         'sms' => $sms + [
-            'enabled' => true,
+            'enabled' => false,
             'prefix' => ''
         ],
         'emails' => $emails + [
-            'enabled' => true,
+            'enabled' => false,
             'prefix' => '',
         ],
         'connections' => $connections + [
