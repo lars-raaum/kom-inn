@@ -7,7 +7,7 @@ $connections = require RESOURCE_PATH . '/connections.php';
 return [
     'dev' => [
         'base_url' => 'http://localhost:8000',
-        'logfile' => '/var/log/kominn.log',
+        'logfile' => RESOURCE_PATH . '/app.log',
         'sms' => $sms + [
             'enabled' => false,
             'prefix' => 'DEV: '
