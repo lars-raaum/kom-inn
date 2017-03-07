@@ -47,6 +47,10 @@ $app->post('/feedback', function(Request $request) use ($app) {
 
     $match = $app['matches']->get($id, true, false);
 
+    if ($match['status'] != \app\models\Matches::STATUS_NEW) {
+        throw new ApiException('Match is not "NEW"');
+    }
+
     $hash = $app['mailer']->createHashCode($match['host']['email']);
     if ($hash != $code) {
         error_log("Feedback request with invalid code [{$code}] != [{$hash}] for match [{$id}]");
