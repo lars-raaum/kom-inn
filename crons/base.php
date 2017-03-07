@@ -21,11 +21,8 @@ $app = new app\Cli($options);
 
 $app['PHP_AUTH_USER'] = $argv[0];
 
-$connection = require_once RESOURCE_PATH . '/connections.php';
-$app->register(new Silex\Provider\DoctrineServiceProvider(), ['db.options' => $connection]);
-
-$email_config = require_once RESOURCE_PATH . '/emails.php';
-$app->register(new app\Mailer($email_config));
+$app->register(new Silex\Provider\DoctrineServiceProvider(), ['db.options' => \app\Environment::get('connections')]);
+$app->register(new app\Mailer());
 
 $app->register(new app\models\Hosts());
 $app->register(new app\models\Matches());
