@@ -64,6 +64,17 @@ $app->delete('/person/{id}', function ($id) use ($app) {
     return $app->json($result);
 });
 
+$app->post('/person/{id}/convert', function ($id) use ($app) {
+    $id = (int) $id;
+
+    $result = $app['people']->changeTypeOfPerson($id);
+    if (!$result) {
+        return $app->json(null, 404);
+    }
+    $result = $app['people']->get($id);
+    return $app->json($result);
+});
+
 $app->get('/people', function() use ($app) {
     $offset = 0;
     $status = false;
