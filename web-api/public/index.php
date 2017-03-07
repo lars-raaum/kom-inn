@@ -39,7 +39,7 @@ $app->error(function (\Exception $e) use ($app) {
         return $app->json(null, $e->getCode(), ['X-Error-Message' => $e->getMessage()]);
     } elseif ($e instanceof app\Exception) {
         error_log("ERROR: {$e->getCode()} : {$e->getMessage()}");
-        return $app->json(null, $e->getCode(), ['X-Error-Message' => $e->getMessage()]);
+        return $app->json(null, 500, ['X-Error-Message' => $e->getMessage()]);
     } else {
         $code = $e->getCode();
         switch ($code) {
@@ -50,8 +50,8 @@ $app->error(function (\Exception $e) use ($app) {
                 $code = 500;
                 $message = 'We are sorry, but something went terribly wrong.';
         }
-        error_log($e->getMessage());
-        return $app->json(compact('message', 'code'));
+        error_log($e->getCode() . " : " . $e->getMessage());
+        return $app->json(null, $code, ['X-Error-Message' => $message]);
     }
 });
 
