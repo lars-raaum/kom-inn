@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\exceptions\ApiException;
 use DateTime;
 use Doctrine\DBAL\Types\Type;
 
@@ -29,17 +30,18 @@ class Guests implements \Pimple\ServiceProviderInterface
      *
      * @param int $id
      * @return array|false
+     * @throws ApiException if not found
      */
     public function get(int $id)
     {
-        if ($id === 0) return false;
+        if ($id === 0) throw new ApiException("Id not valid", 404);
 
         $args = [$id];
         $sql = "SELECT people.*, guests.id AS `guest_id`, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
         error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $guest = $this->app['db']->fetchAssoc($sql, $args);
         if (!$guest) {
-            return false;
+            throw new ApiException("Guest $id not found", 404);
         }
         $guest['type'] = People::TYPE_GUEST;
         return $guest;

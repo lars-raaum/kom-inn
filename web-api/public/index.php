@@ -30,19 +30,25 @@ $app['PHP_AUTH_USER'] = 'PUBLIC';
 require_once __DIR__.'/../controllers/register.php';
 require_once __DIR__.'/../controllers/feedback.php';
 
-$app->error(function (\Exception $e, Request $request, $code) use ($app) {
-    switch ($code) {
-        case 404:
-            $message = 'The requested page could not be found.';
-            break;
-        default:
-            $code = 500;
-            $message = 'We are sorry, but something went terribly wrong.';
-            // $message = $e->getMessage();
-            error_log($e->getMessage());
+$app->error(function (\Exception $e) use ($app) {
+    if ($e instanceof app\exceptions\ApiException) {
+        return $app->json(null, $e->getCode(), ['X-Error-Message' => $e->getMessage()]);
+    } elseif ($e instanceof app\Exception) {
+        error_log("ERROR: {$e->getCode()} : {$e->getMessage()}");
+        return $app->json(null, $e->getCode(), ['X-Error-Message' => $e->getMessage()]);
+    } else {
+        $code = $e->getCode();
+        switch ($code) {
+            case 404:
+                $message = 'The requested page could not be found.';
+                break;
+            default:
+                $code = 500;
+                $message = 'We are sorry, but something went terribly wrong.';
+        }
+        error_log($e->getMessage());
+        return $app->json(compact('message', 'code'));
     }
-
-    return $app->json(compact('message', 'code'));
 });
 
 $app->run();

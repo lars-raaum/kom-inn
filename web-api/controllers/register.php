@@ -1,5 +1,7 @@
 <?php
 
+use app\exceptions\ApiException;
+use app\exceptions\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
 
 $app->post('/register', function(Request $request) use ($app) {
@@ -28,16 +30,16 @@ $app->post('/register', function(Request $request) use ($app) {
 
     // validation
     if (!$type || !in_array($type, ['host', 'guest'])) {
-        return $app->json(null, 400, ['X-Error-Message' => 'No `type` provided']);
+        throw new ApiException('No `type` provided');
     }
     if ($data['email'] == 'N/A' && $data['phone'] == 'N/A') {
-        return $app->json(null, 400, ['X-Error-Message' => 'Required data missing']);
+        throw new ApiException('Required data missing');
     }
 
     $id = $app['people']->insert($data);
 
     if (!$id) {
-        return $app->json(null, 500, ['X-Error-Message' => 'Unable to create person']);
+        throw new ServiceException('Unable to create person');
     }
 
     $data = ['user_id' => $id];
@@ -50,8 +52,7 @@ $app->post('/register', function(Request $request) use ($app) {
         $app['mailer']->sendAdminRegistrationNotice();
     }
     if (!$result) {
-        error_log("Failed to create $type record for person {$id}");
-        return $app->json(null, 500, ['X-Error-Message' => "Unable to create $type person"]);
+        throw new ServiceException("Unable to create $type person {$id}");
     }
 
     $person = $app['people']->get($id);

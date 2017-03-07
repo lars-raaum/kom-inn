@@ -1,11 +1,7 @@
 <?php
 
 $app->get('/guest/{id}', function ($id) use ($app) {
-    $guest = $app['guests']->get((int) $id);
-    if (!$guest) {
-        return $app->json(null, 404, ['X-Error-Message' => "Guest $id not found"]);
-    }
-    return $app->json($guest);
+    return $app->json($app['guests']->get((int) $id));
 });
 
 $app->get('/guests', function() use ($app) {

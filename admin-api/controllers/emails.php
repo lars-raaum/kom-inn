@@ -9,27 +9,23 @@ use Symfony\Component\HttpFoundation\Response;
  * @param int $id
  * @param string $type
  * @return Response
+ * @throws \app\exceptions\ApiException
+ * @throws \app\exceptions\ServiceException
  */
 $app->post('/match/{id}/email/{type}', function($id, $type) use ($app) {
-
     $match = $app['matches']->get((int) $id, true, false); // Only include host
-    if (!$match) {
-        return $app->json(null, 404, ['X-Error-Message' => 'Match $id not found']);
-    }
 
     switch ($type) {
         case 'reminder':
             $result = $app['mailer']->sendReminderMail($match);
             break;
         default:
-            error_log("Email type [$type] not supported");
-            return $app->json(null, 500, ['X-Error-Message' => "Email type [$type] not supported"]);
+            throw new \app\exceptions\ApiException("Email type [$type] not supported");
     }
 
-    if ($result) {
-        return $app->json(['sent' => true]);
-    } else {
-        error_log("Email sending failed!");
-        return $app->json(['sent' => false], 500, ['X-Error-Message' => 'Not sent, is it configured?']);
+    if (!$result) {
+        throw new app\exceptions\ServiceException('Email is not sent, is it configured?');
     }
+
+    return $app->json(['sent' => true]);
 });
