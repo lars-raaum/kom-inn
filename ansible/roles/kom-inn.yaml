@@ -20,4 +20,4 @@
     args:
       chdir: /services/kom-inn/crons/
   - name: setup cronjob for sending emails
-    cron: name="emails" minute="0" hour="8" user="deploy" job="php /services/kom-inn/crons/emails.php > /var/log/kom-inn-emails.log"
+    cron: name="emails" minute="0" hour="8" user="deploy" job="php /services/kom-inn/crons/stale_matches.php > /var/log/kom-inn-stale_matches.log"
