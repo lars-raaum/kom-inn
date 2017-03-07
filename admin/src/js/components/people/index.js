@@ -6,7 +6,7 @@ class Person extends React.Component {
         super();
 
         this.remove = this.remove.bind(this);
-        this.flip = this.flip.bind(this);
+        this.convert = this.convert.bind(this);
     }
 
     getAdults() {
@@ -27,10 +27,10 @@ class Person extends React.Component {
         }).then(() => { this.props.fetchPeople() }); // TODO update people state instead of refetching
     }
 
-    flip(e) {
+    convert(e) {
         e.preventDefault();
         const { person } = this.props;
-        fetch(`/api/person/${person.id}/flip`, {
+        fetch(`/api/person/${person.id}/convert`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -50,7 +50,7 @@ class Person extends React.Component {
                 <span className="address">{person.address} {person.zipcode}</span> <br />
                 <span className="bringing">{person.bringing || <i>No people description</i>}</span> <br />
                 <span className="freetext">{person.freetext || <i>No description</i>}</span> <br />
-                <a href="#" onClick={this.flip}>Change person to other type</a> <br />
+                <a href="#" onClick={this.convert}>Change person to other type</a> <br />
                 <a href="#" onClick={this.remove}>Remove person from database</a>
             </div>
         </li>

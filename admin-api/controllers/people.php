@@ -64,7 +64,7 @@ $app->delete('/person/{id}', function ($id) use ($app) {
     return $app->json($result);
 });
 
-$app->post('/person/{id}/flip', function ($id) use ($app) {
+$app->post('/person/{id}/convert', function ($id) use ($app) {
     $id = (int) $id;
 
     $result = $app['people']->changeTypeOfPerson($id);

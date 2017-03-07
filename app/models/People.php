@@ -252,11 +252,11 @@ class People implements \Pimple\ServiceProviderInterface
      *
      * @param int $id
      * @return bool
+     * @throws ApiException if not found
      */
     public function changeTypeOfPerson(int $id) : bool
     {
         $person = $this->get($id);
-        if (!$person) return false; // throw exception?
         if ($person['type'] == People::TYPE_GUEST) {
             $this->app['db']->delete('guests', ['user_id' => $id]);
             $this->app['hosts']->insert(['user_id' => $id]);
