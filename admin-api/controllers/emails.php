@@ -16,8 +16,8 @@ $app->post('/match/{id}/email/{type}', function($id, $type) use ($app) {
     $match = $app['matches']->get((int) $id, true, false); // Only include host
 
     switch ($type) {
-        case 'host_nag':
-            $result = $app['email']->sendNaggingMail($match);
+        case 'reminder':
+            $result = $app['mailer']->sendReminderMail($match);
             break;
         default:
             throw new \app\exceptions\ApiException("Email type [$type] not supported");

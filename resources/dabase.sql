@@ -16,41 +16,27 @@ SET time_zone = "+00:00";
 CREATE DATABASE IF NOT EXISTS `kominn` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
 USE `kominn`;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `guests`
---
-
 CREATE TABLE IF NOT EXISTS `guests` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `food_concerns` text COLLATE utf8_bin,
   `updated` datetime NOT NULL,
-  `created` datetime NOT NULL
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `hosts`
---
 
 CREATE TABLE IF NOT EXISTS `hosts` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `updated` datetime NOT NULL,
-  `created` datetime NOT NULL
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `people`
---
-
 CREATE TABLE IF NOT EXISTS `people` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(256) COLLATE utf8_bin NOT NULL,
   `name` varchar(128) COLLATE utf8_bin NOT NULL,
   `phone` VARCHAR(16) COLLATE utf8_bin NOT NULL,
@@ -69,62 +55,32 @@ CREATE TABLE IF NOT EXISTS `people` (
   `loc_lat` float NULL DEFAULT NULL,
   `visits` tinyint(4) NOT NULL DEFAULT '0',
   `updated` datetime NOT NULL,
-  `created` datetime NOT NULL
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  ADD KEY `email` (`email`(255))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE IF NOT EXISTS `matches` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `guest_id` int(11) NOT NULL,
   `host_id` int(11) NOT NULL,
   `comment` text COLLATE utf8_bin,
   `status` tinyint(4) NOT NULL DEFAULT '0',
   `updated` datetime NOT NULL,
   `created` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `guest_id` (`guest_id`),
+  KEY `host_id` (`host_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-/*!40000 ALTER TABLE `matches` DISABLE KEYS */;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `guests`
---
-ALTER TABLE `guests`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `hosts`
---
-ALTER TABLE `hosts`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `userId` (`user_id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `people`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `email` (`email`(255));
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `guests`
---
-ALTER TABLE `guests`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `hosts`
---
-ALTER TABLE `hosts`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `people`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+CREATE TABLE `emails` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned NOT NULL,
+  `match_id` int(11) DEFAULT NULL,
+  `type` varchar(32) NOT NULL,
+  `status` enum('SENT','CONFIRMED','FAILED') NOT NULL DEFAULT 'SENT',
+  `updated` datetime NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
