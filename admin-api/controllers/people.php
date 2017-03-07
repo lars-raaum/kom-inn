@@ -2,24 +2,17 @@
 
 use Symfony\Component\HttpFoundation\Request;
 use app\models\People;
+use app\exceptions\ServiceException;
+use app\exceptions\ApiException;
+
 
 $app->get('/person/{id}', function($id, Request $request) use ($app) {
-    $person = $app['people']->get((int) $id);
-    if (!$person) {
-        return $app->json(null, 404, ['X-Error-Message' => "Person {$id} not found"]);
-    }
-    return $app->json($person);
+    return $app->json($app['people']->get((int) $id));
 });
 
 
 $app->post('/person/{id}', function($id, Request $request) use ($app) {
-    $id = (int) $id;
-
-    $person = $app['people']->get($id);
-    if (!$person) {
-        return $app->json(null, 404);
-    }
-
+    $person = $app['people']->get((int) $id);
     $r = $request->request;
     $data  = [
         'email'     => $r->get('email'),
@@ -42,7 +35,7 @@ $app->post('/person/{id}', function($id, Request $request) use ($app) {
     $saved = $app['people']->update($id, $data);
 
     if (!$saved) {
-        return $app->json(null, 500, ['X-Error-Message' => 'Unable to save person data']);
+        throw new ServiceException('Unable to save person data');
     }
 
     if ($person['type'] === People::TYPE_GUEST) {
@@ -51,7 +44,7 @@ $app->post('/person/{id}', function($id, Request $request) use ($app) {
             $guest_id = $person['guest_id'];
             $saved = $app['guests']->update($guest_id, compact('food_concerns'));
             if (!$saved) {
-                return $app->json(null, 500, ['X-Error-Message' => 'Unable to save guest data']);
+                throw new ServiceException('Unable to save guest data');
             }
         }
     }
@@ -63,13 +56,22 @@ $app->post('/person/{id}', function($id, Request $request) use ($app) {
 
 
 $app->delete('/person/{id}', function ($id) use ($app) {
-    $id = (int) $id;
-
-    $person = $app['people']->get($id);
-    if (!$person) {
-        return $app->json(null, 404);
+    $person = $app['people']->get((int) $id);
+    if ($person['status'] == People::STATUS_DELETED) {
+        throw new ApiException("Person $id is already deleted");
     }
     $result = $app['people']->delete($id);
+    return $app->json($result);
+});
+
+$app->post('/person/{id}/convert', function ($id) use ($app) {
+    $id = (int) $id;
+
+    $result = $app['people']->changeTypeOfPerson($id);
+    if (!$result) {
+        return $app->json(null, 404);
+    }
+    $result = $app['people']->get($id);
     return $app->json($result);
 });
 
