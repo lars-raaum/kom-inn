@@ -24,6 +24,10 @@ $app->post('/reactivate', function(Request $request) use ($app) {
         throw new ApiException('Invalid code!');
     }
 
+    if ($match['host']['status'] !== \app\models\People::STATUS_USED) {
+        throw new ApiException('Not able to reactivate this Person');
+    }
+
     $host_id = $match['host_id'];
     $data = ['status' => People::STATUS_ACTIVE];
     $result = $app['people']->update($host_id, $data);
@@ -47,14 +51,14 @@ $app->post('/feedback', function(Request $request) use ($app) {
 
     $match = $app['matches']->get($id, true, false);
 
-    if ($match['status'] != \app\models\Matches::STATUS_NEW) {
-        throw new ApiException('Match is not "NEW"');
-    }
-
     $hash = $app['mailer']->createHashCode($match['host']['email']);
     if ($hash != $code) {
         error_log("Feedback request with invalid code [{$code}] != [{$hash}] for match [{$id}]");
         throw new ApiException('Invalid code!');
+    }
+
+    if ($match['status'] != \app\models\Matches::STATUS_NEW) {
+        throw new ApiException('Match is not "NEW"');
     }
 
     $data = ['status' => $status];
