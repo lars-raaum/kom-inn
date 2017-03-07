@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\exceptions\ApiException;
 use DateTime;
 
 class Hosts implements \Pimple\ServiceProviderInterface
@@ -27,17 +28,18 @@ class Hosts implements \Pimple\ServiceProviderInterface
      *
      * @param int $id
      * @return array|false
+     * @throws ApiException if not found
      */
     public function get(int $id)
     {
-        if ($id === 0) return false;
+        if ($id === 0) throw new ApiException("Id not valid", 404);
 
         $args = [$id];
         $sql = "SELECT people.*, hosts.id AS `host_id` FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
         error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $host = $this->app['db']->fetchAssoc($sql, $args);
         if (!$host) {
-            return false;
+            throw new ApiException("Host $id not found", 404);
         }
         $host['type'] = People::TYPE_HOST;
         return $host;
@@ -86,6 +88,7 @@ class Hosts implements \Pimple\ServiceProviderInterface
      * @param array $filters
      * @return array
      * @throws \Exception
+     * @throws ApiException if not found
      */
     public function findHostForGuest(int $guest_id, float $distance_in_km = 20.0, array $filters = []) : array
     {
@@ -99,7 +102,7 @@ class Hosts implements \Pimple\ServiceProviderInterface
         $guest = $this->app['guests']->get($guest_id);
 
         if (!$guest) {
-            throw new \Exception("Guest $guest_id does not exist", 404);
+            throw new ApiException("Guest $guest_id not found", 404);
         }
 
         $target_latitude = floatval($guest['loc_lat']);

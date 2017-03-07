@@ -1,13 +1,7 @@
 <?php
 
 $app->get('/host/{id}', function ($id) use ($app) {
-
-    $host = $app['hosts']->get((int) $id);
-    if (!$host) {
-        return $app->json(null, 404, ['X-Error-Message' => "Host $id not found!"]);
-    }
-
-    return $app->json($host);
+    return $app->json($app['hosts']->get((int) $id));
 });
 
 $app->get('/hosts', function() use ($app) {
@@ -20,13 +14,7 @@ $app->get('/hosts', function() use ($app) {
             'men'       => $_GET['men']  ?? null,
             'women'     => $_GET['women']  ?? null
         ];
-        try {
-            $hosts = $app['hosts']->findHostForGuest($guest_id, $distance, $filters);
-        } catch (\Exception $e) {
-            if ($e->getCode() == 404) {
-                return $app->json([], 404, ['X-Error-Message' => 'Guest does not exist']);
-            }
-        }
+        $hosts = $app['hosts']->findHostForGuest($guest_id, $distance, $filters);
     } else {
         $hosts = $app['hosts']->find();
     }

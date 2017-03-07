@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\exceptions\ApiException;
 use DateTime;
 use app\Geo;
 use Doctrine\DBAL\Types\Type;
@@ -36,10 +37,11 @@ class People implements \Pimple\ServiceProviderInterface
      *
      * @param int $id
      * @return array|false
+     * @throws ApiException if not found
      */
     public function get(int $id)
     {
-        if ($id === 0) return false;
+        if ($id === 0) throw new ApiException("Id not valid", 404);
 
         $args = [(int) $id];
         $sql = "SELECT p.*, g.id as `guest_id`, g.food_concerns, h.id as `host_id` FROM people AS p ".
@@ -49,7 +51,10 @@ class People implements \Pimple\ServiceProviderInterface
         error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $person = $this->app['db']->fetchAssoc($sql, $args);
 
-        if (!$person) return null;
+        if (!$person) {
+            throw new ApiException("Person $id not found", 404);
+        }
+
         if ($person['guest_id'] === NULL) {
             unset($person['guest_id']);
             unset($person['food_concerns']);
