@@ -1,5 +1,6 @@
 import React from 'react';
 import Person from '../common/person'
+import { deletePerson, fetchPeople, convertPerson } from '../../actions/person';
 
 export default class People extends React.Component {
     constructor(props) {
@@ -21,6 +22,7 @@ export default class People extends React.Component {
         this.prevPage = this.prevPage.bind(this);
         this.gotoPage = this.gotoPage.bind(this);
         this.removePerson = this.removePerson.bind(this);
+        this.convertPerson = this.convertPerson.bind(this);
     }
 
     componentDidMount() {
@@ -28,26 +30,19 @@ export default class People extends React.Component {
     }
 
     fetchPeople() {
-        return fetch(`/api/people?page=${this.state.meta.page}`, { // ?status=${this.state.status}
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(res => {
+        this.setState({ loading: true });
+        return fetchPeople({ page: this.state.meta.page }).then(({ response, headers }) => {
             this.setState({
+                loading: false,
+                people: response,
                 meta: {
-                    count: res.headers.get('X-Count'),
-                    page: res.headers.get('X-Page'),
-                    offset: res.headers.get('X-Offset'),
-                    total: res.headers.get('X-Total'),
-                    limit: res.headers.get('X-Limit')
+                    count: headers.get('X-Count'),
+                    page: headers.get('X-Page'),
+                    offset: headers.get('X-Offset'),
+                    total: headers.get('X-Total'),
+                    limit: headers.get('X-Limit')
                 }
             });
-            return res.json();
-        }).then(people => { // brab meta data from Headers
-            this.setState({
-                people
-            })
         });
     }
 
@@ -92,15 +87,16 @@ export default class People extends React.Component {
         this.setPage(page);
     }
 
-    removePerson(personComponent) {
-        return personComponent.remove()
-            .then(() => { this.props.fetchPeople() });
+    removePerson(id) {
+        return deletePerson({ id }).then(() => this.fetchPeople());
+    }
 
-        // @TODO update people state instead of refetching
+    convertPerson(id) {
+        return convertPerson({ id }).then(() => this.fetchPeople());
     }
 
     render() {
-        if (this.state.people.length === 0) {
+        if (this.state.loading) {
             return <div className="loading-gif">
                 <span>LOADING</span>
             </div>;
@@ -114,7 +110,7 @@ export default class People extends React.Component {
                 <h1> People are strange </h1>
                 <div>
                     {this.state.people.map(person => {
-                        return <Person key={person.id} person={person} fetchPeople={this.fetchPeople} handleRemove={this.removePerson} />
+                        return <Person key={person.id} person={person} removePerson={this.removePerson} convertPerson={this.convertPerson} />
                     })}
                 </div>
             </div>

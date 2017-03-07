@@ -256,6 +256,11 @@ class People implements \Pimple\ServiceProviderInterface
      */
     public function changeTypeOfPerson(int $id) : bool
     {
+        $matches = $this->app['matches']->findByPeopleId($id);
+        if ($matches) {
+            throw new ApiException("Can not change type of matched person", 400);
+        }
+
         $person = $this->get($id);
         if ($person['type'] == People::TYPE_GUEST) {
             $this->app['db']->delete('guests', ['user_id' => $id]);

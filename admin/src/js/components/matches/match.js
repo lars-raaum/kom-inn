@@ -1,5 +1,7 @@
 import React from 'react';
 import Person from '../common/person';
+import { deletePerson } from '../../actions/person';
+import { deleteMatch, updateMatch } from '../../actions/match';
 
 export default class Match extends React.Component {
     constructor() {
@@ -14,13 +16,9 @@ export default class Match extends React.Component {
             e.preventDefault();
         }
 
-        return fetch(`/api/match/${this.props.match.id}`, {
-            method: 'DELETE',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(matches => this.props.fetchMatches());
+        this.props.optimisticRemoveMatch(this.props.match.id);
+
+        return deleteMatch({ id: this.props.match.id });
     }
 
     removeBoth(e) {
@@ -28,48 +26,31 @@ export default class Match extends React.Component {
             e.preventDefault();
         }
 
-        return fetch(`/api/match/${this.props.match.id}`, {
-            method: 'DELETE',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(() => {
-            return fetch(`/api/person/${this.props.match.host_id}`, {
-                method: 'DELETE',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-        }).then(() => {
-            return fetch(`/api/person/${this.props.match.guest_id}`, {
-                method: 'DELETE',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-        }).then(matches => this.props.fetchMatches());
+        this.props.optimisticRemoveMatch(this.props.match.id);
+
+        return deleteMatch({ id: this.props.match.id }).then(() => Promise.all([
+            deletePerson({ id: this.props.match.host_id }),
+            deletePerson({ id: this.props.match.guest_id })
+        ]));
     }
 
     updateMatch() {
-        return fetch(`/api/match/${this.props.match.id}`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                status: this.statusComp.value,
-                comment: this.commentComp.value
-            })
-        }).then(matches => this.props.fetchMatches());
+        const data = {
+            status: this.statusComp.value,
+            comment: this.commentComp.value
+        };
+
+        const { id } = this.props.match;
+
+        this.props.optimisticUpdateMatch(id, data);
+
+        return updateMatch({ id, data });
     }
 
-    removePerson(personComponent) {
-        return personComponent.remove()
-            .then(this.cancelMatch());
+    removePerson(id) {
+        return this.cancelMatch().then(() =>
+            deletePerson({ id })
+        );
     }
 
     nagHost(e) {
@@ -77,13 +58,7 @@ export default class Match extends React.Component {
             e.preventDefault();
         }
 
-        return fetch(`/api/match/${this.props.match.id}/email/host_nag`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(d => console.log("Mailed"));
+        return nagHost(this.props.match.id).then(d => console.log("Mailed"));
     }
 
     render() {
