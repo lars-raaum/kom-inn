@@ -111,11 +111,10 @@ class Mailer implements \Pimple\ServiceProviderInterface
      *
      * @param array $match
      * @param string $type
-     * @return bool
      * @throws \app\Exception if email is not configured
      * @throws InvalidArgumentException if $type is not a valid type
      */
-    public function sendReminderMail(array $match, string $type = Reminders::NEUTRAL) : bool
+    public function sendReminderMail(array $match, string $type = Reminders::NEUTRAL)
     {
         if (empty($this->client)) {
             throw new \app\Exception("Emailing is not configured");
