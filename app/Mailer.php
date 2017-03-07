@@ -59,15 +59,17 @@ class Mailer implements \Pimple\ServiceProviderInterface
      * Emailing constructor, if config is empty, no emails will be called
      * even if called
      *
-     * @param array $config
      */
-    public function __construct(array $config)
+    public function __construct()
     {
-        $this->admin  = isset($config['admin']) ? $config['admin'] : false;
-        $this->prefix = isset($config['prefix']) ? $config['prefix'] : '';
-        $this->salt   = isset($config['salt']) ? $config['salt'] : 'kioslo';
+        $config = Environment::get('emails');
+        $this->admin  = $config['admin'] ?? false;
+        $this->prefix = $config['prefix'];
+        $this->salt   = $config['salt'] ?? 'kioslo';
 
-        if (empty($config)) return;
+        if ($config['enabled'] == false) {
+            return;
+        }
 
         $this->client = new Mailgun($config['key']);
         $this->domain = $config['domain'];

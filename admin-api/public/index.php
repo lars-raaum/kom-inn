@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__.'/../vendor/autoload.php';
+define('RESOURCE_PATH', realpath(__DIR__.'/../../resources'));
 
 $app = new Silex\Application();
 
@@ -13,18 +14,22 @@ $app->before(function (Request $request) use ($app) {
     }
     $app['PHP_AUTH_USER'] = $_SERVER['PHP_AUTH_USER'] ?? "NONE";
 });
-require_once __DIR__.'/../../resources/configuration.php';
+
+$app['debug'] = true;
+
+
+$app->register(new Silex\Provider\DoctrineServiceProvider(), [
+    'db.options' => \app\Environment::get('connections')
+]);
+
 
 $app->register(new \app\models\People());
 $app->register(new \app\models\Guests());
 $app->register(new \app\models\Hosts());
 $app->register(new \app\models\Matches());
 $app->register(new \app\models\Emails());
-
-$email_config = require_once RESOURCE_PATH . '/emails.php';
-$app->register(new app\Mailer($email_config));
-$sms_config = require_once RESOURCE_PATH . '/sms.php';
-$app->register(new app\Sms($sms_config));
+$app->register(new app\Mailer());
+$app->register(new app\Sms());
 
 require_once __DIR__.'/../controllers/matches.php';
 require_once __DIR__.'/../controllers/hosts.php';

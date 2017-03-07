@@ -45,14 +45,16 @@ class Sms implements \Pimple\ServiceProviderInterface
 
     /**
      * Sms constructor.
-     * @param array $config
      */
-    public function __construct(array $config) {
-        if (empty($config)) return;
-        $this->from = $config['phone'];
-        $this->admin = isset($config['admin']) ? $config['admin'] : false;
+    public function __construct() {
+        $config = Environment::get('sms');
+        if ($config['enabled'] == false) {
+            return;
+        }
+        $this->from = $config['phone'] ?? null;
+        $this->admin = $config['admin'] ?? false;
         $this->client = new Client($config['sid'], $config['token']);
-        $this->prefix = isset($config['prefix']) ? $config['prefix'] : '';
+        $this->prefix = $config['prefix'] ?? '';
     }
 
     /**
