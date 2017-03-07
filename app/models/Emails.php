@@ -44,7 +44,7 @@ class Emails implements \Pimple\ServiceProviderInterface
 
         $args = [$id];
         $sql = "SELECT * FROM emails WHERE id = ?";
-        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['monolog']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $record = $this->app['db']->fetchAssoc($sql, $args);
         if (!$record) {
             return false;
@@ -63,7 +63,7 @@ class Emails implements \Pimple\ServiceProviderInterface
     {
         $args = [$person_id, $type];
         $sql = "SELECT * FROM emails WHERE user_id = ? AND type = ? ";
-        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['monolog']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         return $this->app['db']->fetchAll($sql, $args);
     }
 

@@ -48,7 +48,7 @@ class People implements \Pimple\ServiceProviderInterface
                "LEFT JOIN guests AS g ON (p.id = g.user_id) ".
                "LEFT JOIN hosts  AS h ON (p.id = h.user_id) ".
                "WHERE p.id = ?";
-        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['monolog']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $person = $this->app['db']->fetchAssoc($sql, $args);
 
         if (!$person) {
@@ -88,7 +88,7 @@ class People implements \Pimple\ServiceProviderInterface
         }
         $sql .= " ORDER BY updated DESC LIMIT {$offset}, {$limit}";
 
-        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['monolog']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $people = (array) $this->app['db']->fetchAll($sql, $args);
 
         foreach ($people as &$person) {
@@ -121,7 +121,7 @@ class People implements \Pimple\ServiceProviderInterface
             $args = [People::STATUS_DELETED];
             $sql = "SELECT COUNT(1) FROM people WHERE status != ?";
         }
-        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['monolog']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $total = $this->app['db']->fetchColumn($sql, $args, 0);
 
         return $total;
@@ -178,7 +178,7 @@ class People implements \Pimple\ServiceProviderInterface
         $types = ['updated' => Type::getType('datetime')];
         $data['updated'] = new DateTime('now');
 
-        error_log("Update person {$id} - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['monolog']->info("UPDATE person {$id} - by [{$this->app['PHP_AUTH_USER']}]");
         $result = $this->app['db']->update('people', $data, ['id' => $id], $types);
         if (!$result) {
             error_log("ERROR: Failed to update person {$id}");
@@ -238,7 +238,7 @@ class People implements \Pimple\ServiceProviderInterface
         ];
         $types = ['updated' => Type::getType('datetime')];
 
-        error_log("DELETING DATA for Person[{$id}] by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['monolog']->info("SOFT DELETE Person[{$id}] by [{$this->app['PHP_AUTH_USER']}]");
         $result = $this->app['db']->update('people', $data, ['id' => $id], $types);
         if ($result == 0) {
             error_log("ERROR: Failed to update person");

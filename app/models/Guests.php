@@ -38,7 +38,7 @@ class Guests implements \Pimple\ServiceProviderInterface
 
         $args = [$id];
         $sql = "SELECT people.*, guests.id AS `guest_id`, guests.food_concerns FROM people, guests WHERE people.id = guests.user_id AND people.id = ?";
-        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['monolog']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $guest = $this->app['db']->fetchAssoc($sql, $args);
         if (!$guest) {
             throw new ApiException("Guest $id not found", 404);
@@ -96,7 +96,7 @@ class Guests implements \Pimple\ServiceProviderInterface
 
         $sql .= " ORDER BY updated DESC";
 
-        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['monolog']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $guests = $this->app['db']->fetchAll($sql, $args);
 
         foreach ($guests as &$guest) {
@@ -146,7 +146,7 @@ class Guests implements \Pimple\ServiceProviderInterface
 
         $types = ['updated' => Type::getType('datetime')];
         $data['updated'] = new \DateTime('now');
-        error_log("Update guest {$id} - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['monolog']->info("UPDATE guest {$id} - by [{$this->app['PHP_AUTH_USER']}]");
         $result = $this->app['db']->update('guests', $data, ['id' => $id], $types);
 
         if (!$result) {
