@@ -6,7 +6,6 @@ define('RESOURCE_PATH', realpath(__DIR__.'/../../resources'));
 $app = new Silex\Application();
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 $app->before(function (Request $request) {
     if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
@@ -17,6 +16,9 @@ $app->before(function (Request $request) {
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => \app\Environment::get('connections')
+]);
+$app->register(new Silex\Provider\MonologServiceProvider(), [
+    'monolog.logfile' => \app\Environment::get('logfile')
 ]);
 
 $app->register(new app\Mailer());

@@ -22,6 +22,7 @@ $app = new app\Cli($options);
 $app['PHP_AUTH_USER'] = $argv[0];
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(), ['db.options' => \app\Environment::get('connections')]);
+$app->register(new Silex\Provider\MonologServiceProvider(), ['monolog.logfile' => \app\Environment::get('logfile')]);
 $app->register(new app\Mailer());
 
 $app->register(new app\models\Hosts());

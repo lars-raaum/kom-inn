@@ -21,7 +21,9 @@ $app['debug'] = true;
 $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => \app\Environment::get('connections')
 ]);
-
+$app->register(new Silex\Provider\MonologServiceProvider(), [
+    'monolog.logfile' => \app\Environment::get('logfile')
+]);
 
 $app->register(new \app\models\People());
 $app->register(new \app\models\Guests());
