@@ -24,7 +24,7 @@ $app->post('/reactivate', function(Request $request) use ($app) {
         throw new ApiException('Invalid code!');
     }
 
-    if ($match['host']['status'] !== \app\models\People::STATUS_USED) {
+    if (((int) $match['host']['status']) !== \app\models\People::STATUS_USED) {
         throw new ApiException('Not able to reactivate this Person');
     }
 
