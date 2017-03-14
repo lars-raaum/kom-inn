@@ -112,6 +112,7 @@ class Mailer implements \Pimple\ServiceProviderInterface
      *
      * @param array $match
      * @param string $type
+     * @return bool
      * @throws \app\Exception if email is not configured
      * @throws InvalidArgumentException if $type is not a valid type
      */
@@ -123,6 +124,11 @@ class Mailer implements \Pimple\ServiceProviderInterface
         if (!in_array($type, Reminders::$TYPES)) {
             throw new InvalidArgumentException("Type $type is not valid Reminder type");
         }
+        $email_data = [
+            'user_id' => $match['host_id'],
+            'match_id' => $match['id'],
+            'type' => $type,
+        ];
         $templates = new Reminders($this);
         switch ($type) {
             case Reminders::FIRST:
@@ -140,12 +146,24 @@ class Mailer implements \Pimple\ServiceProviderInterface
         }
 
         $to = $match['host']['email'];
-        $this->client->sendMessage($this->domain, [
-            'from'    => $this->from,
-            'to'      => $to,
-            'subject' => $this->prefix . 'Kom inn: oppfølgning - hvordan gikk det?',
-            'html'    => $body
-        ]);
+
+        try {
+            $this->client->sendMessage($this->domain, [
+                'from'    => $this->from,
+                'to'      => $to,
+                'subject' => $this->prefix . 'Kom inn: oppfølgning - hvordan gikk det?',
+                'html'    => $body
+            ]);
+            $sent = true;
+            $this->app['logger']->debug("SENT {$type} email to person {$match['host_id']}");
+        } catch (\Exception $e) {
+            error_log("Failed to mail : " . $e->getMessage());
+            $this->app['logger']->error("FAILED to send {$type} email to person {$match['host_id']}");
+            $email_data['status'] = Emails::STATUS_FAILED;
+            $sent = false;
+        }
+        $this->app['emails']->insert($email_data);
+        return $sent;
     }
 
     /**
