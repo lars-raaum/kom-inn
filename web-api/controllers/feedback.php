@@ -20,7 +20,7 @@ $app->post('/reactivate', function(Request $request) use ($app) {
 
     $hash = $app['mailer']->createHashCode($match['host']['email']);
     if ($hash != $code) {
-        error_log("Feedback request with invalid code [{$code}] != [{$hash}] for person [{$match['host']['id']}]");
+        $this->app['monolog']->warning("Feedback request with invalid code [{$code}] != [{$hash}] for person [{$match['host']['id']}]");
         throw new ApiException('Invalid code!');
     }
 
@@ -49,7 +49,7 @@ $app->post('/feedback', function(Request $request) use ($app) {
 
     $hash = $app['mailer']->createHashCode($match['host']['email']);
     if ($hash != $code) {
-        error_log("Feedback request with invalid code [{$code}] != [{$hash}] for match [{$id}]");
+        $this->app['monolog']->warning("Feedback request with invalid code [{$code}] != [{$hash}] for match [{$id}]");
         throw new ApiException('Invalid code!');
     }
 

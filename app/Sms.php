@@ -64,7 +64,7 @@ class Sms implements \Pimple\ServiceProviderInterface
     public function sendHostInform(array $match) {
         if (empty($this->client)) return false;
         try {
-            error_log("Sending SMS to {$match['host']['phone']}");
+            $this->app['logger']->debug("Sending SMS to {$match['host']['phone']}");
             return $this->client->messages->create(
                 $match['host']['phone'],
                 [

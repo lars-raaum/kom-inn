@@ -36,7 +36,7 @@ class Hosts implements \Pimple\ServiceProviderInterface
 
         $args = [$id];
         $sql = "SELECT people.*, hosts.id AS `host_id` FROM people, hosts WHERE people.id = hosts.user_id AND people.id = ?";
-        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['logger']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $host = $this->app['db']->fetchAssoc($sql, $args);
         if (!$host) {
             throw new ApiException("Host $id not found", 404);
@@ -55,7 +55,7 @@ class Hosts implements \Pimple\ServiceProviderInterface
         $args = [People::STATUS_ACTIVE];
         $sql = "SELECT people.*, hosts.id AS `host_id` FROM people, hosts WHERE people.id = hosts.user_id AND people.status = ?";
 
-        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['logger']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $hosts = $this->app['db']->fetchAll($sql, $args);
         return $hosts;
     }
@@ -72,6 +72,7 @@ class Hosts implements \Pimple\ServiceProviderInterface
         $types = ['updated' => $dtt, 'created' => $dtt];
         $data['updated'] = new DateTime('now');
         $data['created'] = new DateTime('now');
+        $this->app['logger']->info("INSERT to Hosts - by [{$this->app['PHP_AUTH_USER']}]");
         $result = $this->app['db']->insert('hosts', $data, $types);
         if (!$result) {
             return false;
@@ -150,7 +151,7 @@ class Hosts implements \Pimple\ServiceProviderInterface
             }
         }
 
-        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['logger']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $hosts = $this->app['db']->fetchAll($sql, $args);
 
         if ($target_longitude && $target_latitude) {

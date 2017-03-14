@@ -54,7 +54,9 @@ class StaleMatches {
         } else {
             $sql = "SELECT *, DATEDIFF(NOW(), `created`) as `ago` FROM matches WHERE status = 0 ORDER BY id DESC";
         }
-        $app->verbose("SQL [ $sql ] - by [CRON]", "");
+
+        $app['logger']->info("SQL [ $sql ] - by [{$app['PHP_AUTH_USER']}]");
+        $app->verbose("SQL [ $sql ] - by [{$app['PHP_AUTH_USER'] }]", "");
         $matches = $app['db']->fetchAll($sql);
         $total = count($matches);
         $app->verbose("Found {$total} active matches", "");
