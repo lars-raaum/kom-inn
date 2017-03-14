@@ -9,7 +9,8 @@ use Doctrine\DBAL\Types\Type;
 
 class People implements \Pimple\ServiceProviderInterface
 {
-    const STATUS_PURGED = -2;
+    const STATUS_PURGED = -3;
+    const STATUS_EXPIRED = -2;
     const STATUS_DELETED = -1;
     const STATUS_ACTIVE = 1;
     const STATUS_USED = 2;
@@ -219,7 +220,7 @@ class People implements \Pimple\ServiceProviderInterface
     }
 
     /**
-     * Updates a person's status to USED
+     * Updates a person's status to DELETED
      *
      * @param int $id
      * @return bool
@@ -228,6 +229,20 @@ class People implements \Pimple\ServiceProviderInterface
     {
         $data = [
             'status' => People::STATUS_DELETED
+        ];
+        return $this->update($id, $data);
+    }
+
+    /**
+     * Updates a person's status to EXPIRED
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function setToExpired(int $id) : bool
+    {
+        $data = [
+            'status' => People::STATUS_EXPIRED
         ];
         return $this->update($id, $data);
     }

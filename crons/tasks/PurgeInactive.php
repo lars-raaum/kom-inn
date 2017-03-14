@@ -32,7 +32,7 @@ class PurgeInactive
         foreach ($people as $person) {
             try {
 
-                $deleted = $app['dry'] || $this->app['people']->setToSoftDeleted($person['id']);
+                $deleted = $app['dry'] || $this->app['people']->setToExpired($person['id']);
                 if ($deleted) {
                     $this->counters['DELETE']++;
                 }
