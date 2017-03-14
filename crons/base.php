@@ -19,6 +19,8 @@ define('RESOURCE_PATH', __DIR__ . '/../resources');
 
 $app = new app\Cli($options);
 
+$app['debug'] = true;
+
 $app['PHP_AUTH_USER'] = $argv[0];
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(), ['db.options' => \app\Environment::get('connections')]);
@@ -29,3 +31,5 @@ $app->register(new app\models\Hosts());
 $app->register(new app\models\Matches());
 $app->register(new app\models\People());
 $app->register(new app\models\Emails());
+
+$app['logger']->debug("CRON STARTED : " . $argv[0]);
