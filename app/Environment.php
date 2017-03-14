@@ -50,7 +50,7 @@ class Environment
     /**
      * @return string
      */
-    private static function env()
+    public static function env()
     {
         if (!self::$env) {
             self::$env = include RESOURCE_PATH . '/env.php';

@@ -116,7 +116,7 @@ EOT;
     {
         list($yes, $no) = $this->reminderUrls($match);
         return <<<EOT
-<h1>Hei igjen!</h1>";
+<h1>Hei igjen!</h1>
 <p>Takk for at du meldte deg på Kom Inn!</p>
 <p>Det er nå en liten stund siden du fikk tildelt din middagsgjest.</p>
 <p>Vi håper at matchen var vellykket!</p>
