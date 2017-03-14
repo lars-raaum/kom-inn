@@ -1,0 +1,12 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: Create kom-inn logging directory
+    file: path=/var/log/kom-inn/ state=directory owner=deploy group=deploy mode=0775
+  - name: Ensure /var/log/kom-inn/backend.log is present and writeable
+    file: path=/var/log/kom-inn/backend.log state=touch mode="u=rw,g=rw"
+  - name: Ensure /var/log/kom-inn/stale_matches.log is present and writeable
+    file: path=/var/log/kom-inn/stale_matches.log state=touch mode="u=rw,g=rw"
+  - name: Setup lograte for log files
+    template: src=../templates/logrotate.tpl dest=/etc/logrotate.d/kom-inn

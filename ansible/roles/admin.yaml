@@ -16,8 +16,6 @@
     notify: restart apache
   - name: Ensure passwd file is present
     file: path=/services/htpasswd_admins state=touch
-  - name: Ensure /var/log/kom-inn-backend.log is present and writeable
-    file: path=/var/log/kom-inn-backend.log state=touch mode="u=rw,g=rw"
   - name: setup ssl certificates
     shell: "{{ item }}"
     with_items:
