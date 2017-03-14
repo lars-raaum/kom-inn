@@ -28,7 +28,7 @@ class HostInform
         $age        = $match['guest']['age'];
         $origin     = $match['guest']['origin'];
         $verter     = $match['host']['adults_m'] + $match['host']['adults_f'] + $match['host']['children'];
-        $gjester    = $match['guest']['adults_m'] + $match['guest']['adults_f'] + $match['guest']['children'];
+        $gjester    = $match['guest']['adults_m'] + $match['guest']['adults_f'] + $match['guest']['children'] - 1;
         $dudere     = $verter > 0 ? 'dere' : 'du';
         $HanHun     = $match['guest']['gender'] == 'male' ? 'Han' : 'Hun';
         $han_hun    = $match['guest']['gender'] == 'male' ? 'han' : 'hun';
