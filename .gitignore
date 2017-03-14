@@ -2,3 +2,4 @@ ansible.log
 emails.log
 app.log
 kom-inn-backend.log
+env.php
