@@ -44,7 +44,7 @@ class Emails implements \Pimple\ServiceProviderInterface
 
         $args = [$id];
         $sql = "SELECT * FROM emails WHERE id = ?";
-        $this->app['monolog']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['logger']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $record = $this->app['db']->fetchAssoc($sql, $args);
         if (!$record) {
             return false;
@@ -63,7 +63,7 @@ class Emails implements \Pimple\ServiceProviderInterface
     {
         $args = [$person_id, $type];
         $sql = "SELECT * FROM emails WHERE user_id = ? AND type = ? ";
-        $this->app['monolog']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['logger']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         return $this->app['db']->fetchAll($sql, $args);
     }
 
@@ -81,6 +81,7 @@ class Emails implements \Pimple\ServiceProviderInterface
         $data['updated'] = $now;
         $data['created'] = $now;
         $data['status']  =
+        $this->app['logger']->info("INSERT to Emails - by [{$this->app['PHP_AUTH_USER']}]");
         $result = $this->app['db']->insert('emails', $data, $types);
         if (!$result) {
             throw new \Exception("Failed to insert email record!");

@@ -97,6 +97,7 @@ class Mailer implements \Pimple\ServiceProviderInterface
     public function sendAdminRegistrationNotice() : bool
     {
         if (empty($this->client) || empty($this->admin)) return false;
+        $this->app['logger']->debug("Sent admin registration notice to {$this->admin}");
         $this->client->sendMessage($this->domain, [
             'from'    => $this->from,
             'to'      => $this->admin,
