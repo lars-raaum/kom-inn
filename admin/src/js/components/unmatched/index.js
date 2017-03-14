@@ -303,7 +303,7 @@ export default class Unmatched extends React.Component {
     }
 
     fetchGuests() {
-        return fetch('/api/guests', {
+        return fetch('/api/guests?region=Oslo', {
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
