@@ -40,6 +40,7 @@ class StaleMatches {
             $this->counters['TOTAL']++;
 
         }
+        $app['logger']->debug(__CLASS__ . " RESULTS: " . http_build_query($this->counters, '', ' | '));
         $this->outputResults($app);
     }
 
