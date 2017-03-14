@@ -10,6 +10,7 @@ $app->get('/guests', function() use ($app) {
     $filters['children'] = $_GET['children'] ?? null;
     $filters['men'] = $_GET['men'] ?? null;
     $filters['women'] = $_GET['women'] ?? null;
+    $filters['region'] = $_GET['region'] ?? false;
 
     $guests = $app['guests']->find($status, $filters);
     return $app->json($guests);

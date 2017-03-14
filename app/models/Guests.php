@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\exceptions\ApiException;
+use app\Geo;
 use DateTime;
 use Doctrine\DBAL\Types\Type;
 
@@ -92,6 +93,20 @@ class Guests implements \Pimple\ServiceProviderInterface
                 $sql .= ' AND people.adults_f = ?';
                 $args[] = 0;
             }
+        }
+
+        $region = $filters['region'] ?? false;
+        if ($region !== false && $region !== 'ALL') {
+            $target = $this->app['geo']->getTargetByRegion($region);
+            $distance = Geo::distanceToRadians($target['distance_in_km']);
+            $target_latitude = $target['loc_lat'];
+            $target_longitude = $target['loc_long'];
+            $sql .=  " AND (people.loc_long - ?)*(people.loc_long - ?) + (people.loc_lat - ?)*(people.loc_lat - ?) < ? ";
+            $args[] = $target_longitude;
+            $args[] = $target_longitude;
+            $args[] = $target_latitude;
+            $args[] = $target_latitude;
+            $args[] = $distance;
         }
 
         $sql .= " ORDER BY updated DESC";

@@ -39,6 +39,11 @@ class Geo implements \Pimple\ServiceProviderInterface
         $this->geocoder = new GoogleMaps($curl);
     }
 
+    public static function distanceToRadians(float $distance_in_km) : float
+    {
+        return pow($distance_in_km * 0.539956803 / 60, 2);
+    }
+
     /**
      * @param array $data
      * @return Coordinates
@@ -48,5 +53,20 @@ class Geo implements \Pimple\ServiceProviderInterface
         $addresses = $this->geocoder->geocode($data['address'] . ' ' . $data['zipcode'] . ' norway');
         $coords    = $addresses->first()->getCoordinates();
         return $coords;
+    }
+
+    /**
+     * @param string $region
+     * @return array with `loc_lang`, `loc_long` and `distance_in_km`
+     */
+    public function getTargetByRegion(string $region) : array
+    {
+        switch ($region) {
+            case 'Bergen':
+                return ['loc_lat' => 60.389444, 'loc_long' => 5.33, 'distance_in_km' => 110.0];
+            case 'Oslo':
+            default:
+                return ['loc_lat' => 59.9139, 'loc_long' => 10.7522, 'distance_in_km' => 110.0];
+        }
     }
 }

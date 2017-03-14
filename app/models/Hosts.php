@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\exceptions\ApiException;
+use app\Geo;
 use DateTime;
 
 class Hosts implements \Pimple\ServiceProviderInterface
@@ -93,7 +94,7 @@ class Hosts implements \Pimple\ServiceProviderInterface
      */
     public function findHostForGuest(int $guest_id, float $distance_in_km = 20.0, array $filters = []) : array
     {
-        $distance = pow($distance_in_km * 0.539956803 / 60, 2);
+        $distance = Geo::distanceToRadians($distance_in_km);
         $args = [People::STATUS_ACTIVE];
         $sql = "SELECT people.*, hosts.user_id FROM people, hosts WHERE people.id = hosts.user_id AND people.status = ?";
 
