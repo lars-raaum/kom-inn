@@ -32,6 +32,7 @@ $app->register(new \app\models\Matches());
 $app->register(new \app\models\Emails());
 $app->register(new app\Mailer());
 $app->register(new app\Sms());
+$app->register(new app\Geo());
 
 require_once __DIR__.'/../controllers/matches.php';
 require_once __DIR__.'/../controllers/hosts.php';
