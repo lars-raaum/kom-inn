@@ -44,7 +44,7 @@ henne i løpet av kort tid og lager en konkret avtale.</p>
 <p><a href="{$no}">Trykk her hvis middagen av en eller annen grunn ikke blir noe av allikevel.</a></p>
 
 <p>Har du spørsmål, noe mer du vil fortelle eller kanskje etter hvert et bilde fra kvelden? Send oss en mail til
-<a href="mailto:kominnoslo@gmail.com">kominnoslo@gmail.com</a></p>';
+<a href="mailto:kominnoslo@gmail.com">kominnoslo@gmail.com</a></p>
 <p>Vennlig hilsen oss i Kom Inn</p>
 EOT;
     }
@@ -121,8 +121,8 @@ EOT;
 <p>Det er nå en liten stund siden du fikk tildelt din middagsgjest.</p>
 <p>Vi håper at matchen var vellykket!</p>
 <p>Vi vil gjerne vite om dere har gjennomført middagen - eller laget en helt konkret avtale med gjesten. </p>
-<p><a href="{$yes}">Trykk her</a> – hvis dere har gjennomført middagen eller laget en helt konkret avtale</p>
-<p><a href="{$no}">Trykk her</a> – hvis dere av ulike årsaker ikke kommer til å gjennomføre middagen allikevel.</p>
+<p><a href="{$yes}">Trykk her hvis dere har gjennomført middagen eller laget en helt konkret avtale</a></p>
+<p><a href="{$no}">Trykk her hvis dere av ulike årsaker ikke kommer til å gjennomføre middagen allikevel.</a></p>
 <p>Er det noe mer du vil fortelle? Har du spørsmål, tilbakemeldinger –  eller kanskje et bilde fra middagen? Send oss gjerne en mail på
 <a href="mailto:kominnoslo@gmail.com">kominnoslo@gmail.com</a></p>
 <p>Med vennlig hilsen oss i Kom Inn:)</p>
