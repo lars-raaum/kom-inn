@@ -46,7 +46,7 @@ return [
 
     ],
     'pro' => [
-        'base_url' => 'https://kom-inn.org',
+        'base_url' => 'https://pro.kom-inn.org',
         'logfile' => '/var/log/kom-inn/backend.log',
         'sms' => $sms + [
             'enabled' => false,
