@@ -5,5 +5,5 @@
     delaycompress
     missingok
     notifempty
-    create 644 deploy devs
+    create 0666 deploy devs
 }
