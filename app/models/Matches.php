@@ -44,7 +44,7 @@ class Matches implements \Pimple\ServiceProviderInterface
 
         $args = [$id];
         $sql = "SELECT * FROM matches WHERE id = ?";
-        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['logger']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $match = $this->app['db']->fetchAssoc($sql, $args);
         if (!$match) {
             throw new ApiException("Match $id not found", 404);
@@ -72,7 +72,7 @@ class Matches implements \Pimple\ServiceProviderInterface
         // TODO join requests
         $args = [$status];
         $sql = "SELECT * FROM matches WHERE status = ? ORDER BY id DESC";
-        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['logger']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $matches = $this->app['db']->fetchAll($sql, $args);
 
         if ($with_guest || $with_host) {
@@ -122,7 +122,7 @@ class Matches implements \Pimple\ServiceProviderInterface
         $dtt = Type::getType('datetime');
         $types = ['updated' => $dtt, 'created' => $dtt];
 
-        error_log("INSERT match Guest[{$data['guest_id']}] Host[{$data['host_id']}] by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['logger']->info("INSERT match Guest[{$data['guest_id']}] Host[{$data['host_id']}] by [{$this->app['PHP_AUTH_USER']}]");
         $result = $this->app['db']->insert('matches', $data, $types);
         if (!$result) {
             error_log("ERROR: Failed to insert new match!");
@@ -145,7 +145,7 @@ class Matches implements \Pimple\ServiceProviderInterface
         $types = ['updated' => Type::getType('datetime')];
         $data['updated'] = new DateTime('now');
 
-        error_log("Update Match[{$id}] by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['logger']->info("UPDATE Match[{$id}] by [{$this->app['PHP_AUTH_USER']}]");
         $result = $this->app['db']->update('matches', $data, ['id' => $id], $types);
         if (!$result) {
             // @TODO grab sql error to log?
@@ -168,7 +168,7 @@ class Matches implements \Pimple\ServiceProviderInterface
             'status'  => Matches::STATUS_DELETED,
             'updated' => new DateTime('now')
         ];
-        error_log("Soft delete Match[{$id}] by [{$this->app['PHP_AUTH_USER']}]");
+        $this->app['logger']->info("SOFT DELETE Match[{$id}] by [{$this->app['PHP_AUTH_USER']}]");
         $result = $this->app['db']->update('matches', $data, ['id' => $id], $types);
         if (!$result) {
             error_log("ERROR: Failed to update match");

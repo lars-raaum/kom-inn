@@ -2,8 +2,11 @@
     "require": {
         "silex/silex": "~2.0",
         "Doctrine/DBAL": "^2.5",
-        "mailgun/mailgun-php": "@stable",
-        "php-http/curl-client": "^1.6"
+        "mailgun/mailgun-php": "^2.1",
+        "php-http/curl-client": "^1.7",
+        "guzzlehttp/psr7": "^1.4",
+        "php-http/message": "^1.5",
+        "monolog/monolog": "^1.22"
     },
     "autoload": {
         "psr-4": {

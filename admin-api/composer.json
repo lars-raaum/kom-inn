@@ -6,7 +6,8 @@
         "willdurand/geocoder": "@stable",
         "twilio/sdk": "^5.4",
         "mailgun/mailgun-php": "@stable",
-        "php-http/curl-client": "^1.6"
+        "php-http/curl-client": "^1.6",
+        "monolog/monolog": "^1.22"
     },
     "autoload": {
         "psr-4": {

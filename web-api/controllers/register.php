@@ -49,7 +49,7 @@ $app->post('/register', function(Request $request) use ($app) {
     } else {
         $data['food_concerns'] = $r->get('food_concerns');
         $result = $app['guests']->insert($data);
-        $app['email']->sendAdminRegistrationNotice();
+        $app['mailer']->sendAdminRegistrationNotice();
     }
     if (!$result) {
         throw new ServiceException("Unable to create $type person {$id}");

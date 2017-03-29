@@ -18,10 +18,14 @@ $app->post('/reactivate', function(Request $request) use ($app) {
     // @TODO ideally id should be person id and not match id
     $match = $app['matches']->get($id, true, false);
 
-    $hash = $app['email']->createHashCode($match['host']['email']);
+    $hash = $app['mailer']->createHashCode($match['host']['email']);
     if ($hash != $code) {
-        error_log("Feedback request with invalid code [{$code}] != [{$hash}] for person [{$match['host']['id']}]");
+        $this->app['monolog']->warning("Feedback request with invalid code [{$code}] != [{$hash}] for person [{$match['host']['id']}]");
         throw new ApiException('Invalid code!');
+    }
+
+    if (((int) $match['host']['status']) !== \app\models\People::STATUS_USED) {
+        throw new ApiException('Not able to reactivate this Person');
     }
 
     $host_id = $match['host_id'];
@@ -47,10 +51,14 @@ $app->post('/feedback', function(Request $request) use ($app) {
 
     $match = $app['matches']->get($id, true, false);
 
-    $hash = $app['email']->createHashCode($match['host']['email']);
+    $hash = $app['mailer']->createHashCode($match['host']['email']);
     if ($hash != $code) {
-        error_log("Feedback request with invalid code [{$code}] != [{$hash}] for match [{$id}]");
+        $this->app['monolog']->warning("Feedback request with invalid code [{$code}] != [{$hash}] for match [{$id}]");
         throw new ApiException('Invalid code!');
+    }
+
+    if ($match['status'] != \app\models\Matches::STATUS_NEW) {
+        throw new ApiException('Match is not "NEW"');
     }
 
     $data = ['status' => $status];
