@@ -6,7 +6,7 @@ $app->get('/host/{id}', function ($id) use ($app) {
 
 $app->get('/hosts', function() use ($app) {
     $guest_id = (int) ($_GET['guest_id'] ?? NULL);
-    $distance = (float) (floatval($_GET['distance']) ?? 20); // distance in nautical miles squared
+    $distance = (float) (floatval($_GET['distance'] ?? 20 )); // distance in nautical miles squared
 
     if ($guest_id) {
         $filters = [

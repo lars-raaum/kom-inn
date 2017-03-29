@@ -28,7 +28,7 @@ return [
     ],
     'pre' => [
         'base_url' => 'https://dev.kom-inn.org',
-        'logfile' => '/var/log/kom-inn-backend.log',
+        'logfile' => '/var/log/kom-inn/backend.log',
         'sms' => $sms + [
             'enabled' => false,
             'prefix' => 'PRE: '
@@ -46,8 +46,8 @@ return [
 
     ],
     'pro' => [
-        'base_url' => 'https://kom-inn.org',
-        'logfile' => '/var/log/kom-inn-backend.log',
+        'base_url' => 'https://pro.kom-inn.org',
+        'logfile' => '/var/log/kom-inn/backend.log',
         'sms' => $sms + [
             'enabled' => false,
             'prefix' => ''

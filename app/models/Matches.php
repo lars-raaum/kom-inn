@@ -77,15 +77,35 @@ class Matches implements \Pimple\ServiceProviderInterface
 
         if ($with_guest || $with_host) {
             foreach ($matches as $k => $match) {
-                if ($with_host) {
-                    $matches[$k]['host'] = $this->app['hosts']->get((int) $match['host_id']);
-                }
-                if ($with_guest) {
-                    $matches[$k]['guest'] = $this->app['guests']->get((int) $match['guest_id']);
+                try {
+                    if ($with_host) {
+                        $matches[$k]['host'] = $this->app['hosts']->get((int) $match['host_id']);
+                    }
+                    if ($with_guest) {
+                        $matches[$k]['guest'] = $this->app['guests']->get((int) $match['guest_id']);
+                    }
+                } catch(\app\exceptions\ApiException $e) {
+                    unset($matches[$k]);
                 }
             }
         }
+
+
         return $matches;
+    }
+
+    /**
+     * Find list of matches based on people id
+     *
+     * @param int $people_id
+     * @return array
+     */
+    public function findByPeopleId($people_id)
+    {
+        $args = [$people_id, $people_id];
+        $sql = "SELECT * FROM matches WHERE host_id = ? OR guest_id = ? ORDER BY id DESC";
+        error_log("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
+        return $this->app['db']->fetchAll($sql, $args);
     }
 
     /**

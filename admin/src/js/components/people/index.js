@@ -1,68 +1,19 @@
 import React from 'react';
-import { Link } from 'react-router';
-
-class Person extends React.Component {
-    constructor() {
-        super();
-
-        this.remove = this.remove.bind(this);
-        this.convert = this.convert.bind(this);
-    }
-
-    getAdults() {
-        const { person } = this.props;
-
-        return parseInt(person.adults_f, 10) + parseInt(person.adults_m, 10);
-    }
-
-    remove(e) {
-        e.preventDefault();
-        const { person } = this.props;
-        return fetch(`/api/person/${person.id}`, {
-            method: 'DELETE',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(() => { this.props.fetchPeople() }); // TODO update people state instead of refetching
-    }
-
-    convert(e) {
-        e.preventDefault();
-        const { person } = this.props;
-        fetch(`/api/person/${person.id}/convert`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(() => { this.props.fetchPeople() }); // TODO update people state instead of refetching
-    }
-
-    render() {
-        const { person } = this.props;
-
-        return <li>
-            <span className="title">{this.getAdults()} adults. {person.children} children.</span><span className="type">{person.type}</span>
-            <div className={'info'}>
-                <span className="name">{person.name}</span> <span className="info">{person.age} år. {person.adults_f} females. {person.adults_m} males.</span> <span className="origin">{person.origin}.</span> <br />
-                <span className="phone">Phone: <a href={`tel:${person.phone}`}>{person.phone}</a></span> <span className="email">Email <a href={`mailto:${person.email}`}>{person.email}</a></span> <br />
-                <span className="address">{person.address} {person.zipcode}</span> <br />
-                <span className="bringing">{person.bringing || <i>No people description</i>}</span> <br />
-                <span className="freetext">{person.freetext || <i>No description</i>}</span> <br />
-                <a href="#" onClick={this.convert}>Change person to other type</a> <br />
-                <a href="#" onClick={this.remove}>Remove person from database</a>
-            </div>
-        </li>
-    }
-}
+import Person from '../common/person'
+import { deletePerson, fetchPeople, convertPerson } from '../../actions/person';
 
 export default class People extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             people: [],
-            meta: {page: 1, limit: 10}
+            meta: {
+                count: 0,
+                page: 1,
+                offset: 0,
+                total: 0,
+                limit: 10
+            }
             // ,
             // status: '1'
         };
@@ -70,6 +21,8 @@ export default class People extends React.Component {
         this.nextPage = this.nextPage.bind(this);
         this.prevPage = this.prevPage.bind(this);
         this.gotoPage = this.gotoPage.bind(this);
+        this.removePerson = this.removePerson.bind(this);
+        this.convertPerson = this.convertPerson.bind(this);
     }
 
     componentDidMount() {
@@ -77,67 +30,104 @@ export default class People extends React.Component {
     }
 
     fetchPeople() {
-        return fetch(`/api/people?page=${this.state.meta.page}`, { // ?status=${this.state.status}
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(res => {
-            var meta = {
-                count: res.headers.get('X-Count'),
-                page: res.headers.get('X-Page'),
-                offset: res.headers.get('X-Offset'),
-                total: res.headers.get('X-Total'),
-                limit: res.headers.get('X-Limit')
-            };
-            this.setState({meta});
-            return res.json();
-        }).then(people => { // brab meta data from Headers
-            this.setState({ people })
+        this.setState({ loading: true });
+        return fetchPeople({ page: this.state.meta.page }).then(({ response, headers }) => {
+            this.setState({
+                loading: false,
+                people: response,
+                meta: {
+                    count: headers.get('X-Count'),
+                    page: headers.get('X-Page'),
+                    offset: headers.get('X-Offset'),
+                    total: headers.get('X-Total'),
+                    limit: headers.get('X-Limit')
+                }
+            });
         });
+    }
+
+    setPage(page) {
+        if (page === this.state.meta.page) {
+            return;
+        }
+
+        this.setState({
+            meta: Object.assign(this.state.meta, {
+                page: page
+            })
+        }, this.fetchPeople);
     }
 
     nextPage(e) {
         e.preventDefault();
-        var max = Math.ceil(this.state.meta.total / this.state.meta.limit);
-        if (this.state.meta.page < max)
-            this.state.meta.page++;
-        this.fetchPeople();
+        const max = Math.ceil(this.state.meta.total / this.state.meta.limit);
+        let page = this.state.meta.page;
+
+        if (page < max) {
+            page++;
+        }
+
+        this.setPage(page);
     }
 
     prevPage(e) {
         e.preventDefault();
-        if (this.state.meta.page > 1)
-            this.state.meta.page--;
-        this.fetchPeople();
+        let page = this.state.meta.page;
+
+        if (page > 1) {
+            page--;
+        }
+
+        this.setPage(page);
     }
 
     gotoPage(e) {
         e.preventDefault();
-        this.state.meta.page = e.target.getAttribute("data-page");
-        this.fetchPeople();
+        const page = e.target.getAttribute('data-page');
+        this.setPage(page);
+    }
+
+    removePerson(id) {
+        return deletePerson({ id }).then(() => this.fetchPeople());
+    }
+
+    convertPerson(id) {
+        return convertPerson({ id }).then(() => this.fetchPeople());
     }
 
     render() {
-        var N = Math.ceil(this.state.meta.total / this.state.meta.limit);
-        var pages = Array.apply(null, {length: N}).map(Number.call, Number); // + 1
+        if (this.state.loading) {
+            return <div className="loading-gif">
+                <span>LOADING</span>
+            </div>;
+        }
+
+        const N = Math.ceil(this.state.meta.total / this.state.meta.limit);
+        const pages = [...Array(N).keys()]; // + 1
+
         return <div>
             <div className="people">
                 <h1> People are strange </h1>
-                <ul>
+                <div>
                     {this.state.people.map(person => {
-                        return <Person key={person.id} person={person} fetchPeople={this.fetchPeople} />
+                        return <Person key={person.id} person={person} removePerson={this.removePerson} convertPerson={this.convertPerson} />
                     })}
-                </ul>
+                </div>
             </div>
             <div  className="pagination">
                 <ul>
-                    <li><button name="prev" onClick={this.prevPage}>Previous</button></li>
+                    <li>
+                        <button name="prev" onClick={this.prevPage}>Previous</button>
+                    </li>
                     {pages.map((p) => {
                          p = p + 1;
-                        return <li key={p}><button data-page={p} onClick={this.gotoPage}> {p} </button></li>
+                        return (<li key={p}>
+                            <button data-page={p} onClick={this.gotoPage}> {p} </button>
+                        </li>)
                     })}
-                    <li><button name="next" onClick={this.nextPage}>Next</button> </li>
+                    <li>
+                        <button name="next" onClick={this.nextPage}>Next</button>
+                    </li>
                 </ul>
                 <p>Showing {this.state.meta.count} of {this.state.meta.total}, page {this.state.meta.page}</p>
             </div>
