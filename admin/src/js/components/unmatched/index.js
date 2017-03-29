@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import cs from 'classnames';
 
-import Marker from './marker';
 import Person from './person';
 import Hosts from './hosts';
 

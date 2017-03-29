@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import Map, { GoogleApiWrapper } from 'google-maps-react'
 
 import camelize from 'camelize';
 const evtNames = ['click', 'mouseover', 'recenter'];
@@ -17,7 +16,7 @@ const wrappedPromise = function() {
     return wrappedPromise;
 }
 
-export class Marker extends React.Component {
+export default class Marker extends React.Component {
 
     componentDidMount() {
         this.markerPromise = wrappedPromise();

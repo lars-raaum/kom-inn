@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import cs from 'classnames';
 
-class Person extends React.Component {
+export default class Person extends React.Component {
     getAdults() {
         const { person } = this.props;
 

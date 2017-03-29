@@ -1,6 +1,10 @@
 import React, { PropTypes } from 'react';
+import Map, { GoogleApiWrapper } from 'google-maps-react'
 
-class Hosts extends React.Component {
+import Person from './person';
+import Marker from './marker';
+
+export default class Hosts extends React.Component {
     renderFilters() {
         return <div className="filters">
             <span className="info">
