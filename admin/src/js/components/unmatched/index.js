@@ -75,7 +75,8 @@ export default class Unmatched extends React.Component {
     }
 
     fetchGuests() {
-        return fetch('/api/guests?region=Oslo', {
+        let region = "?region=" + document.getElementById('region-select').value;
+        return fetch('/api/guests' + region, {
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'

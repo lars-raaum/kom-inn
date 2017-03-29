@@ -11,7 +11,7 @@ export default class Header extends React.Component {
     render() {
         return <div className="header">
             <div className="location">
-                <select name="Region" onChange={this.changeRegion}>
+                <select id="region-select" name="Region" onChange={this.changeRegion}>
                     <option value="ALL">ALL</option>
                     <option value="Oslo" default>Oslo</option>
                     <option value="Bergen">Bergen</option>
