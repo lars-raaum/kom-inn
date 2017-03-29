@@ -74,7 +74,7 @@ export default class Hosts extends React.Component {
             {this.renderMap()}
             <ul>
                 {hosts.map(host => {
-                    const selected = this.props.selectedHost && this.props.selectedHost.id === host.id;
+                    const selected = this.props.selectedHostId === host.id;
                     return <Person key={host.id + '-' + (selected ? 1 : 0)}
                         person={host}
                         selected={selected}

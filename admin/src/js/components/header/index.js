@@ -1,12 +1,21 @@
 import React from 'react'
 import { Link, IndexLink } from 'react-router';
+import { connect } from 'react-redux';
 
-export default class Header extends React.Component {
+import { setRegion } from '../../redux/actions/ui';
+
+class Header extends React.Component {
+    onChange(e) {
+        const region = e.target.value.toLowerCase();
+        this.props.setRegion(region);
+    }
+
     render() {
         return <div className="header">
             <div className="location">
-                <select disabled>
+                <select onChange={e => this.onChange(e)}>
                     <option>Oslo</option>
+                    <option>Bergen</option>
                 </select>
             </div>
             <div className="tabs">
@@ -26,3 +35,9 @@ export default class Header extends React.Component {
         </div>
     }
 }
+
+function mapDispatchToProps() {
+    return {};
+}
+
+export default connect(mapDispatchToProps, { setRegion })(Header);
