@@ -36,8 +36,13 @@ class Header extends React.Component {
     }
 }
 
-function mapDispatchToProps() {
-    return {};
+const DEFAULT_OBJECT = {};
+
+function mapDispatchToProps(state) {
+    const location = state.routing.locationBeforeTransitions || DEFAULT_OBJECT;
+    return {
+        path: location.pathname
+    };
 }
 
 export default connect(mapDispatchToProps, { setRegion })(Header);
