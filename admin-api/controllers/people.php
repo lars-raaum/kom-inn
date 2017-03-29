@@ -82,16 +82,11 @@ $app->get('/people', function() use ($app) {
         $status = (int) $_GET['status'];
     }
     $limit = (int) ($_GET['limit'] ?? 10);
-    if (isset($_GET['page'])) {
-        $page = (int) $_GET['page'];
-        $offset = $page * $limit - $limit;
-    } else {
-        $page = 1;
-    }
+    $page = (int) ($_GET['page'] ?? 1);
+    $filters = ['region' => $_GET['region'] ?? false];
 
-    $people = $app['people']->find($status, $limit, $offset);
-    $total = $app['people']->total($status);
-
+    $people = $app['people']->find($status, $filters, compact('limit', 'page'));
+    $total = $app['people']->total($status, $filters);
     $count = count($people);
 
     // ($data = null, $status = 200, $headers = array(), $json = false)

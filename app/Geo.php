@@ -62,9 +62,9 @@ class Geo implements \Pimple\ServiceProviderInterface
     public function getTargetByRegion(string $region) : array
     {
         switch ($region) {
-            case 'Bergen':
+            case 'bergen':
                 return ['loc_lat' => 60.389444, 'loc_long' => 5.33, 'distance_in_km' => 110.0];
-            case 'Oslo':
+            case 'oslo':
             default:
                 return ['loc_lat' => 59.9139, 'loc_long' => 10.7522, 'distance_in_km' => 110.0];
         }

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\exceptions\ApiException;
+use app\Geo;
 use DateTime;
 use Doctrine\DBAL\Types\Type;
 
@@ -63,15 +64,51 @@ class Matches implements \Pimple\ServiceProviderInterface
      * Find list of matches based on status, optionally include hosts and guests
      *
      * @param int $status
-     * @param bool $with_host
-     * @param bool $with_guest
+     * @param array $filters
+     * @param array $options
      * @return array
      */
-    public function find(int $status, bool $with_host = true, bool $with_guest = true) : array
+    public function find(int $status, array $filters = [], array $options = []) : array
     {
-        // TODO join requests
-        $args = [$status];
-        $sql = "SELECT * FROM matches WHERE status = ? ORDER BY id DESC";
+        $args    = [$status];
+        $sql     = "SELECT * FROM matches AS m";
+        $where   = "WHERE m.status = ?";
+
+        $with_guest = $filters['guest'] ?? false;
+        $with_host = $filters['host'] ?? false;
+
+        $region = $filters['region'] ?? false;
+        if ($region !== false && $region !== 'all') {
+            $with_host = true; // Have to have host to do regio matching
+            $target = $this->app['geo']->getTargetByRegion($region);
+            $distance = Geo::distanceToRadians($target['distance_in_km']);
+            $target_latitude = $target['loc_lat'];
+            $target_longitude = $target['loc_long'];
+            $where .=  " AND (h.loc_long - ?)*(h.loc_long - ?) + (h.loc_lat - ?)*(h.loc_lat - ?) < ? ";
+            $args[] = $target_longitude;
+            $args[] = $target_longitude;
+            $args[] = $target_latitude;
+            $args[] = $target_latitude;
+            $args[] = $distance;
+        }
+
+        if ($with_host) {
+            $fields = 'h.id AS h_id,h.email AS h_email,h.name AS h_name,h.phone AS h_phone,h.gender AS h_gender,h.age AS h_age,h.children AS h_children,h.adults_m AS h_adults_m,h.adults_f AS h_adults_f,h.origin AS h_origin,h.zipcode AS h_zipcode,h.address AS h_address,h.status AS h_status,h.freetext AS h_freetext,h.bringing AS h_bringing,h.loc_long AS h_loc_long,h.loc_lat AS h_loc_lat,h.visits AS h_visits,h.updated AS h_updated,h.created AS h_created';
+            $joins = ' LEFT JOIN people AS h ON m.host_id = h.id';
+            if ($with_guest) {
+                $fields .= ', g.id AS g_id, g.email AS g_email, g.name AS g_name, g.phone AS g_phone, g.gender AS g_gender, g.age AS g_age, g.children AS g_children, g.adults_m AS g_adults_m, g.adults_f AS g_adults_f, g.origin AS g_origin, g.zipcode AS g_zipcode, g.address AS g_address, g.status AS g_status, g.freetext AS g_freetext, g.bringing AS g_bringing, g.loc_long AS g_loc_long, g.loc_lat AS g_loc_lat, g.visits AS g_visits, g.updated AS g_updated, g.created AS g_created, ge.food_concerns AS g_food_concerns';
+                $joins .= ' LEFT JOIN people AS g ON m.guest_id = g.id LEFT JOIN guests as ge ON m.guest_id = ge.user_id';
+
+            }
+            $sql = "SELECT m.*, {$fields} FROM matches AS m{$joins}";
+        }
+
+        $options = $options + ['limit' => 100, 'page' => 1, 'sort' => 'id DESC'];
+        $limit   = $options['limit'];
+        $offset  = ($options['page'] - 1) * $limit;
+        $sort    = $options['sort'];
+        $sql    .= " {$where} ORDER BY {$sort} LIMIT {$offset}, {$limit}";
+
         $this->app['logger']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $matches = $this->app['db']->fetchAll($sql, $args);
 
@@ -79,17 +116,32 @@ class Matches implements \Pimple\ServiceProviderInterface
             foreach ($matches as $k => $match) {
                 try {
                     if ($with_host) {
-                        $matches[$k]['host'] = $this->app['hosts']->get((int) $match['host_id']);
+                        $host = [];
+                        foreach ($match as $key => $value) {
+                            if (substr($key, 0, 2) == 'h_') {
+                                $host_key = substr($key, 2);
+                                $host[$host_key] = $value;
+                                unset($matches[$k][$key]);
+                            }
+                        }
+                        $matches[$k]['host'] = $host;
                     }
                     if ($with_guest) {
-                        $matches[$k]['guest'] = $this->app['guests']->get((int) $match['guest_id']);
+                        $guest = [];
+                        foreach ($match as $key => $value) {
+                            if (substr($key, 0, 2) == 'g_') {
+                                $guest_key = substr($key, 2);
+                                $guest[$guest_key] = $value;
+                                unset($matches[$k][$key]);
+                            }
+                        }
+                        $matches[$k]['guest'] = $guest;
                     }
                 } catch(\app\exceptions\ApiException $e) {
                     unset($matches[$k]);
                 }
             }
         }
-
 
         return $matches;
     }

@@ -24,9 +24,14 @@ $app->get('/match/{id}', function ($id) use ($app) {
  */
 $app->get('/matches', function() use ($app) {
     $status = (int) ($_GET['status'] ?? 0);
-
-    // @TODO add pagination
-    $matches = $app['matches']->find($status);
+    $limit = (int) ($_GET['limit'] ?? 10);
+    $page = (int) ($_GET['page'] ?? 1);
+    $filters = [
+        'region' => $_GET['region'] ?? false,
+        'host' => true,
+        'guest' => true
+    ];
+    $matches = $app['matches']->find($status, $filters, compact('limit', 'page'));
     return $app->json($matches);
 });
 

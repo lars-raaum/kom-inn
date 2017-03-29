@@ -71,11 +71,11 @@ class People implements \Pimple\ServiceProviderInterface
      * Returns all users that match #status, paginated
      *
      * @param int|boolean $status if false, all users that is not deleted will be returned
-     * @param int $limit
-     * @param int $offset
+     * @param array $filters
+     * @param array $options
      * @return array
      */
-    public function find($status, int $limit = 10, int $offset = 0) : array
+    public function find($status, array $filters = [], array $options = []) : array
     {
         $sql = "SELECT p.*, g.id as `guest_id`, g.food_concerns, h.id as `host_id` ".
                "FROM people AS p LEFT JOIN guests AS g ON (p.id = g.user_id) LEFT JOIN hosts  AS h ON (p.id = h.user_id) ";
@@ -86,7 +86,26 @@ class People implements \Pimple\ServiceProviderInterface
             $args = [People::STATUS_DELETED];
             $sql .= "WHERE status != ?";
         }
-        $sql .= " ORDER BY updated DESC LIMIT {$offset}, {$limit}";
+
+        $region = $filters['region'] ?? false;
+        if ($region !== false && $region !== 'all') {
+            $target = $this->app['geo']->getTargetByRegion($region);
+            $distance = Geo::distanceToRadians($target['distance_in_km']);
+            $target_latitude = $target['loc_lat'];
+            $target_longitude = $target['loc_long'];
+            $sql .=  " AND (p.loc_long - ?)*(p.loc_long - ?) + (p.loc_lat - ?)*(p.loc_lat - ?) < ? ";
+            $args[] = $target_longitude;
+            $args[] = $target_longitude;
+            $args[] = $target_latitude;
+            $args[] = $target_latitude;
+            $args[] = $distance;
+        }
+
+        $options = $options + ['limit' => 10, 'page' => 1, 'sort' => 'updated DESC'];
+        $limit   = $options['limit'];
+        $offset  = ($options['page'] - 1) * $limit;
+        $sort    = $options['sort'];
+        $sql    .= " ORDER BY {$sort} LIMIT {$offset}, {$limit}";
 
         $this->app['logger']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $people = (array) $this->app['db']->fetchAll($sql, $args);
@@ -110,9 +129,10 @@ class People implements \Pimple\ServiceProviderInterface
      * Returns a count of all people with given status
      *
      * @param int|boolean $status
+     * @param array $filters
      * @return int
      */
-    public function total($status) : int
+    public function total($status, array $filters = []) : int
     {
         if ($status !== false) {
             $args = [$status];
@@ -121,6 +141,21 @@ class People implements \Pimple\ServiceProviderInterface
             $args = [People::STATUS_DELETED];
             $sql = "SELECT COUNT(1) FROM people WHERE status != ?";
         }
+
+        $region = $filters['region'] ?? false;
+        if ($region !== false && $region !== 'ALL') {
+            $target = $this->app['geo']->getTargetByRegion($region);
+            $distance = Geo::distanceToRadians($target['distance_in_km']);
+            $target_latitude = $target['loc_lat'];
+            $target_longitude = $target['loc_long'];
+            $sql .=  " AND (people.loc_long - ?)*(people.loc_long - ?) + (people.loc_lat - ?)*(people.loc_lat - ?) < ? ";
+            $args[] = $target_longitude;
+            $args[] = $target_longitude;
+            $args[] = $target_latitude;
+            $args[] = $target_latitude;
+            $args[] = $distance;
+        }
+
         $this->app['logger']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $total = $this->app['db']->fetchColumn($sql, $args, 0);
 

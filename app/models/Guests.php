@@ -56,7 +56,7 @@ class Guests implements \Pimple\ServiceProviderInterface
      * @param array $filters
      * @return array
      */
-    public function find(int $status, array $filters = []) : array
+    public function find(int $status, array $filters = [], array $options = []) : array
     {
         $args = [$status];
         $sql = "SELECT people.*, guests.user_id FROM people, guests WHERE people.id = guests.user_id AND people.status = ?";
@@ -96,7 +96,7 @@ class Guests implements \Pimple\ServiceProviderInterface
         }
 
         $region = $filters['region'] ?? false;
-        if ($region !== false && $region !== 'ALL') {
+        if ($region !== false && $region !== 'all') {
             $target = $this->app['geo']->getTargetByRegion($region);
             $distance = Geo::distanceToRadians($target['distance_in_km']);
             $target_latitude = $target['loc_lat'];
@@ -109,7 +109,11 @@ class Guests implements \Pimple\ServiceProviderInterface
             $args[] = $distance;
         }
 
-        $sql .= " ORDER BY updated DESC";
+        $options = $options + ['limit' => 10, 'page' => 1, 'sort' => 'updated DESC'];
+        $limit   = $options['limit'];
+        $offset  = ($options['page'] - 1) * $limit;
+        $sort    = $options['sort'];
+        $sql    .= " ORDER BY {$sort} LIMIT {$offset}, {$limit}";
 
         $this->app['logger']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $guests = $this->app['db']->fetchAll($sql, $args);
