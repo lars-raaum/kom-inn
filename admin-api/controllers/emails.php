@@ -1,5 +1,7 @@
 <?php
 
+use app\mails\HostInform;
+use app\mails\Purge;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -33,25 +35,25 @@ $app->post('/match/{id}/email/{type}', function($id, $type) use ($app) {
 /**
  * Show email content body
  *
- * @path /match/{id}/email/{type}
- * @param int $id
- * @param string $type
+ * @path /email/{template}/render?id={id}
+ * @param string $template
  * @return Response
  * @throws \app\exceptions\ApiException
  * @throws \app\exceptions\ServiceException
  */
-$app->post('/match/{id}/email/{template}/render', function($id, $template) use ($app) {
+$app->post('/email/{template}/render', function($template) use ($app) {
     if (\app\Environment::env() !== 'dev') {
         throw new \app\exceptions\ApiException("Endpoint only exists in DEV", 404);
     }
 
-    $match = $app['matches']->get((int) $id, true, true);
+    $id = $_GET['id'] ?? 1;
 
     /** @var \app\Mailer $mailer */
     $mailer = $app['mailer'];
 
     switch ($template) {
         case 'reminder':
+            $match = $app['matches']->get((int) $id, true, true);
             $templater = new \app\mails\Reminders($mailer);
             $type = $_GET['type'] ?? 'default';
             switch ($type) {
@@ -68,8 +70,14 @@ $app->post('/match/{id}/email/{template}/render', function($id, $template) use (
                     $content = $templater->buildFeedbackRequestText($match);
             }
             break;
+        case 'expired_host':
+            $templater = new Purge($mailer);
+            $host = $app['hosts']->get($id);
+            $content = $templater->buildExpiredHostText($host);
+            break;
         case 'host_inform':
-            $templater = new \app\mails\HostInform($mailer);
+            $templater = new HostInform($mailer);
+            $match = $app['matches']->get((int) $id, true, true);
             $content = $templater->buildHostInformText($match);
             break;
         default:

@@ -3,6 +3,8 @@
 namespace crons\tasks;
 
 
+use app\Mailer;
+
 class PurgeInactive
 {
 
@@ -14,7 +16,7 @@ class PurgeInactive
     public function __construct(\app\Cli $app)
     {
         $this->app = $app;
-        $counter_keys = ["DELETE", "PURGE", "ERROR", "TOTAL"];
+        $counter_keys = ["EMAIL", "DELETE", "PURGE", "ERROR", "TOTAL"];
         $fn = function ($o, $v) { $o[$v] = 0; return $o; };
         $this->counters = array_reduce($counter_keys, $fn, []);
     }
@@ -35,6 +37,12 @@ class PurgeInactive
                 $deleted = $app['dry'] || $this->app['people']->setToExpired($person['id']);
                 if ($deleted) {
                     $this->counters['DELETE']++;
+                }
+                // @TODO Check type is HOST;
+                $sent = $app['dry'] || $this->app['mailer']->sendHostExpired($person);
+                if ($sent) {
+                    $this->counters['EMAIL']++;
+                    $this->app->verbose("Sent mail to [{$person['id']}] {$person['name']}");
                 }
                 $this->app->verbose("Person [{$person['id']}] {$person['name']} - Soft deleted");
             } catch (\app\Exception $e) {
@@ -99,6 +107,7 @@ class PurgeInactive
     {
         $app = $this->app;
         $app->verbose(" ", " Handled: " . $this->counters['TOTAL']);
+        $app->verbose("  Emails: " . $this->counters['EMAIL']);
         $app->verbose("  Deleted: " . $this->counters['DELETE']);
         $app->verbose("  Purged: " . $this->counters['PURGE']);
         if ($this->counters['ERROR'])
