@@ -9,6 +9,8 @@ use Doctrine\DBAL\Types\Type;
 
 class People implements \Pimple\ServiceProviderInterface
 {
+    const STATUS_PURGED = -3;
+    const STATUS_EXPIRED = -2;
     const STATUS_DELETED = -1;
     const STATUS_ACTIVE = 1;
     const STATUS_USED = 2;
@@ -218,6 +220,34 @@ class People implements \Pimple\ServiceProviderInterface
     }
 
     /**
+     * Updates a person's status to DELETED
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function setToSoftDeleted(int $id) : bool
+    {
+        $data = [
+            'status' => People::STATUS_DELETED
+        ];
+        return $this->update($id, $data);
+    }
+
+    /**
+     * Updates a person's status to EXPIRED
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function setToExpired(int $id) : bool
+    {
+        $data = [
+            'status' => People::STATUS_EXPIRED
+        ];
+        return $this->update($id, $data);
+    }
+
+    /**
      * Soft delete, but anonymize person data.
      *
      * Removes `name`, `email`, `phone`, `address`, `freetext` and  `bringing`
@@ -234,7 +264,7 @@ class People implements \Pimple\ServiceProviderInterface
             'address'   => '#DELETED#',
             'freetext'  => NULL,
             'bringing'  => NULL,
-            'status'    => People::STATUS_DELETED,
+            'status'    => People::STATUS_PURGED,
             'updated'   => new DateTime('now')
         ];
         $types = ['updated' => Type::getType('datetime')];

@@ -2,6 +2,7 @@
 
 namespace app;
 
+use app\mails\Purge;
 use app\models\Emails;
 use InvalidArgumentException;
 use Mailgun\Mailgun;
@@ -200,4 +201,30 @@ class Mailer implements \Pimple\ServiceProviderInterface
         return $sent;
     }
 
+    public function sendHostExpired(array $host) : bool
+    {
+        if (empty($this->client)) return false;
+        $to = $host['email'];
+        $email_data = [
+            'user_id' => $host['id'],
+            'type' => Purge::EXPIRED_HOST
+        ];
+        try {
+            $templater = new Purge($this);
+            $body = $templater->buildExpiredHostText($host);
+            $this->client->sendMessage($this->domain, [
+                'from'    => $this->from,
+                'to'      => $to,
+                'subject' => $this->prefix . 'Vil du fortsatt invitere på middag? Gi oss beskjed!',
+                'html'    => $body
+            ]);
+            $sent = true;
+        } catch (\Exception $e) {
+            error_log("Failed to mail : " . $e->getMessage());
+            $email_data['status'] = Emails::STATUS_FAILED;
+            $sent = false;
+        }
+        $this->app['emails']->insert($email_data);
+        return $sent;
+    }
 }
