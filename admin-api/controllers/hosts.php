@@ -14,6 +14,10 @@ $app->get('/hosts', function() use ($app) {
             'men'       => $_GET['men']  ?? null,
             'women'     => $_GET['women']  ?? null
         ];
+        $childless = $_GET['childless'] ?? false;
+        if ($childless == 'yes') {
+            $filters['children'] = 'no';
+        }
         $hosts = $app['hosts']->findHostForGuest($guest_id, $distance, $filters);
     } else {
         $hosts = $app['hosts']->find();

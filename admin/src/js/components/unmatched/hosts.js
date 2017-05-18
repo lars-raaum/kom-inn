@@ -27,6 +27,9 @@ export default class Hosts extends React.Component {
             <label>
                 <input type="checkbox" onChange={e => this.props.setFilter('children', e.target.checked)} /> Children
             </label>
+            <label>
+                <input type="checkbox" onChange={e => this.props.setFilter('childless', e.target.checked)} /> No Children
+            </label>
         </div>
     }
     renderMap() {
