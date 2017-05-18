@@ -96,6 +96,7 @@ class StaleMatches {
             $app['matches']->delete($match['id']);
             $app['people']->delete($match['host_id']);
             $app['people']->setToActive($match['guest_id']);
+            $app['mailer']->sendAdminRegistrationNotice(); // Does potentially send duplicates yes.
         }
         $app->verbose("Deleting host [{$match['host_id']}]");
         $app->verbose("Setting guest to active [{$match['guest_id']}]");
