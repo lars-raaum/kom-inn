@@ -189,17 +189,17 @@ export default class Register extends React.Component {
                     <div className="form-group">
                         <div className="input-field col-1-3">
                             <label className="input-header" htmlFor="adults_female">{translate('Kvinner')}</label>
-                            <input type="number" placeholder="0"  max="10" id="adults_female" ref={(c) => this.form.adults_female = c} />
+                            <input type="number" placeholder="Fyll inn et tall" max="100" id="adults_female" ref={(c) => this.form.adults_female = c} required />
                         </div>
 
                         <div className="input-field col-1-3">
                             <label className="input-header" htmlFor="adults_male">{translate('Menn')}</label>
-                            <input type="number" placeholder="0"  max="10" id="adults_male" ref={(c) => this.form.adults_male = c} />
+                            <input type="number" placeholder="Fyll inn et tall" max="100" id="adults_male" ref={(c) => this.form.adults_male = c} required />
                         </div>
 
                         <div className="input-field col-1-3">
                             <label className="input-header" htmlFor="children">{translate('Barn')} (0-18 {translate('År').toLowerCase()})</label>
-                            <input type="number" placeholder="0"  max="10" id="children" ref={(c) => this.form.children = c} />
+                            <input type="number" placeholder="Fyll inn et tall" max="100" id="children" ref={(c) => this.form.children = c} required />
                         </div>
                     </div>
 
