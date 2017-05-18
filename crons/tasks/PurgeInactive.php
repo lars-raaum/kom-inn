@@ -3,8 +3,6 @@
 namespace crons\tasks;
 
 
-use app\Mailer;
-
 class PurgeInactive
 {
 
@@ -27,19 +25,23 @@ class PurgeInactive
     public function task() : void
     {
         $app = $this->app;
+        /* @var $mailer \app\Mailer */
+        $mailer = $this->app['mailer'];
+        /* @var $people \app\models\People */
+        $people = $this->app['people'];
 
-        // Get all active users that hasnt been updated in the last 6 months
-        $sql = "SELECT * FROM people WHERE updated < DATE_ADD(CURDATE(), INTERVAL - 6 MONTH) AND status = 1 ORDER BY id ASC";
-        $people = $this->getPeople($sql);
-        foreach ($people as $person) {
+        // Get all active users that hasnt been updated in the last 60 days
+        $sql = "SELECT * FROM people WHERE updated < DATE_ADD(CURDATE(), INTERVAL - 60 DAY) AND status = 1 ORDER BY id ASC";
+        $result = $this->getPeople($sql);
+        foreach ($result as $person) {
             try {
 
-                $deleted = $app['dry'] || $this->app['people']->setToExpired($person['id']);
+                $deleted = $app['dry'] || $people->setToExpired($person['id']);
                 if ($deleted) {
                     $this->counters['DELETE']++;
                 }
                 // @TODO Check type is HOST;
-                $sent = $app['dry'] || $this->app['mailer']->sendHostExpired($person);
+                $sent = $app['dry'] || $mailer->sendHostExpired($person);
                 if ($sent) {
                     $this->counters['EMAIL']++;
                     $this->app->verbose("Sent mail to [{$person['id']}] {$person['name']}");
@@ -59,12 +61,12 @@ class PurgeInactive
             $this->counters['TOTAL']++;
         }
 
-        // Get all soft deleted users that hasnt been updated in the last year
-        $sql = "SELECT * FROM people WHERE updated < DATE_ADD(CURDATE(), INTERVAL - 1 YEAR) AND status = -1 ORDER BY id ASC";
-        $people = $this->getPeople($sql);
-        foreach ($people as $person) {
+        // Get all soft deleted users that hasnt been updated in another 30 days
+        $sql = "SELECT * FROM people WHERE updated < DATE_ADD(CURDATE(), INTERVAL - 30 DAY) AND status = -1 ORDER BY id ASC";
+        $result = $this->getPeople($sql);
+        foreach ($result as $person) {
             try {
-                $purged = $app['dry'] || $this->app['people']->delete($person['id']);
+                $purged = $app['dry'] || $people->delete($person['id']);
                 if ($purged) {
                     $this->counters['PURGE']++;
                 }
