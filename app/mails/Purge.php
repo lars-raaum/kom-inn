@@ -8,12 +8,37 @@ use app\Mailer;
 class Purge
 {
     CONST EXPIRED_HOST = 'EXPIRED HOST';
+    CONST REACTIVATE_PERSON = 'REACTIVATE PERSON';
 
     protected $mailer;
 
     public function __construct(Mailer $mailer)
     {
         $this->mailer = $mailer;
+    }
+
+    /**
+     * Build text to use in HostInform mail
+     *
+     * @param array $person
+     * @return string
+     */
+    public function buildReactivateUsedText(array $person) : string
+    {
+        $name = $person['name'];
+        $url  = $this->reactiveUrl($person);
+        $text = "<h1>Hei {$name}</h1>\n\n
+        <p>For en stund siden meldte du deg på Kom inn - Lær norsk rundt middagsbordet. Vi håper du har vært på én eller flere hyggelige middager!</p>\n
+        <p>Hvis du vil bli delta på en ny middag med en annen familie, <a href=\"{$url}\">klikk på denne lenken!</a></p>\n
+        <p>Hvis du aldri har vært på middag, men fortsatt har lyst,  <a href=\"{$url}\">klikk på denne linken.</a></p>
+        <p>Kom inn drives på fritiden av en liten gruppe frivillige og vi rekrutterer gjester gjennom å dra på skolebesøk til Voksenopplæringene i Oslo.
+        Dette gjør vi noen ganger i halvåret, så det kan ta noe tid før vi finner en match. Vi finner heller ikke matcher til alle, men jo flere vi har
+        som ønsker å invitere, jo lettere er det å skape gode matcher!</p>
+        <p>mvh<br>\n
+        Kom inn<br>\n
+        " . '<a href="http://www.kom-inn.org/">http://www.kom-inn.org/</a>' . "<br>\n
+        " . '<a href="https://www.facebook.com/kominnnorge">https://www.facebook.com/kominnnorge</a>' . "</p>";
+        return $text;
     }
 
     /**

@@ -72,8 +72,13 @@ $app->post('/email/{template}/render', function($template) use ($app) {
             break;
         case 'expired_host':
             $templater = new Purge($mailer);
-            $host = $app['people']->get($id);
+            $host = $app['people']->get((int) $id);
             $content = $templater->buildExpiredHostText($host);
+            break;
+        case 'reactivate_used':
+            $templater = new Purge($mailer);
+            $match = $app['people']->get((int) $id);
+            $content = $templater->buildReactivateUsedText($match);
             break;
         case 'host_inform':
             $templater = new HostInform($mailer);

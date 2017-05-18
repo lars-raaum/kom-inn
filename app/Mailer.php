@@ -227,4 +227,31 @@ class Mailer implements \Pimple\ServiceProviderInterface
         $this->app['emails']->insert($email_data);
         return $sent;
     }
+
+    public function sendReactivateUsed(array $person) : bool
+    {
+        if (empty($this->client)) return false;
+        $to = $person['email'];
+        $email_data = [
+            'user_id' => $person['id'],
+            'type' => Purge::REACTIVATE_PERSON
+        ];
+        try {
+            $templater = new Purge($this);
+            $body = $templater->buildReactivateUsedText($person);
+            $this->client->sendMessage($this->domain, [
+                'from'    => $this->from,
+                'to'      => $to,
+                'subject' => $this->prefix . 'Vil du på en ny Kom inn-middag?',
+                'html'    => $body
+            ]);
+            $sent = true;
+        } catch (\Exception $e) {
+            error_log("Failed to mail : " . $e->getMessage());
+            $email_data['status'] = Emails::STATUS_FAILED;
+            $sent = false;
+        }
+        $this->app['emails']->insert($email_data);
+        return $sent;
+    }
 }
