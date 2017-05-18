@@ -72,7 +72,7 @@ $app->post('/email/{template}/render', function($template) use ($app) {
             break;
         case 'expired_host':
             $templater = new Purge($mailer);
-            $host = $app['hosts']->get($id);
+            $host = $app['people']->get($id);
             $content = $templater->buildExpiredHostText($host);
             break;
         case 'host_inform':
@@ -81,7 +81,7 @@ $app->post('/email/{template}/render', function($template) use ($app) {
             $content = $templater->buildHostInformText($match);
             break;
         default:
-            throw new \app\exceptions\ApiException("Email type [$type] not supported");
+            throw new \app\exceptions\ApiException("Email type [$template] not supported");
     }
 
     if (!$content) {
