@@ -21,5 +21,3 @@
       chdir: /services/kom-inn/crons/
   - name: setup cronjob for sending emails
     cron: name="emails" minute="0" hour="8" user="deploy" job="php /services/kom-inn/crons/stale_matches.php > /var/log/kom-inn/stale_matches.log"
-  - name: setup cronjob for purging inactive
-    cron: name="purge" minute="0" hour="9" user="deploy" job="php /services/kom-inn/crons/purge_inactive.php > /var/log/kom-inn/purge_inactive.log"
