@@ -24,11 +24,23 @@ export default class Person extends React.Component {
         }
     }
 
+    statusText(c) {
+        const t = {
+            "-2" : "purged",
+            "-1" : "expired",
+            "0" : "new",
+            "1" : "active",
+            "2" : "used"
+        }
+        return t[c];
+    }
+
     render() {
         const { person, handleRemove } = this.props;
 
         return <div className="person">
             <span className="title">{this.getAdults()} adults. {person.children} children.</span>
+            <span className="status">{this.statusText(person.status)}</span>
             <div className={'info'}>
                 <span className="name">{person.name}</span>
                 <span className="info">{person.age} år. {person.adults_f} females. {person.adults_m} males. {person.children} children. {this.getType()}.</span>
