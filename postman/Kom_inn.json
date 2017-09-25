@@ -22,7 +22,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n\"email\"\t\t: \"lina@example.com\",\n\"name\"\t\t: \"Lina\",\n\"phone\"     : \"+4790121212\",\n\"gender\"\t: \"female\",\n\"age\"\t\t: 22,\n\"children\"\t: 0,\n\"adults_m\"\t: 0,\n\"adults_f\"\t: 0,\n\"origin\"\t: \"Russia\",\n\"zipcode\"\t: \"0479\",\n\"address\"\t: \"Sigurd Lies gate 17\",\n\"freetext\"\t: \"Hey!\",\n\"type\"\t\t: \"guest\"\n}"
+          "raw": "{\n\"email\"    : \"lina@example.com\",\n\"name\"    : \"Lina\",\n\"phone\"     : \"+4790121212\",\n\"gender\"  : \"female\",\n\"age\"    : 22,\n\"children\"  : 0,\n\"adults_m\"  : 0,\n\"adults_f\"  : 0,\n\"origin\"  : \"Russia\",\n\"zipcode\"  : \"0479\",\n\"address\"  : \"Sigurd Lies gate 17\",\n\"freetext\"  : \"Hey! Bumped value\",\n\"type\"    : \"guest\"\n}"
         },
         "description": ""
       },
