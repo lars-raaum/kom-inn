@@ -16,6 +16,7 @@ export default class Hosts extends React.Component {
                     <option value="10">10 km</option>
                     <option value="5">5 km</option>
                     <option value="2">2 km</option>
+                    <option value="100">100 km</option>
                 </select>
             </label>
             <label>
