@@ -53,7 +53,7 @@ class Environment
     public static function env()
     {
         if (!self::$env) {
-            self::$env = include RESOURCE_PATH . '/env.php';
+            self::$env = include RESOURCE_PATH . '/env-dist.php';
         }
         return self::$env;
     }
