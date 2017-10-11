@@ -98,27 +98,34 @@ export default class Register extends React.Component {
         return (<div>
             <h2>{translate('Hvem er du')}?</h2>
             <div className="form-group">
-                <div className="input-field col-1-3">
-                    <label className="input-header" htmlFor="name">{translate('Hva er navnet ditt')}</label>
-                    <input type="text" placeholder="" id="name" ref={(c) => this.form.name = c} required />
+        
+                <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input className="mdl-textfield__input" type="text" id="name" ref={(c) => this.form.name = c} required />
+                    <label className="mdl-textfield__label" htmlFor="name">{translate('Hva er navnet ditt')}</label>
                 </div>
 
-                <div className="input-field col-1-3">
-                    <label className="input-header" htmlFor="age">{translate('Alder')}</label>
-                    <input type="number" placeholder="" max="120" id="age" ref={(c) => this.form.age = c} required />
+                <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input className="mdl-textfield__input" type="text" max="120" id="age" pattern="-?[0-9]*(\.[0-9]+)?" ref={(c) => this.form.age = c} required />
+                    <label className="mdl-textfield__label" htmlFor="age">{translate('Alder')}</label>
+                    <span className="mdl-textfield__error">Input is not a number!</span>
                 </div>
 
-                <div className="radio-field col-1-3">
-                    <label className="input-header">{translate('Kjønn')}</label>
-                    <label htmlFor="gender-male"><input type="radio" name="gender" id="gender-male" onChange={() => this.setState({gender: 'male' })} />  {translate('Mann')}</label>
-                    <label htmlFor="gender-female"><input type="radio" name="gender" id="gender-female" onChange={() => this.setState({gender: 'female' })} />  {translate('Kvinne')}</label>
+                <div>
+                    <label className="" htmlFor="age">{translate('Kjønn')}</label>
+                    
+                    <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect" htmlFor="gender-male">
+                        <input type="radio" id="gender-male" onChange={() => this.setState({gender: 'male' })} className="mdl-radio__button" name="gender" />
+                        <span className="mdl-radio__label">{translate('Mann')}</span>
+                    </label>
+                    <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect" htmlFor="gender-female">
+                        <input type="radio" id="gender-female" onChange={() => this.setState({gender: 'female' })} className="mdl-radio__button" name="gender" />
+                        <span className="mdl-radio__label">{translate('Kvinne')}</span>
+                    </label>
                 </div>
             </div>
-            <div className="form-group">
-                <div className="input-field col-1-1">
-                    <label className="input-header" htmlFor="origin">{translate('Hvor er du fra')}</label>
-                    <input type="text" placeholder="" id="origin" ref={(c) => this.form.origin = c} required />
-                </div>
+            <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input className="mdl-textfield__input" type="text" id="origin" ref={(c) => this.form.origin = c} required />
+                <label className="mdl-textfield__label" htmlFor="origin">{translate('Hvor er du fra')}</label>
             </div>
         </div>)
     }
