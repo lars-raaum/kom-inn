@@ -13,7 +13,7 @@ body {
     .translate {
         width: 200px;
         float: right;
-        margin-right: 10%;
+        margin-right: 10px;
     }
 }
 
@@ -65,14 +65,18 @@ p {
 }
 
 button {
-    background-color: #4CAF50;
-    border: none;
-    color: red;
-    padding: 15px 32px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
+    background-color: yellow;
+    border: none;
+    color: black;
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
+    border-radius: 12px;
+}
+
+.button1 {
+    padding: 15px 32px;
 }

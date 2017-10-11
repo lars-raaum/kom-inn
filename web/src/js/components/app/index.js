@@ -22,9 +22,9 @@ export default class App extends React.Component {
 
     renderTranslations() {
         if (lang === 'en') {
-            return <button onClick={() => this.setLanguage('no')} class="button">Les på norsk</button>
+            return <button onClick={() => this.setLanguage('no')} class="button button1">Les på norsk</button>
         } else {
-            return <button onClick={() => this.setLanguage('en')} class="button">Read in English</button>
+            return <button onClick={() => this.setLanguage('en')} class="button button1">Read in English</button>
         }
     }
 
