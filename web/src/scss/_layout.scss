@@ -9,6 +9,12 @@ body {
     background-image: url(../img/header.jpg);
     background-position: center center;
     background-repeat: no-repeat;
+
+    .translate {
+        width: 200px;
+        float: right;
+        margin-right: 10px;
+    }
 }
 
 .content {
@@ -28,10 +34,6 @@ body {
     background: #fff;
     border-top: 5px solid #e1e1e1;
 
-    .translate {
-        width: 200px;
-        margin: 0 auto;
-    }
     &:after {
         content: "";
         clear: both;
@@ -60,4 +62,21 @@ p {
     line-height: 135%;
     margin-top: 22px;
     font-size: 16px;
+}
+
+button {
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    background-color: yellow;
+    border: none;
+    color: black;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+.button1 {
+    padding: 15px 32px;
 }
