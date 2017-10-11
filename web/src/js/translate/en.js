@@ -41,7 +41,7 @@ module.exports = {
     'Registrer deg nedenfor dersom du vil komme på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match ber vi verten ta kontakt for å avtale tidspunkt.':
         'Register below if you wish to be invited to a Norwegian dinner. To find a match we need to know a little bit about you and where you live. When we find a match we, a host will contact you with an invitation.',
     'Registrer deg nedenfor dersom du vil invitere noen på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match setter vi dere i kontakt for å avtale tidspunkt.':
-        'Register below if you wish to invite someone over for dinner. To find a match we need to know a little bit abouy you and where you live. Wehn we find a match we will ask you to contact the guest with an invitation.',
+        'Register below if you wish to invite someone over for dinner. To find a match we need to know a little bit about you and where you live. When we find a match we will ask you to contact the guest with an invitation.',
     'Hvor mange blir med på middag i tillegg til deg': 'How many guests are you bringing with you in addition to yourself',
     'Kan du fortelle litt mer om deg selv': 'Can you tell us a bit more about yourself',
     'Er det noe annet vi trenger å vite om deg/dere': 'Is there anything else we should know about you',
