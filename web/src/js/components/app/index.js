@@ -22,22 +22,21 @@ export default class App extends React.Component {
 
     renderTranslations() {
         if (lang === 'en') {
-            return <span onClick={() => this.setLanguage('no')}>Les på norsk</span>
+            return <button onClick={() => this.setLanguage('no')} class="button button1">Les på norsk</button>
         } else {
-            return <span onClick={() => this.setLanguage('en')}>Read in English</span>
+            return <button onClick={() => this.setLanguage('en')} class="button button1">Read in English</button>
         }
     }
 
     render() {
         return <div className="wrapper">
-            <div className="header">&nbsp;</div>
-            <div className="content">
-                {this.props.children}
-            </div>
-            <div className="footer">
+            <div className="header">
                 <div className="translate">
                     {this.renderTranslations()}
                 </div>
+            </div>
+            <div className="content">
+                {this.props.children}
             </div>
         </div>
     }
