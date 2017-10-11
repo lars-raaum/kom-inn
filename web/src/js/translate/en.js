@@ -49,5 +49,9 @@ module.exports = {
     'Hvordan kan vi kontakte deg': "How can we contact you",
     'Hvor bor du': 'Where do you live',
     'Annet': 'Anything else',
-    'Hvem tar du med deg? Vet vi mer er sjansen for at vi finner en god match større. Eksempelvis alder på barna.': 'Who are you bringing? The more we know, the better chance for a good match. For example, what is the age of your kids.'
+    'Hvem tar du med deg? Vet vi mer er sjansen for at vi finner en god match større. Eksempelvis alder på barna.': 'Who are you bringing? The more we know, the better chance for a good match. For example, what is the age of your kids.',
+    'Vennligst skriv inn en gyldig alder': 'Please enter a valid age',
+    'Vennligst oppgi en gyldig epostadresse': 'Please enter a valid email address',
+    'Vennligst oppgi et gyldig telefonnummer': 'Please enter a valid phone number',
+    'Gyldig kode må ligge mellom 0001 og 9999': 'Valid code must lie between 0001 and 9999'
 }
