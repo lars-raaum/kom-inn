@@ -94,6 +94,110 @@ export default class Register extends React.Component {
         return (<div className="main-page">Takk!</div>);
     }
 
+    renderAboutYouSection(translate) {
+        return (<div>
+            <h2>{translate('Hvem er du')}?</h2>
+            <div className="form-group">
+                <div className="input-field col-1-3">
+                    <label className="input-header" htmlFor="name">{translate('Hva er navnet ditt')}</label>
+                    <input type="text" placeholder="" id="name" ref={(c) => this.form.name = c} required />
+                </div>
+
+                <div className="input-field col-1-3">
+                    <label className="input-header" htmlFor="age">{translate('Alder')}</label>
+                    <input type="number" placeholder="" max="120" id="age" ref={(c) => this.form.age = c} required />
+                </div>
+
+                <div className="radio-field col-1-3">
+                    <label className="input-header">{translate('Kjønn')}</label>
+                    <label htmlFor="gender-male"><input type="radio" name="gender" id="gender-male" onChange={() => this.setState({gender: 'male' })} />  {translate('Mann')}</label>
+                    <label htmlFor="gender-female"><input type="radio" name="gender" id="gender-female" onChange={() => this.setState({gender: 'female' })} />  {translate('Kvinne')}</label>
+                </div>
+            </div>
+            <div className="form-group">
+                <div className="input-field col-1-1">
+                    <label className="input-header" htmlFor="origin">{translate('Hvor er du fra')}</label>
+                    <input type="text" placeholder="" id="origin" ref={(c) => this.form.origin = c} required />
+                </div>
+            </div>
+        </div>)
+    }
+
+    renderYourGuestsSection(translate) {
+        return (<div>
+                <h2>{translate('Hvor mange blir med på middag i tillegg til deg')}?</h2>
+                <div className="form-group">
+                    <div className="input-field col-1-3">
+                        <label className="input-header" htmlFor="adults_female">{translate('Kvinner')}</label>
+                        <input type="number" placeholder="" max="100" id="adults_female" ref={(c) => this.form.adults_female = c} required />
+                    </div>
+
+                    <div className="input-field col-1-3">
+                        <label className="input-header" htmlFor="adults_male">{translate('Menn')}</label>
+                        <input type="number" placeholder="" max="100" id="adults_male" ref={(c) => this.form.adults_male = c} required />
+                    </div>
+
+                    <div className="input-field col-1-3">
+                        <label className="input-header" htmlFor="children">{translate('Barn')} (0-18 {translate('År').toLowerCase()})</label>
+                        <input type="number" placeholder="" max="100" id="children" ref={(c) => this.form.children = c} required />
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <div className="input-field col-1-1 no-height">
+                        <label className="input-header" htmlFor="bringing">{translate('Hvem tar du med deg? Vet vi mer er sjansen for at vi finner en god match større. Eksempelvis alder på barna.')}</label>
+                        <textarea id="bringing" ref={(c) => this.form.bringing = c}></textarea>
+                    </div>
+                </div>
+            </div>);
+    }
+    renderContactInfoSection(translate) {
+        return (<div>
+                <h2>{translate('Hvordan kan vi kontakte deg')}?</h2>
+                <div className="form-group">
+                    <div className="input-field col-1-1">
+                        <label className="input-header" htmlFor="email">{translate('Hva er e-postadressen din')}?</label>
+                        <input type="email" placeholder="" id="email" ref={(c) => this.form.email = c} required />
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <div className="input-field col-1-1">
+                        <label className="input-header" htmlFor="phone">{translate('Hva er telefonnummeret ditt')}?</label>
+                        <input type="phone" placeholder="" id="phone" ref={(c) => this.form.phone = c} required />
+                    </div>
+                </div>
+
+                <h2>{translate('Hvor bor du')}?</h2>
+                <div className="form-group">
+                    <div className="input-field col-1-1">
+                        <label className="input-header" htmlFor="address">{translate('Adresse')}</label>
+                        <input type="text" placeholder="" id="address" ref={(c) => this.form.address = c} required />
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <div className="input-field col-1-1">
+                        <label className="input-header" htmlFor="zipcode">{translate('Postnummer')}</label>
+                        <input type="text" placeholder="" id="zipcode" ref={(c) => this.form.zipcode = c} required />
+                    </div>
+                </div>
+            </div>);
+    }
+
+    renderOthersSection(translate) {
+        return (<div>
+            <h2>{translate('Annet')}?</h2>
+            {this.renderFoodConcerns()}
+            <div className="form-group">
+                <div className="input-field col-1-1 no-height">
+                    <label className="input-header" htmlFor="freetext">{translate('Er det noe annet vi trenger å vite om deg/dere')}?</label>
+                    <textarea id="freetext" ref={(c) => this.form.freetext = c} ></textarea>
+                </div>
+            </div>
+        </div>);
+    }
+
     render() {
         const translate = this.context.translate;
 
@@ -150,7 +254,7 @@ export default class Register extends React.Component {
                 </div>
             )
         }
-
+        
         return (
             <div className="main-page">
                 {intro}
@@ -159,97 +263,13 @@ export default class Register extends React.Component {
 
                     {typeForm}
 
-                    <h2>{translate('Hvem er du')}?</h2>
-                    <div className="form-group">
-                        <div className="input-field col-1-3">
-                            <label className="input-header" htmlFor="name">{translate('Hva er navnet ditt')}</label>
-                            <input type="text" placeholder="" id="name" ref={(c) => this.form.name = c} required />
-                        </div>
+                    {this.renderAboutYouSection(translate)}
 
-                        <div className="input-field col-1-3">
-                            <label className="input-header" htmlFor="age">{translate('Alder')}</label>
-                            <input type="number" required title={translate('Vennligst skriv inn en gyldig alder')} min="18" max="100" id="age" ref={(c) => this.form.age = c}/>
-                        </div>
+                    {this.renderYourGuestsSection(translate)}
 
-                        <div className="radio-field col-1-3">
-                            <label className="input-header">{translate('Kjønn')}</label>
-                            <label htmlFor="gender-male"><input type="radio" name="gender" id="gender-male" onChange={() => this.setState({gender: 'male' })} />  {translate('Mann')}</label>
-                            <label htmlFor="gender-female"><input type="radio" name="gender" id="gender-female" onChange={() => this.setState({gender: 'female' })} />  {translate('Kvinne')}</label>
-                        </div>
-                    </div>
+                    {this.renderContactInfoSection(translate)}
 
-                    <div className="form-group">
-                        <div className="input-field col-1-1">
-                            <label className="input-header" htmlFor="origin">{translate('Hvor er du fra')}</label>
-                            <input type="text" placeholder="" id="origin" ref={(c) => this.form.origin = c} required />
-                        </div>
-                    </div>
-
-                    <h2>{translate('Hvor mange blir med på middag i tillegg til deg')}?</h2>
-                    <div className="form-group">
-                        <div className="input-field col-1-3">
-                            <label className="input-header" htmlFor="adults_female">{translate('Kvinner')}</label>
-                            <input type="number" required min="0" max="100" id="adults_female" ref={(c) => this.form.adults_female = c}/>
-                        </div>
-
-                        <div className="input-field col-1-3">
-                            <label className="input-header" htmlFor="adults_male">{translate('Menn')}</label>
-                            <input type="number" required min="0" max="100" id="adults_male" ref={(c) => this.form.adults_male = c}/>
-                        </div>
-
-                        <div className="input-field col-1-3">
-                            <label className="input-header" htmlFor="children">{translate('Barn')} (0-18 {translate('År').toLowerCase()})</label>
-                            <input type="number" required min="0" max="100" id="children" ref={(c) => this.form.children = c}/>
-                        </div>
-                    </div>
-
-                    <div className="form-group">
-                        <div className="input-field col-1-1 no-height">
-                            <label className="input-header" htmlFor="bringing">{translate('Hvem tar du med deg? Vet vi mer er sjansen for at vi finner en god match større. Eksempelvis alder på barna.')}</label>
-                            <textarea id="bringing" ref={(c) => this.form.bringing = c}></textarea>
-                        </div>
-                    </div>
-
-                    <h2>{translate('Hvordan kan vi kontakte deg')}?</h2>
-                    <div className="form-group">
-                        <div className="input-field col-1-1">
-                            <label className="input-header" htmlFor="email">{translate('Hva er e-postadressen din')}?</label>
-                            <input required type="email" pattern="^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$" title={translate('Vennligst oppgi en gyldig epostadresse')} id="email" ref={(c) => this.form.email = c} />
-                        </div>
-                    </div>
-
-                    <div className="form-group">
-                        <div className="input-field col-1-1">
-                            <label className="input-header" htmlFor="phone">{translate('Hva er telefonnummeret ditt')}?</label>
-                            <input type="phone" required pattern="((32|33|35|37|38|([2678][0-9])|(5[0-7]))|((((9|4)[0-9])|59))|(58[0-9]{4}))[0-9]{6}" title={translate('Vennligst oppgi et gyldig telefonnummer')} id="phone" ref={(c) => this.form.phone = c}/>
-                        </div>
-                    </div>
-
-                    <h2>{translate('Hvor bor du')}?</h2>
-                    <div className="form-group">
-                        <div className="input-field col-1-1">
-                            <label className="input-header" htmlFor="address">{translate('Adresse')}</label>
-                            <input type="text" placeholder="" id="address" ref={(c) => this.form.address = c} required />
-                        </div>
-                    </div>
-
-                    <div className="form-group">
-                        <div className="input-field col-1-1">
-                            <label className="input-header" htmlFor="zipcode">{translate('Postnummer')}</label>
-                            <input type="number" required min="0001" max="9999" title={translate('Gyldig kode må ligge mellom 0001 og 9999')} id="zipcode" ref={(c) => this.form.zipcode = c}/>
-                        </div>
-                    </div>
-
-                    <h2>{translate('Annet')}?</h2>
-
-                    {this.renderFoodConcerns()}
-
-                    <div className="form-group">
-                        <div className="input-field col-1-1 no-height">
-                            <label className="input-header" htmlFor="freetext">{translate('Er det noe annet vi trenger å vite om deg/dere')}?</label>
-                            <textarea id="freetext" ref={(c) => this.form.freetext = c} ></textarea>
-                        </div>
-                    </div>
+                    {this.renderOthersSection(translate)}
 
                     <div className="submit">
                         <button type="submit">{translate('Send inn')}</button>

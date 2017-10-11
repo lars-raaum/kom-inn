@@ -53,9 +53,9 @@ export default class App extends React.Component {
         }
 
         if (language === 'en') {
-            return <button onClick={() => this.setLanguage('no')} class="button button1">Les på norsk</button>
+          return <a className="mdl-navigation__link translate" href="" onClick={(e) => {e.preventDefault();this.setLanguage('no')}}>Les på norsk</a>
         } else {
-            return <button onClick={() => this.setLanguage('en')} class="button button1">Read in English</button>
+          return <a className="mdl-navigation__link translate" href="" onClick={(e) => {e.preventDefault();this.setLanguage('en')}}>Read in English</a>
         }
     }
 
