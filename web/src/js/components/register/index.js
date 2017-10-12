@@ -14,7 +14,7 @@ export default class Register extends React.Component {
     componentDidMount() {
         var cleanTextFields = document.querySelectorAll('.textfield--clean input');
         for(let i=0; i<cleanTextFields.length; i++){
-            
+
             cleanTextFields[i].onblur = function(){
                 this.onblur = undefined;
                 this.parentElement.classList.remove('textfield--clean')
@@ -124,7 +124,7 @@ export default class Register extends React.Component {
                             <span className="mdl-radio__label">{translate("Jeg vil invitere noen på middag!")}</span>
                         </label>
                     </fieldset>
-        
+
                     <fieldset className="mdl-cell mdl-cell--12-col  ">
                         <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield--clean">
                             <input className="mdl-textfield__input" type="text" id="name" ref={(c) => this.form.name = c} required />
@@ -140,7 +140,7 @@ export default class Register extends React.Component {
                         </div>
                         <fieldset>
                             <legend><b>{translate('Kjønn')}</b></legend>
-                            
+
                             <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect" htmlFor="gender-male">
                                 <input type="radio" id="gender-male" onChange={() => this.setState({gender: 'male' })} className="mdl-radio__button" name="gender" />
                                 <span className="mdl-radio__label">{translate('Mann')}</span>
@@ -198,7 +198,7 @@ export default class Register extends React.Component {
                     <label className="mdl-textfield__label" htmlFor="bringing">{translate('Hvem tar du med deg? Vet vi mer er sjansen for at vi finner en god match større. Eksempelvis alder på barna.')}</label>
                     <textarea className="mdl-textfield__input" type="text" id="bringing" ref={(c) => this.form.bringing = c} rows="3" ></textarea>
                 </div>
-                
+
             </div>);
     }
     renderContactInfoSection(translate) {
@@ -295,7 +295,7 @@ export default class Register extends React.Component {
                 </div>
             )
         }
-        
+
         return (
 
             <div className="mdl-grid">
