@@ -2,7 +2,7 @@
 
 $sms = file_exists(RESOURCE_PATH . '/sms.php') ? require RESOURCE_PATH . '/sms.php' : [];
 $emails = file_exists(RESOURCE_PATH . '/emails.php') ? require RESOURCE_PATH . '/emails.php' : [];
-$connections = require RESOURCE_PATH . '/connections-dist.php';
+$connections = require RESOURCE_PATH . '/connections.php';
 
 return [
     'dev' => [
@@ -19,11 +19,11 @@ return [
         ],
         'connections' => $connections + [
             'driver'    => 'pdo_mysql',
-            'host'      => '127.0.0.1',
-            'port'      => '3306',
+            'host'      => 'localhost',
             'dbname'    => 'kominn',
             'user'      => 'root',
-            'password'  => 'sa'
+            'password'  => '',  
+            'charset'   => 'utf8mb4'
         ]
     ],
     'pre' => [
@@ -41,9 +41,7 @@ return [
             'driver'    => 'pdo_mysql',
             'host'      => 'localhost',
             'dbname'    => 'kominn',
-            'charset'   => 'utf8mb4',
-            'user'      => 'root',
-            'password'  => 'sa'
+            'charset'   => 'utf8mb4'
         ]
 
     ],
@@ -62,8 +60,6 @@ return [
             'driver'    => 'pdo_mysql',
             'host'      => 'localhost',
             'dbname'    => 'kominn',
-            'user'      => 'root',
-            'password'  => 'sa',
             'charset'   => 'utf8mb4'
         ]
     ]
