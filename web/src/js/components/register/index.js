@@ -2,11 +2,16 @@ import React from 'react'
 import { Link } from 'react-router'
 
 export default class Register extends React.Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
+        const { params } = this.props;
+        const paramsType = params && params.type;
+        // if type is vert type is host, if anything else default to guest
+        const type = paramsType === 'vert' ? 'host' : 'guest';
+
         this.form = {};
 
-        this.state = { gender: null, type: 'guest', error: null, success: false, pending: false };
+        this.state = { gender: null, type, error: null, success: false, pending: false };
 
         this.submit = this.submit.bind(this);
     }
@@ -247,12 +252,13 @@ export default class Register extends React.Component {
 
     render() {
         const translate = this.context.translate;
+        const { type, pending, success } = this.state;
 
-        if (this.state.pending) {
+        if (pending) {
             return this.renderPending();
         }
 
-        if (this.state.success) {
+        if (success) {
             return this.renderSuccess();
         }
 
@@ -264,19 +270,13 @@ export default class Register extends React.Component {
             <p>{translate('Hvis du vil komme på middag, eller invitere noen på middag registrerer du deg nedenfor. Vi matcher dere basert på hvem dere er og hvor dere bor og setter dere i kontakt for å avtale tidspunkt.')}</p>
             </div>
         )
-        if (this.props.params.type == 'gjest' || this.props.params.type == 'vert') {
-            // Good, lets proceed
-        } else {
-            // No preselected, assume guest as per #24
-            this.props.params.type = 'gjest';
-        }
-        if (this.props.params.type == 'gjest') {
+        if (type == 'guest') {
             intro = (<div className="mdl-cell mdl-cell--12-col">
                 <p>{translate("Vil du øve på å snakke norsk? Ideen bak Kom inn er at mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk.")}</p>
                 <p>{translate("Registrer deg nedenfor dersom du vil komme på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match ber vi verten ta kontakt for å avtale tidspunkt.")}</p>
                 </div>
             )
-        } else if (this.props.params.type == 'vert') {
+        } else if (type == 'host') {
             intro = ( <div className="mdl-cell mdl-cell--12-col">
                 <p>{translate("Vil du hjelpe noen å lære norsk? Ideen bak Kom inn er at mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk.")}</p>
                 <p>{translate("Registrer deg nedenfor dersom du vil invitere noen på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match setter vi dere i kontakt for å avtale tidspunkt.")}</p>
