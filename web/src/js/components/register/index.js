@@ -55,7 +55,7 @@ export default class Register extends React.Component {
             return null;
         }
         return  <div className="mdl-cell mdl-cell--6-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield--clean">
-                    <input className="mdl-textfield__input" type="text" id="food_concerns"  ref={(c) => this.form.food_concerns = c} required />
+                    <input className="mdl-textfield__input" type="text" id="food_concerns"  ref={(c) => this.form.food_concerns = c}  />
                     <label className="mdl-textfield__label" htmlFor="food_concerns">{this.context.translate('Er det noe mat du/dere ikke spiser')}?</label>
                 </div>
     }
@@ -151,14 +151,15 @@ export default class Register extends React.Component {
 
                     <fieldset>
                         <div className="mdl-cell mdl-cell--6-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield--clean">
-                            <input className="mdl-textfield__input" type="text" id="name" ref={(c) => this.form.name = c} required />
-                            <label className="mdl-textfield__label" htmlFor="name">{translate('Hva er navnet ditt')}</label>
+                            <input className="mdl-textfield__input" type="text" id="name" pattern="[a-zA-Z][a-zA-Z_\.]{1,20}$" ref={(c) => this.form.name = c} required />
+                            <label className="mdl-textfield__label" htmlFor="name">{translate('Hva er navnet ditt')}*</label>
+                            <span className="mdl-textfield__error">This is not a valid name</span>
                         </div>
 
                         <div className="mdl-cell mdl-cell--6-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield--clean">
                             <input className="mdl-textfield__input" type="number" max="120" id="age" pattern="-?[0-9]*(\.[0-9]+)?" ref={(c) => this.form.age = c} required />
-                            <label className="mdl-textfield__label" htmlFor="age">{translate('Alder')}</label>
-                            <span className="mdl-textfield__error">Input is not a number!</span>
+                            <label className="mdl-textfield__label" htmlFor="age">{translate('Alder')}*</label>
+                            <span className="mdl-textfield__error">This is not a valid age</span>
                         </div>
                         <div className="mdl-cell mdl-cell--12-col">
                             <legend>{translate('Kjønn')}</legend>
@@ -175,7 +176,8 @@ export default class Register extends React.Component {
                         </div>
                         <div className="mdl-cell mdl-cell--12-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield--clean">
                             <input className="mdl-textfield__input" type="text" id="origin" ref={(c) => this.form.origin = c} required />
-                            <label className="mdl-textfield__label" htmlFor="origin">{translate('Hvor er du fra')}</label>
+                            <label className="mdl-textfield__label" htmlFor="origin">{translate('Hvor er du fra')}*</label>
+                            <span className="mdl-textfield__error">This is not a valid location</span>
                         </div>
                     </fieldset>
                 </div>
@@ -192,20 +194,20 @@ export default class Register extends React.Component {
                         <fieldset>
                             <div className="mdl-cell mdl-cell--3-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield--clean">
                                 <input className="mdl-textfield__input" type="number" id="adults_female" pattern="-?[0-9]*(\.[0-9]+)?" ref={(c) => this.form.adults_female = c} required />
-                                <label className="mdl-textfield__label" htmlFor="adults_female">{translate('Kvinner')}</label>
-                                <span className="mdl-textfield__error">Input is not a number!</span>
+                                <label className="mdl-textfield__label" htmlFor="adults_female">{translate('Kvinner')}*</label>
+                                <span className="mdl-textfield__error">This is not a valid number</span>
                             </div>
 
                             <div className="mdl-cell mdl-cell--3-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield--clean">
                                 <input className="mdl-textfield__input" type="number" id="adults_male" pattern="-?[0-9]*(\.[0-9]+)?" ref={(c) => this.form.adults_male = c} required />
-                                <label className="mdl-textfield__label" htmlFor="adults_male">{translate('Menn')}</label>
-                                <span className="mdl-textfield__error">Input is not a number!</span>
+                                <label className="mdl-textfield__label" htmlFor="adults_male">{translate('Menn')}*</label>
+                                <span className="mdl-textfield__error">This is not a valid number</span>
                             </div>
 
                             <div className="mdl-cell mdl-cell--3-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield--clean">
                                 <input className="mdl-textfield__input" type="number" id="children" pattern="-?[0-9]*(\.[0-9]+)?" ref={(c) => this.form.children = c}  required />
-                                <label className="mdl-textfield__label" htmlFor="children">{translate('Barn')} (0-18 {translate('År').toLowerCase()})</label>
-                                <span className="mdl-textfield__error">Input is not a number!</span>
+                                <label className="mdl-textfield__label" htmlFor="children">{translate('Barn')} (0-18 {translate('År').toLowerCase()})*</label>
+                                <span className="mdl-textfield__error">This is not a valid number</span>
                             </div>
                         </fieldset>
 
@@ -226,26 +228,27 @@ export default class Register extends React.Component {
 
                      <div className="mdl-cell mdl-cell--4-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield--clean">
                         <input className="mdl-textfield__input" type="text" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"  ref={(c) => this.form.email = c} required />
-                        <label className="mdl-textfield__label" htmlFor="email">{translate('Hva er e-postadressen din')}?</label>
-                        <span className="mdl-textfield__error">Input is not an email!</span>
+                        <label className="mdl-textfield__label" htmlFor="email">{translate('Hva er e-postadressen din')}?*</label>
+                        <span className="mdl-textfield__error">This is not a valid email</span>
                     </div>
 
                      <div className="mdl-cell mdl-cell--4-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield--clean">
-                        <input className="mdl-textfield__input" type="text" id="phone" pattern="-?[0-9]*(\.[0-9]+)?"  ref={(c) => this.form.phone = c}  required />
-                        <label className="mdl-textfield__label" htmlFor="phone">{translate('Hva er telefonnummeret ditt')}?</label>
-                        <span className="mdl-textfield__error">Input is not a valid phone number!</span>
+                        <input className="mdl-textfield__input" type="text" id="phone" pattern="[0-9]{10}"  ref={(c) => this.form.phone = c}  required />
+                        <label className="mdl-textfield__label" htmlFor="phone">{translate('Hva er telefonnummeret ditt')}?*</label>
+                        <span className="mdl-textfield__error">This is not a valid phone number</span>
                     </div>
 
                     <h3>{translate('Hvor bor du')}?</h3>
 
                      <div className="mdl-cell mdl-cell--4-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield--clean">
                         <input className="mdl-textfield__input" type="text" id="address"  ref={(c) => this.form.address = c} required />
-                        <label className="mdl-textfield__label" htmlFor="address">{translate('Adresse')}</label>
+                        <label className="mdl-textfield__label" htmlFor="address">{translate('Adresse')}*</label>
+                        <span className="mdl-textfield__error">This is not a valid address</span>
                     </div>
                      <div className="mdl-cell mdl-cell--4-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield--clean">
-                        <input className="mdl-textfield__input" type="number" id="zipcode" pattern="[0-9]{5}" ref={(c) => this.form.zipcode = c} required />
-                        <label className="mdl-textfield__label" htmlFor="zipcode">{translate('Postnummer')}</label>
-                        <span className="mdl-textfield__error">Input is not a valid zipcode</span>
+                        <input className="mdl-textfield__input" type="text" id="zipcode" pattern="[0-9]{4}" ref={(c) => this.form.zipcode = c} required />
+                        <label className="mdl-textfield__label" htmlFor="zipcode">{translate('Postnummer')}*</label>
+                        <span className="mdl-textfield__error">This is not a valid zipcode</span>
                     </div>
             </div>);
     }
