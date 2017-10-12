@@ -118,6 +118,7 @@ export default class Register extends React.Component {
 
         }).catch(err => {
             this.setState({ pending: false, error: err.message ? err.message : err });
+            componentHandler.upgradeDom();
         });
     }
 
