@@ -52,5 +52,6 @@ module.exports = {
     'Hvem tar du med deg? Vet vi mer er sjansen for at vi finner en god match større. Eksempelvis alder på barna.': 'Who are you bringing? The more we know, the better chance for a good match. For example, what is the age of your kids.',
     'Takk skal du ha': 'Thank you',
     'vær så snill å fikse uthevede feil': 'Please fix highlighted errors',
-    'vennligst velg kjønn': 'Please select gender'
+    'vennligst velg kjønn': 'Please select gender',
+    'Del på Facebook': 'Share on Facebook'
 }
