@@ -70,8 +70,29 @@ export default class Register extends React.Component {
         return <span className="error">{this.state.error}</span>
     }
 
+    validateInputAndUpdateErrorMessage(){
+        console.log(this.state.gender)
+        var invalidInputs = document.getElementsByClassName('is-invalid');
+        if(invalidInputs && invalidInputs.length > 0){
+            for(let i=0; i<invalidInputs.length; i++){
+                invalidInputs[i].classList.remove('textfield--clean');
+            }
+            this.setState({error: this.context.translate('vær så snill å fikse uthevede feil')});
+            return false;
+        }
+        if(!this.state.gender){
+            this.setState({error: this.context.translate('vennligst velg kjønn')});
+            return false;
+        }
+        return true;
+    }
+
     submit(e) {
         e.preventDefault();
+
+        if(!this.validateInputAndUpdateErrorMessage()) {
+            return;
+        }
 
         this.setState({ pending: true });
 
@@ -112,19 +133,19 @@ export default class Register extends React.Component {
 
     renderAboutYouSection(translate) {
         return (<div>
-            <h2>{translate('Hvem er du')}?</h2>
+            <h3>{translate('Hvem er du')}?</h3>
             <div className="form-group">
                 <div className= "mdl-grid">
 
                     <fieldset className="mdl-cell mdl-cell--12-col  ">
                         <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect" htmlFor="guest-user">
-                            <input type="radio" id="guest-user" className="mdl-radio__button" name="user-type" value="guest"
+                            <input type="radio" id="guest-user" className="mdl-radio__button" name="user-type" checked={this.state.type==='guest'}
                             onChange={() => this.setState({type: 'guest' })} />
                             <span className="mdl-radio__label">{translate("Jeg vil komme på middag!")}</span>
                         </label>
                         <div className="mdl-layout-spacer"></div>
                         <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect" htmlFor="host-user">
-                            <input type="radio" id="host-user" className="mdl-radio__button" name="user-type" value="host"
+                            <input type="radio" id="host-user" className="mdl-radio__button" name="user-type" checked={this.state.type==='host'}
                             onChange={() => this.setState({type: 'host' })} />
                             <span className="mdl-radio__label">{translate("Jeg vil invitere noen på middag!")}</span>
                         </label>
@@ -144,7 +165,7 @@ export default class Register extends React.Component {
                             <span className="mdl-textfield__error">Input is not a number!</span>
                         </div>
                         <fieldset>
-                            <legend><b>{translate('Kjønn')}</b></legend>
+                            <legend>{translate('Kjønn')}</legend>
 
                             <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect" htmlFor="gender-male">
                                 <input type="radio" id="gender-male" onChange={() => this.setState({gender: 'male' })} className="mdl-radio__button" name="gender" />
@@ -168,7 +189,7 @@ export default class Register extends React.Component {
 
     renderYourGuestsSection(translate) {
         return (<div>
-                <h2>{translate('Hvor mange blir med på middag i tillegg til deg')}?</h2>
+                <h3>{translate('Hvor mange blir med på middag i tillegg til deg')}?</h3>
                 <div className="form-group">
                     <div className="mdl-grid">
 
@@ -208,7 +229,7 @@ export default class Register extends React.Component {
     }
     renderContactInfoSection(translate) {
         return (<div>
-                <h2>{translate('Hvordan kan vi kontakte deg')}?</h2>
+                <h3>{translate('Hvordan kan vi kontakte deg')}?</h3>
 
                      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield--clean">
                         <input className="mdl-textfield__input" type="text" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"  ref={(c) => this.form.email = c} required />
@@ -224,7 +245,7 @@ export default class Register extends React.Component {
                         <span className="mdl-textfield__error">Input is not a valid phone number!</span>
                     </div>
 
-                    <h2>{translate('Hvor bor du')}?</h2>
+                    <h3>{translate('Hvor bor du')}?</h3>
 
                      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield--clean">
                         <input className="mdl-textfield__input" type="text" id="address"  ref={(c) => this.form.address = c} required />
@@ -241,7 +262,7 @@ export default class Register extends React.Component {
 
     renderOthersSection(translate) {
         return (<div>
-            <h2>{translate('Annet')}?</h2>
+            <h3>{translate('Annet')}?</h3>
             {this.renderFoodConcerns()}
               <div className="mdl-textfield mdl-js-textfield textfield--clean">
                     <label className="mdl-textfield__label" htmlFor="freetext">{translate('Er det noe annet vi trenger å vite om deg/dere')}?</label>
