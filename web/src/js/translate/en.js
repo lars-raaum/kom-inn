@@ -65,5 +65,7 @@ module.exports = {
     'Vennligst oppgi et gyldig telefonnummer': 'Please enter a valid phone number',
     'Gyldig kode må ligge mellom 0001 og 9999': 'Valid code must lie between 0001 and 9999',
     'Del på Facebook': 'Share on Facebook',
-    'Takk skal du ha': 'Thank you'
+    'Takk skal du ha': 'Thank you',
+    'vær så snill å fikse uthevede feil': 'Please fix highlighted errors',
+    'vennligst velg kjønn': 'Please select gender'
 }
