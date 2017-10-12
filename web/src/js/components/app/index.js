@@ -22,23 +22,32 @@ export default class App extends React.Component {
 
     renderTranslations() {
         if (lang === 'en') {
-            return <button onClick={() => this.setLanguage('no')} className="button button1">Les på norsk</button>
+            return <a className="mdl-navigation__link translate" href="" onClick={(e) => {e.preventDefault();this.setLanguage('no')}}>Les på norsk</a>
         } else {
-            return <button onClick={() => this.setLanguage('en')} className="button button1">Read in English</button>
+            return <a className="mdl-navigation__link translate" href="" onClick={(e) => {e.preventDefault();this.setLanguage('en')}}>Read in English</a>
         }
     }
 
     render() {
-        return <div className="wrapper">
-            <div className="header">
-                <div className="translate">
-                    {this.renderTranslations()}
-                </div>
-            </div>
-            <div className="content">
-                {this.props.children}
-            </div>
-        </div>
+        return <div className="demo-layout-transparent mdl-layout mdl-js-layout">
+  <header className="mdl-layout__header mdl-layout__header--transparent">
+    <div className="mdl-layout__header-row">
+    <a className="mdl-layout-title" href="http://www.kom-inn.org" id="top">        
+      <img src="//static1.squarespace.com/static/57681c7520099ed9b9f13e4d/t/5768504229687fc14c0ff129/1507756555899/?format=1500w" alt="Kom inn"/>
+    </a>
+    <div className="mdl-layout-spacer"></div>
+      <nav className="mdl-navigation">
+        {this.renderTranslations()}
+      </nav>
+    </div>
+  </header>
+  <main className="mdl-layout__content">
+    <div className="content">
+      {this.props.children}
+    </div>
+  </main>
+</div>
+
     }
 }
 

@@ -49,5 +49,6 @@ module.exports = {
     'Hvordan kan vi kontakte deg': "How can we contact you",
     'Hvor bor du': 'Where do you live',
     'Annet': 'Anything else',
-    'Hvem tar du med deg? Vet vi mer er sjansen for at vi finner en god match større. Eksempelvis alder på barna.': 'Who are you bringing? The more we know, the better chance for a good match. For example, what is the age of your kids.'
+    'Hvem tar du med deg? Vet vi mer er sjansen for at vi finner en god match større. Eksempelvis alder på barna.': 'Who are you bringing? The more we know, the better chance for a good match. For example, what is the age of your kids.',
+    'Takk skal du ha': 'Thank you'
 }

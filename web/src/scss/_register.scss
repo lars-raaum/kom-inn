@@ -1,0 +1,16 @@
+
+.mdl-textfield.textfield--clean {
+	.mdl-textfield__input {
+		border-bottom: 1px solid rgba(0,0,0,.12);
+	}
+	.mdl-textfield__label {
+		color: rgba(0,0,0,.26);
+		font-size: inherit;
+	}
+	&.is-focused .mdl-textfield__label:after {
+		visibility: hidden;
+	}
+	.mdl-textfield__error {
+		visibility: hidden;
+	}
+}
