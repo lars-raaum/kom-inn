@@ -50,5 +50,14 @@ module.exports = {
     'Hvor bor du': 'Where do you live',
     'Annet': 'Anything else',
     'Hvem tar du med deg? Vet vi mer er sjansen for at vi finner en god match større. Eksempelvis alder på barna.': 'Who are you bringing? The more we know, the better chance for a good match. For example, what is the age of your kids.',
-    'Del på Facebook': 'Share on Facebook'
+    'Del på Facebook': 'Share on Facebook',
+    'Takk': 'Thanks',
+    'Hva skjer nå?': 'What happens now?',
+    'Vi vil nå matche deg med noen som ønsker å invitere deg, vanligvis innen to uker.': 'We\'ll now match you with someone who wants to invite you, usually within two weeks.',
+    'Du vil da motta en invitasjon via SMS fra verten': 'You will then receive an invitation by SMS from the host',
+    'Sammen er du enige om når du kommer til huset til middag': 'Together you agree on when you will come to their house for dinner',
+    'Les mer på': 'Read more at',
+    'eller send en epost til': 'Or send an email to',
+    'For flere detaljer': 'For more details',
+    'Ha en fortsatt fin dag!': 'Have a nice day!'
 }

@@ -6,12 +6,20 @@ export default class App extends React.Component {
     constructor() {
         super();
 
+        if(localStorage && localStorage.getItem("lang"))
+        {
+            this.state = localStorage.getItem("lang");
+        }
+
         this.state = { lang }
 
         this.setLanguage = this.setLanguage.bind(this);
     }
 
     setLanguage(lang) {
+        if(localStorage) {
+            localStorage.setItem("lang", lang);
+        }
         setLanguage(lang);
         this.setState({ lang });
     }
@@ -21,7 +29,15 @@ export default class App extends React.Component {
     }
 
     renderTranslations() {
-        if (lang === 'en') {
+
+        let language = lang;
+
+        if(localStorage && localStorage.getItem("lang"))
+        {
+            language = localStorage.getItem("lang");
+        }
+
+        if (language === 'en') {
             return <button onClick={() => this.setLanguage('no')} class="button button1">Les på norsk</button>
         } else {
             return <button onClick={() => this.setLanguage('en')} class="button button1">Read in English</button>
