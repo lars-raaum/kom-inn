@@ -26,18 +26,20 @@ export default class ThankYou extends React.Component {
     }
 
     renderGuest() {
+        const translate = this.context.translate;
         return (
-            <div>
-                <h1>Takk {name}</h1>
-                <h3>Hva skjer nå?</h3>
-                <p>Vi vil prøve å finne noen som kan invitere deg på middag så snart
-                som mulig. Av og til tar det noen dager, andre ganger tar det lenger
-                tid. Vanligvis finner vi noen innen 2 uker. </p>
-                <h3>Har du andre spørsmål?</h3>
-                <p>Les mer på <a href="http://www.kom-inn.org/#hjem">kom-inn.org</a> eller send en epost til <a href="mailto:kominnoslo@gmail.com">kominnoslo@gmail.com</a>.</p>
+            <div className="nextSteps">
+                <h1>{translate("Takk")} {name}</h1>
+                <h3>{translate("Hva skjer nå?")}</h3>
+                <ul>
+                <li>{translate("Vi vil nå matche deg med noen som ønsker å invitere deg, vanligvis innen to uker.")}</li>
+                <li>{translate("Du vil da motta en invitasjon via SMS fra verten")}</li>
+                <li>{translate("Sammen er du enige om når du kommer til huset til middag")} </li>
+                </ul>
+                <h3>{translate("For flere detaljer")}</h3>
+                <p>{translate("Les mer på")} <a href='http://www.kom-inn.org/#hjem'>kom-inn.org</a> {translate("eller send en epost til")} <a href='mailto:kominnoslo@gmail.com'>kominnoslo@gmail.com</a>.</p>
                 <p className="fb-share-button" data-href="https://www.facebook.com/" data-layout="button" data-size="small" data-mobile-iframe="false"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.facebook.com%2F&amp;src=sdkpreparse">{this.context.translate('Del på Facebook')}</a></p>
-                <p>Ha en fortsatt fin dag!</p>
-                <p>Hilsen oss i Kom inn.</p>
+                <p>{translate("Ha en fortsatt fin dag!")}</p>
             </div>
         )
     }
