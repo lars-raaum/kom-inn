@@ -168,7 +168,7 @@ export default class Register extends React.Component {
 
                         <div className="input-field col-1-3">
                             <label className="input-header" htmlFor="age">{translate('Alder')}</label>
-                            <input type="number" placeholder="" max="120" id="age" ref={(c) => this.form.age = c} required />
+                            <input type="number" required title={translate('Vennligst skriv inn en gyldig alder')} min="18" max="100" id="age" ref={(c) => this.form.age = c}/>
                         </div>
 
                         <div className="radio-field col-1-3">
@@ -189,17 +189,17 @@ export default class Register extends React.Component {
                     <div className="form-group">
                         <div className="input-field col-1-3">
                             <label className="input-header" htmlFor="adults_female">{translate('Kvinner')}</label>
-                            <input type="number" placeholder="" max="100" id="adults_female" ref={(c) => this.form.adults_female = c} required />
+                            <input type="number" required min="0" max="100" id="adults_female" ref={(c) => this.form.adults_female = c}/>
                         </div>
 
                         <div className="input-field col-1-3">
                             <label className="input-header" htmlFor="adults_male">{translate('Menn')}</label>
-                            <input type="number" placeholder="" max="100" id="adults_male" ref={(c) => this.form.adults_male = c} required />
+                            <input type="number" required min="0" max="100" id="adults_male" ref={(c) => this.form.adults_male = c}/>
                         </div>
 
                         <div className="input-field col-1-3">
                             <label className="input-header" htmlFor="children">{translate('Barn')} (0-18 {translate('År').toLowerCase()})</label>
-                            <input type="number" placeholder="" max="100" id="children" ref={(c) => this.form.children = c} required />
+                            <input type="number" required min="0" max="100" id="children" ref={(c) => this.form.children = c}/>
                         </div>
                     </div>
 
@@ -214,14 +214,14 @@ export default class Register extends React.Component {
                     <div className="form-group">
                         <div className="input-field col-1-1">
                             <label className="input-header" htmlFor="email">{translate('Hva er e-postadressen din')}?</label>
-                            <input type="email" placeholder="" id="email" ref={(c) => this.form.email = c} required />
+                            <input required type="email" pattern="^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$" title={translate('Vennligst oppgi en gyldig epostadresse')} id="email" ref={(c) => this.form.email = c} />
                         </div>
                     </div>
 
                     <div className="form-group">
                         <div className="input-field col-1-1">
                             <label className="input-header" htmlFor="phone">{translate('Hva er telefonnummeret ditt')}?</label>
-                            <input type="phone" placeholder="" id="phone" ref={(c) => this.form.phone = c} required />
+                            <input type="phone" required pattern="((32|33|35|37|38|([2678][0-9])|(5[0-7]))|((((9|4)[0-9])|59))|(58[0-9]{4}))[0-9]{6}" title={translate('Vennligst oppgi et gyldig telefonnummer')} id="phone" ref={(c) => this.form.phone = c}/>
                         </div>
                     </div>
 
@@ -236,7 +236,7 @@ export default class Register extends React.Component {
                     <div className="form-group">
                         <div className="input-field col-1-1">
                             <label className="input-header" htmlFor="zipcode">{translate('Postnummer')}</label>
-                            <input type="text" placeholder="" id="zipcode" ref={(c) => this.form.zipcode = c} required />
+                            <input type="number" required min="0001" max="9999" title={translate('Gyldig kode må ligge mellom 0001 og 9999')} id="zipcode" ref={(c) => this.form.zipcode = c}/>
                         </div>
                     </div>
 
