@@ -61,5 +61,22 @@ module.exports = {
     'Takk skal du ha': 'Thank you',
     'vær så snill å fikse uthevede feil': 'Please fix highlighted errors',
     'vennligst velg kjønn': 'Please select gender',
-    'Del på Facebook': 'Share on Facebook'
+    'Del på Facebook': 'Share on Facebook',
+    'Takk': 'Thanks',
+    'Hva skjer nå?': 'What happens now?',
+    'Vi vil nå matche deg med noen som ønsker å invitere deg, vanligvis innen to uker.': 'We\'ll now match you with someone who wants to invite you, usually within two weeks.',
+    'Du vil da motta en invitasjon via SMS fra verten': 'You will then receive an invitation by SMS from the host',
+    'Sammen er du enige om når du kommer til huset til middag': 'Together you agree on when you will come to their house for dinner',
+    'Les mer på': 'Read more at',
+    'eller send en epost til': 'Or send an email to',
+    'For flere detaljer': 'For more details',
+    'Ha en fortsatt fin dag!': 'Have a nice day!',
+    'Vennligst skriv inn en gyldig alder': 'Please enter a valid age',
+    'Vennligst oppgi en gyldig epostadresse': 'Please enter a valid email address',
+    'Vennligst oppgi et gyldig telefonnummer': 'Please enter a valid phone number',
+    'Gyldig kode må ligge mellom 0001 og 9999': 'Valid code must lie between 0001 and 9999',
+    'Del på Facebook': 'Share on Facebook',
+    'Takk skal du ha': 'Thank you',
+    'vær så snill å fikse uthevede feil': 'Please fix highlighted errors',
+    'vennligst velg kjønn': 'Please select gender'
 }

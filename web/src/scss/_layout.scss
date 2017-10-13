@@ -23,6 +23,20 @@ header {
         }
         
     }
+
+    .mdl-layout-title {
+        margin-top: 50px;
+        margin-left: -50px;
+        img {
+            max-height: 100px;
+            max-width: 400px;
+        }
+        
+    }
+}
+
+.mdl-layout__container {
+    position: relative;
 }
 .logo{
     background-image: url(../img/logo.png);
