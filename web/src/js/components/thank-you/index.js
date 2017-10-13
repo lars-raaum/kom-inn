@@ -18,6 +18,7 @@ export default class ThankYou extends React.Component {
                 Vi tar kontakt med deg når vi har gjester i ditt området!  </p>
                 <h3>Har du andre spørsmål?</h3>
                 <p>Les mer på <a href="http://www.kom-inn.org/#hjem">kom-inn.org</a> eller send en epost til <a href="mailto:kominnoslo@gmail.com">kominnoslo@gmail.com</a>.</p>
+                <p className="fb-share-button" data-href="https://www.facebook.com/" data-layout="button" data-size="small" data-mobile-iframe="false"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.facebook.com%2F&amp;src=sdkpreparse">{this.context.translate('Del på Facebook')}</a></p>
                 <p>Ha en fortsatt fin dag!</p>
                 <p>Hilsen oss i Kom inn.</p>
             </div>
@@ -34,6 +35,7 @@ export default class ThankYou extends React.Component {
                 tid. Vanligvis finner vi noen innen 2 uker. </p>
                 <h3>Har du andre spørsmål?</h3>
                 <p>Les mer på <a href="http://www.kom-inn.org/#hjem">kom-inn.org</a> eller send en epost til <a href="mailto:kominnoslo@gmail.com">kominnoslo@gmail.com</a>.</p>
+                <p className="fb-share-button" data-href="https://www.facebook.com/" data-layout="button" data-size="small" data-mobile-iframe="false"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.facebook.com%2F&amp;src=sdkpreparse">{this.context.translate('Del på Facebook')}</a></p>
                 <p>Ha en fortsatt fin dag!</p>
                 <p>Hilsen oss i Kom inn.</p>
             </div>
@@ -59,4 +61,7 @@ export default class ThankYou extends React.Component {
             </div>
         )
     }
+}
+ThankYou.contextTypes = {
+    translate: React.PropTypes.func
 }

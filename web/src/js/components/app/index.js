@@ -31,6 +31,7 @@ export default class App extends React.Component {
     render() {
         return <div className="wrapper">
             <div className="header">
+                <div><a className="logo" href="https://www.kom-inn.org/"></a></div>
                 <div className="translate">
                     {this.renderTranslations()}
                 </div>
