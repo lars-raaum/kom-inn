@@ -14,15 +14,14 @@ header {
     .translate {
     }
 
-    .logo{
-        background-image: url(../img/logo.png);
-        background-position: center center;
-        background-repeat: no-repeat;
-        float: left;
-        margin: 32px 0px 0px 32px;
-        background-size: 50px;
-        height: 50px;
-        width: 50px;
+    .mdl-layout-title {
+        margin-top: 50px;
+        margin-left: -50px;
+        img {
+            max-height: 100px;
+            max-width: 400px;
+        }
+        
     }
 
     .mdl-layout-title {
@@ -34,6 +33,20 @@ header {
         }
         
     }
+}
+
+.mdl-layout__container {
+    position: relative;
+}
+.logo{
+    background-image: url(../img/logo.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    float: left;
+    margin: 32px 0px 0px 32px;
+    background-size: 50px;
+    height: 50px;
+    width: 50px;
 }
 
 .mdl-layout__container {
