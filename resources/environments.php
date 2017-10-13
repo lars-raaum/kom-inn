@@ -22,7 +22,7 @@ return [
             'host'      => 'localhost',
             'dbname'    => 'kominn',
             'user'      => 'root',
-            'password'  => '',
+            'password'  => '',  
             'charset'   => 'utf8mb4'
         ]
     ],
