@@ -59,5 +59,10 @@ module.exports = {
     'Les mer på': 'Read more at',
     'eller send en epost til': 'Or send an email to',
     'For flere detaljer': 'For more details',
-    'Ha en fortsatt fin dag!': 'Have a nice day!'
+    'Ha en fortsatt fin dag!': 'Have a nice day!',
+    'Vennligst skriv inn en gyldig alder': 'Please enter a valid age',
+    'Vennligst oppgi en gyldig epostadresse': 'Please enter a valid email address',
+    'Vennligst oppgi et gyldig telefonnummer': 'Please enter a valid phone number',
+    'Gyldig kode må ligge mellom 0001 og 9999': 'Valid code must lie between 0001 and 9999',
+    'Del på Facebook': 'Share on Facebook'
 }
