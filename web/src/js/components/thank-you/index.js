@@ -70,7 +70,7 @@ export default class ThankYou extends React.Component {
     }
 
     render() {
-        const type = this.props.params.type;
+        const type = this.props.type || this.props.params.type;
 
         if (type === 'vert') {
             return this.renderHost();

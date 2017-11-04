@@ -1,9 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router'
 
+import ThankYou from "components/thank-you";
+
 export default class Feedback extends React.Component {
     constructor() {
         super()
+        this.state = { reactivated: false };
         this.reactivate = this.reactivate.bind(this);
     }
 
@@ -49,7 +52,9 @@ export default class Feedback extends React.Component {
             },
             body: JSON.stringify(data)
         }).then(response => {
-            window.location.href = '/takk/vert';
+            this.setState({
+                reactivated: true
+            })
         }).catch(err => {
             console.error(err);
             this.setState({ error: err.message ? err.message : err });
@@ -57,6 +62,11 @@ export default class Feedback extends React.Component {
     }
 
     render() {
+
+        if (this.state.reactivated) {
+            return <ThankYou type="vert" />;
+        }
+
         const type = this.props.params.completed;
         if (type == 'yes') {
             return this.renderYes();
