@@ -11,10 +11,10 @@ use Doctrine\DBAL\Types\Type;
  *
  *    Flows:
  *
- *    Signup > Active > Matched > Used > Expired > Deleted
- *    Signup > Active > Matched > Used > Expired > Reactivated > Active
+ *    Signup > Active > Matched > Used > Deleted > Purged
+ *    Signup > Active > Matched > Used > Deleted > Reactivated > Active
  *    Signup > Active > Matched > Used > Active
- *    Signup > Active > Expired > Deleted
+ *    Signup > Active > Expired > Purged
  *    Signup > Active > Expired > Reactivated > Active
  *
  */
@@ -266,7 +266,7 @@ class People implements \Pimple\ServiceProviderInterface
      * @param int $id
      * @return bool
      */
-    public function delete(int $id) : bool
+    public function purge(int $id) : bool
     {
         $data  = [
             'name'      => '#DELETED#',

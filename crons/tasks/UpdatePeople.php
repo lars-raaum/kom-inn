@@ -15,7 +15,7 @@ class UpdatePeople
     public function __construct(\app\Cli $app)
     {
         $this->app = $app;
-        $counter_keys = ["EMAIL", "PURGE", "ERROR", "EXPIRE", "TOTAL"];
+        $counter_keys = ["EMAIL", "DELETE", "PURGE", "ERROR", "EXPIRE", "TOTAL"];
         $fn = function ($o, $v) { $o[$v] = 0; return $o; };
         $this->counters = array_reduce($counter_keys, $fn, []);
     }
@@ -32,7 +32,7 @@ class UpdatePeople
         /* @var $people \app\models\People */
         $people = $this->app['people'];
 
-        // Get all active users that hasnt been updated in the last 60 days
+        // Get all active users that hasnt been updated in the last 60 days and EXPIRE them
         $sql = "SELECT p.*, g.id as `guest_id`, h.id as `host_id` FROM people AS p ".
             "LEFT JOIN guests AS g ON (p.id = g.user_id) ".
             "LEFT JOIN hosts  AS h ON (p.id = h.user_id) ".
@@ -74,12 +74,12 @@ class UpdatePeople
             $this->counters['TOTAL']++;
         }
 
-        // Get all soft deleted users that hasnt been updated in another 30 days
-        $sql = "SELECT * FROM people WHERE updated < DATE_ADD(CURDATE(), INTERVAL - 30 DAY) AND status = -1 ORDER BY id ASC";
+        // Get all soft deleted and expired users that hasnt been updated in another 30 days and PURGE them
+        $sql = "SELECT * FROM people WHERE updated < DATE_ADD(CURDATE(), INTERVAL - 30 DAY) AND status IN (-1, -2) ORDER BY id ASC";
         $result = $this->getPeople($sql);
         foreach ($result as $person) {
             try {
-                $purged = $app['dry'] || $people->delete($person['id']);
+                $purged = $app['dry'] || $people->purge($person['id']);
                 if ($purged) {
                     $this->counters['PURGE']++;
                 }
@@ -98,7 +98,7 @@ class UpdatePeople
             $this->counters['TOTAL']++;
         }
 
-        // Get all used users that hasnt been updated in the last 60 days
+        // Get all used users that hasnt been updated in the last 60 days and SOFT DELETE
         $sql = "SELECT p.*, g.id as `guest_id`, h.id as `host_id` FROM people AS p ".
             "LEFT JOIN guests AS g ON (p.id = g.user_id) ".
             "LEFT JOIN hosts  AS h ON (p.id = h.user_id) ".
@@ -112,9 +112,9 @@ class UpdatePeople
                 $person['type'] = People::TYPE_GUEST;
             }
             try {
-                $expired = $app['dry'] || $people->setToExpired($person['id']);
-                if ($expired) {
-                    $this->counters['EXPIRE']++;
+                $deleted = $app['dry'] || $people->setToSoftDeleted($person['id']);
+                if ($deleted) {
+                    $this->counters['DELETE']++;
                 }
                 if ($person['type'] == People::TYPE_GUEST) {
                     $sent = $app['dry'] || $mailer->sendReactivateUsedGuest($person);
@@ -166,6 +166,7 @@ class UpdatePeople
         $app->verbose(" ", " Handled: " . $this->counters['TOTAL']);
         $app->verbose("  Emails: " . $this->counters['EMAIL']);
         $app->verbose("  Expired: " . $this->counters['EXPIRE']);
+        $app->verbose("  Deleted: " . $this->counters['DELETE']);
         $app->verbose("  Purged: " . $this->counters['PURGE']);
         if ($this->counters['ERROR'])
             $app->verbose("  Errors: " . $this->counters['ERROR']);
