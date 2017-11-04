@@ -228,17 +228,17 @@ class Mailer implements \Pimple\ServiceProviderInterface
         return $sent;
     }
 
-    public function sendGuestExpired(array $host) : bool
+    public function sendGuestExpired(array $guest) : bool
     {
         if (empty($this->client)) return false;
-        $to = $host['email'];
+        $to = $guest['email'];
         $email_data = [
-            'user_id' => $host['id'],
+            'user_id' => $guest['id'],
             'type' => Purge::EXPIRED_GUEST
         ];
         try {
             $templater = new Purge($this);
-            $body = $templater->buildExpiredGuestText($host);
+            $body = $templater->buildExpiredGuestText($guest);
             $this->client->sendMessage($this->domain, [
                 'from'    => $this->from,
                 'to'      => $to,

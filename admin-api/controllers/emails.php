@@ -77,8 +77,8 @@ $app->post('/email/{template}/render', function($template) use ($app) {
             break;
         case 'reactivate_used':
             $templater = new Purge($mailer);
-            $match = $app['people']->get((int) $id);
-            $content = $templater->buildReactivateUsedText($match);
+            $person = $app['people']->get((int) $id);
+            $content = $templater->buildReactivateUsedGuestText($person);
             break;
         case 'host_inform':
             $templater = new HostInform($mailer);

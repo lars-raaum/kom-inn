@@ -4,6 +4,7 @@ namespace app\mails;
 
 use app\Environment;
 use app\Mailer;
+use app\models\People;
 
 class Purge
 {
@@ -22,13 +23,13 @@ class Purge
     /**
      * Build text to use in HostInform mail
      *
-     * @param array $person
+     * @param array $host
      * @return string
      */
-    public function buildReactivateUsedHostText(array $person) : string
+    public function buildReactivateUsedHostText(array $host) : string
     {
-        $name = $person['name'];
-        $url  = $this->reactiveUrl($person);
+        $name = $host['name'];
+        $url  = $this->reactiveUrl($host);
         $text = "<h1>Hei {$name}</h1>\n\n
         <p>For en stund siden meldte du deg på Kom inn - Lær norsk rundt middagsbordet. Vi håper du har vært på én eller flere hyggelige middager!</p>\n
         <p>Hvis du vil bli delta på en ny middag med en annen familie, <a href=\"{$url}\">klikk på denne lenken!</a></p>\n
@@ -46,13 +47,13 @@ class Purge
     /**
      * Build text to use in GuestReactivate mail
      *
-     * @param array $person
+     * @param array $guest
      * @return string
      */
-    public function buildReactivateUsedGuestText(array $person) : string
+    public function buildReactivateUsedGuestText(array $guest) : string
     {
-        $name = $person['name'];
-        $url  = $this->reactiveUrl($person);
+        $name = $guest['name'];
+        $url  = $this->reactiveUrl($guest);
         $text = "<h1>Hei {$name}</h1>\n\n
         <p>For en stund siden meldte du deg på Kom inn - Lær norsk rundt middagsbordet. Vi håper du har vært på én eller flere hyggelige middager!</p>\n
         <p>Hvis du vil bli delta på en ny middag med en annen familie, <a href=\"{$url}\">klikk på denne lenken!</a></p>\n
@@ -88,10 +89,10 @@ class Purge
         " . '<a href="https://www.facebook.com/kominnnorge">https://www.facebook.com/kominnnorge</a>' . "</p>";
         return $text;
     }
-    private function reactiveUrl(array $host) : string
+    private function reactiveUrl(array $person) : string
     {
-        $id   = $host['id'];
-        $code = $this->mailer->createHashCode($host['email']);
+        $id   = $person['id'];
+        $code = $this->mailer->createHashCode($person['email']);
         $base = Environment::get('base_url');
         return "{$base}/reactivate/{$id}/{$code}";
     }
@@ -99,13 +100,13 @@ class Purge
     /**
      * Build text to use in GuestExpired mail
      *
-     * @param array $host
+     * @param array $guest
      * @return string
      */
-    public function buildExpiredGuestText(array $host) : string
+    public function buildExpiredGuestText(array $guest) : string
     {
-        $name = $host['name'];
-        $url  = $this->reactiveUrl($host);
+        $name = $guest['name'];
+        $url  = $this->reactiveUrl($guest);
         $text = "<h1>Hei {$name}</h1>\n\n
         <p>For en stund siden meldte du deg på Kom inn - Lær norsk rundt middagsbordet. Takk for det!</p>\n
         <p>Vi har dessverre ikke funnet match til deg i løpet av denne tiden, men vi håper du fortsatt kunne tenke deg å delta på middag!</p>\n
