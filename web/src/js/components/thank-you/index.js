@@ -5,7 +5,6 @@ export default class ThankYou extends React.Component {
     renderHost() {
         return (
             <div>
-                <h1>Takk {name}</h1>
                 <h3>Hva skjer nå?</h3>
                 <p>Vi vil prøve å finne noen du kan invitere på middag så fort så mulig.
                 Når vi har funnet passende gjester - hører du fra oss!</p>
@@ -29,7 +28,6 @@ export default class ThankYou extends React.Component {
         const translate = this.context.translate;
         return (
             <div className="nextSteps">
-                <h1>{translate("Takk")} {name}</h1>
                 <h3>{translate("Hva skjer nå?")}</h3>
                 <ul>
                 <li>{translate("Vi vil nå matche deg med noen som ønsker å invitere deg, vanligvis innen to uker.")}</li>
@@ -44,24 +42,33 @@ export default class ThankYou extends React.Component {
         )
     }
 
-    render() {
-        const type = this.props.params.type;
-
+    getAppropriateContent(type){
         if (type === 'vert') {
             return this.renderHost();
         } else if (type === 'gjest') {
             return this.renderGuest();
+        } else {
+            return <div>
+                    <h1>Takk {name}</h1>
+                    <h3>Har du spørsmål?</h3>
+                    <p>Les mer på <a href="http://www.kom-inn.org/#hjem">kom-inn.org</a> eller send en epost til <a href="mailto:kominnoslo@gmail.com">kominnoslo@gmail.com</a>.</p>
+                    <p>Ha en fortsatt fin dag!</p>
+                    <p>Hilsen oss i Kom inn.</p>
+                </div>;
         }
+    }
 
-        return (
-            <div>
-                <h1>Takk {name}</h1>
-                <h3>Har du spørsmål?</h3>
-                <p>Les mer på <a href="http://www.kom-inn.org/#hjem">kom-inn.org</a> eller send en epost til <a href="mailto:kominnoslo@gmail.com">kominnoslo@gmail.com</a>.</p>
-                <p>Ha en fortsatt fin dag!</p>
-                <p>Hilsen oss i Kom inn.</p>
+    render() {
+        const type = this.props.params.type;
+
+        return <div className="mdl-grid">
+            <div className="mdl-cell mdl-cell--12-col mdl-card mdl-shadow--2dp">
+                <div className="mdl-card__title">{this.context.translate("Takk")} {name}</div>
+                <div className="mdl-card__supporting-text">
+                    {this.getAppropriateContent(type)}
+                </div>
             </div>
-        )
+        </div>
     }
 }
 ThankYou.contextTypes = {
