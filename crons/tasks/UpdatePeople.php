@@ -165,7 +165,7 @@ class UpdatePeople
         $app = $this->app;
         $app->verbose(" ", " Handled: " . $this->counters['TOTAL']);
         $app->verbose("  Emails: " . $this->counters['EMAIL']);
-        $app->verbose("  Deleted: " . $this->counters['DELETE']);
+        $app->verbose("  Expired: " . $this->counters['EXPIRE']);
         $app->verbose("  Purged: " . $this->counters['PURGE']);
         if ($this->counters['ERROR'])
             $app->verbose("  Errors: " . $this->counters['ERROR']);
