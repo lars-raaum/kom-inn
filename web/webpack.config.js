@@ -103,7 +103,8 @@ if (isProd) {
         },
         historyApiFallback: {
             index: 'index.html'
-        }
+        },
+        stats: 'errors-only'
     };
 }
 
