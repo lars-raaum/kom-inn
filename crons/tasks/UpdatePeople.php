@@ -33,7 +33,7 @@ class UpdatePeople
         $people = $this->app['people'];
 
         // Get all active users that hasnt been updated in the last 60 days
-        $sql = "SELECT p.*, g.id as `guest_id`, h.id as `host_id` FROM people AS p".
+        $sql = "SELECT p.*, g.id as `guest_id`, h.id as `host_id` FROM people AS p ".
             "LEFT JOIN guests AS g ON (p.id = g.user_id) ".
             "LEFT JOIN hosts  AS h ON (p.id = h.user_id) ".
             "WHERE p.updated < DATE_ADD(CURDATE(), INTERVAL - 60 DAY) AND p.status = 1 ORDER BY p.id ASC";
@@ -99,7 +99,7 @@ class UpdatePeople
         }
 
         // Get all used users that hasnt been updated in the last 60 days
-        $sql = "SELECT p.*, g.id as `guest_id`, h.id as `host_id` FROM people AS p".
+        $sql = "SELECT p.*, g.id as `guest_id`, h.id as `host_id` FROM people AS p ".
             "LEFT JOIN guests AS g ON (p.id = g.user_id) ".
             "LEFT JOIN hosts  AS h ON (p.id = h.user_id) ".
             "WHERE p.updated < DATE_ADD(CURDATE(), INTERVAL - 60 DAY) AND p.status = 2 ORDER BY p.id ASC";
