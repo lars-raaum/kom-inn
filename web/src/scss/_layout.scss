@@ -3,57 +3,24 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-header {
-    color: #fafafa;
+.header {
     height: 275px;
     width: 100%;
     background-image: url(../img/header.jpg);
     background-position: center center;
     background-repeat: no-repeat;
-
-    .translate {
-    }
-
-    .logo{
-        background-image: url(../img/logo.png);
-        background-position: center center;
-        background-repeat: no-repeat;
-        float: left;
-        margin: 32px 0px 0px 32px;
-        background-size: 50px;
-        height: 50px;
-        width: 50px;
-    }
-
-    .mdl-layout-title {
-        margin-top: 50px;
-        margin-left: -50px;
-        img {
-            max-height: 100px;
-            max-width: 400px;
-        }
-        
-    }
 }
 
-.mdl-layout__container {
-    position: relative;
-}
-
-.mdl-layout__content {
-    top: -100px;
-    z-index: 4;
-}
-@media screen and (max-width: 1024px) {
-header.mdl-layout__header {
-    display: block;
-}
-}
 .content {
     max-width: 940px;
+    margin: 0px auto;
+    background-color: #fff;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.37);
     word-wrap: break-word;
-    margin-left: auto;
-    margin-right: auto;
+    border-top: 8px solid #2290a6;
+    padding: 35px 15px;
+    position: relative;
+    top: -100px;
 }
 .footer {
     padding: 14px 10px;
@@ -61,6 +28,10 @@ header.mdl-layout__header {
     background: #fff;
     border-top: 5px solid #e1e1e1;
 
+    .translate {
+        width: 200px;
+        margin: 0 auto;
+    }
     &:after {
         content: "";
         clear: both;
@@ -89,8 +60,4 @@ p {
     line-height: 135%;
     margin-top: 22px;
     font-size: 16px;
-}
-
-.error {
-    color: #d50000;
 }
