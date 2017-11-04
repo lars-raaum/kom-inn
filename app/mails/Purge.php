@@ -94,7 +94,8 @@ class Purge
         $id   = $person['id'];
         $code = $this->mailer->createHashCode($person['email']);
         $base = Environment::get('base_url');
-        return "{$base}/reactivate/{$id}/{$code}";
+        $type = $person['type'] == People::TYPE_GUEST ? 'gjest' : 'vert';
+        return "{$base}/reactivate/{$id}/{$code}/{$type}";
     }
 
     /**
