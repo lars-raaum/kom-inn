@@ -2,6 +2,7 @@
 
 namespace crons\tasks;
 
+use app\mails\Purge;
 use app\models\People;
 
 class UpdatePeople
@@ -52,14 +53,16 @@ class UpdatePeople
                 }
                 if ($person['type'] === People::TYPE_GUEST) {
                     $sent = $app['dry'] || $mailer->sendGuestExpired($person);
+                    $mail_sent = Purge::EXPIRED_GUEST;
                 } else {
                     $sent = $app['dry'] || $mailer->sendHostExpired($person);
+                    $mail_sent = Purge::EXPIRED_HOST;
                 }
                 if ($sent) {
                     $this->counters['EMAIL']++;
-                    $this->app->verbose("Sent mail to [{$person['id']}] {$person['name']}");
+                    $this->app->verbose("Sent mail [{$mail_sent}] to [{$person['id']}] {$person['name']}");
                 }
-                $this->app->verbose("Person [{$person['id']}] {$person['name']} - Soft deleted");
+                $this->app->verbose("Person [{$person['id']}] {$person['name']} - Expired");
             } catch (\app\Exception $e) {
                 $app->error("ERROR! " . $e->getMessage());
                 $this->counters['ERROR']++;
@@ -118,12 +121,14 @@ class UpdatePeople
                 }
                 if ($person['type'] == People::TYPE_GUEST) {
                     $sent = $app['dry'] || $mailer->sendReactivateUsedGuest($person);
+                    $mail_sent = Purge::REACTIVATE_GUEST;
                 } else {
                     $sent = $app['dry'] || $mailer->sendReactivateUsedHost($person);
+                    $mail_sent = Purge::REACTIVATE_HOST;
                 }
                 if ($sent) {
                     $this->counters['EMAIL']++;
-                    $this->app->verbose("Sent mail to [{$person['id']}] {$person['name']}");
+                    $this->app->verbose("Sent mail [{$mail_sent}] to [{$person['id']}] {$person['name']}");
                 }
                 $this->app->verbose("Person [{$person['id']}] {$person['name']} - Soft deleted");
             } catch (\app\Exception $e) {
