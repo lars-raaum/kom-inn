@@ -8,7 +8,9 @@ use app\Mailer;
 class Purge
 {
     CONST EXPIRED_HOST = 'EXPIRED HOST';
-    CONST REACTIVATE_PERSON = 'REACTIVATE PERSON';
+    CONST EXPIRED_GUEST = 'EXPIRED GUEST';
+    CONST REACTIVATE_HOST = 'REACTIVATE HOST';
+    CONST REACTIVATE_GUEST = 'REACTIVATE GUEST';
 
     protected $mailer;
 
@@ -23,7 +25,7 @@ class Purge
      * @param array $person
      * @return string
      */
-    public function buildReactivateUsedText(array $person) : string
+    public function buildReactivateUsedHostText(array $person) : string
     {
         $name = $person['name'];
         $url  = $this->reactiveUrl($person);
@@ -34,6 +36,27 @@ class Purge
         <p>Kom inn drives på fritiden av en liten gruppe frivillige og vi rekrutterer gjester gjennom å dra på skolebesøk til Voksenopplæringene i Oslo.
         Dette gjør vi noen ganger i halvåret, så det kan ta noe tid før vi finner en match. Vi finner heller ikke matcher til alle, men jo flere vi har
         som ønsker å invitere, jo lettere er det å skape gode matcher!</p>
+        <p>mvh<br>\n
+        Kom inn<br>\n
+        " . '<a href="http://www.kom-inn.org/">http://www.kom-inn.org/</a>' . "<br>\n
+        " . '<a href="https://www.facebook.com/kominnnorge">https://www.facebook.com/kominnnorge</a>' . "</p>";
+        return $text;
+    }
+
+    /**
+     * Build text to use in GuestReactivate mail
+     *
+     * @param array $person
+     * @return string
+     */
+    public function buildReactivateUsedGuestText(array $person) : string
+    {
+        $name = $person['name'];
+        $url  = $this->reactiveUrl($person);
+        $text = "<h1>Hei {$name}</h1>\n\n
+        <p>For en stund siden meldte du deg på Kom inn - Lær norsk rundt middagsbordet. Vi håper du har vært på én eller flere hyggelige middager!</p>\n
+        <p>Hvis du vil bli delta på en ny middag med en annen familie, <a href=\"{$url}\">klikk på denne lenken!</a></p>\n
+        <p>Hvis du aldri har vært på middag, men fortsatt har lyst,  <a href=\"{$url}\">klikk på denne linken.</a></p>
         <p>mvh<br>\n
         Kom inn<br>\n
         " . '<a href="http://www.kom-inn.org/">http://www.kom-inn.org/</a>' . "<br>\n
@@ -72,6 +95,29 @@ class Purge
         $base = Environment::get('base_url');
         return "{$base}/reactivate/{$id}/{$code}";
     }
+
+    /**
+     * Build text to use in GuestExpired mail
+     *
+     * @param array $host
+     * @return string
+     */
+    public function buildExpiredGuestText(array $host) : string
+    {
+        $name = $host['name'];
+        $url  = $this->reactiveUrl($host);
+        $text = "<h1>Hei {$name}</h1>\n\n
+        <p>For en stund siden meldte du deg på Kom inn - Lær norsk rundt middagsbordet. Takk for det!</p>\n
+        <p>Vi har dessverre ikke funnet match til deg i løpet av denne tiden, men vi håper du fortsatt kunne tenke deg å delta på middag!</p>\n
+        <p>Da trenger du bare å <a href=\"{$url}\">klikke på denne lenken!</a></p>\n
+        <p>Hvis du ikke trykker på linken antar vi at du ikke lenger er interessert og vi vil slette deg.</p>\n
+        <p>mvh<br>\n
+        Kom inn<br>\n
+        " . '<a href="http://www.kom-inn.org/">http://www.kom-inn.org/</a>' . "<br>\n
+        " . '<a href="https://www.facebook.com/kominnnorge">https://www.facebook.com/kominnnorge</a>' . "</p>";
+        return $text;
+    }
+
 }
 /**
 EMAIL TEXT:

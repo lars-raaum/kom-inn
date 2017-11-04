@@ -7,6 +7,17 @@ use DateTime;
 use app\Geo;
 use Doctrine\DBAL\Types\Type;
 
+/**
+ *
+ *    Flows:
+ *
+ *    Signup > Active > Matched > Used > Expired > Deleted
+ *    Signup > Active > Matched > Used > Expired > Reactivated > Active
+ *    Signup > Active > Matched > Used > Active
+ *    Signup > Active > Expired > Deleted
+ *    Signup > Active > Expired > Reactivated > Active
+ *
+ */
 class People implements \Pimple\ServiceProviderInterface
 {
     const STATUS_PURGED = -3;

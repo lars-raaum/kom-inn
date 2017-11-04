@@ -2,8 +2,9 @@
 
 namespace crons\tasks;
 
+use app\models\People;
 
-class PurgeUsed
+class UpdatePeople
 {
 
     /** @var \app\Cli */
@@ -14,13 +15,14 @@ class PurgeUsed
     public function __construct(\app\Cli $app)
     {
         $this->app = $app;
-        $counter_keys = ["EMAIL", "DELETE", "PURGE", "ERROR", "TOTAL"];
+        $counter_keys = ["EMAIL", "PURGE", "ERROR", "EXPIRE", "TOTAL"];
         $fn = function ($o, $v) { $o[$v] = 0; return $o; };
         $this->counters = array_reduce($counter_keys, $fn, []);
     }
 
     /**
-     *
+     * Set all people unused for 60 days to expired and send them an "reactiviate mail".
+     * Also delete all people that have been expired for 30 days
      */
     public function task() : void
     {
@@ -30,16 +32,29 @@ class PurgeUsed
         /* @var $people \app\models\People */
         $people = $this->app['people'];
 
-        // Get all used users that hasnt been updated in the last 60 days
-        $sql = "SELECT * FROM people WHERE updated < DATE_ADD(CURDATE(), INTERVAL - 60 DAY) AND status = 2 ORDER BY id ASC";
+        // Get all active users that hasnt been updated in the last 60 days
+        $sql = "SELECT p.*, g.id as `guest_id`, h.id as `host_id` FROM people AS p".
+            "LEFT JOIN guests AS g ON (p.id = g.user_id) ".
+            "LEFT JOIN hosts  AS h ON (p.id = h.user_id) ".
+            "WHERE p.updated < DATE_ADD(CURDATE(), INTERVAL - 60 DAY) AND p.status = 1 ORDER BY p.id ASC";
         $result = $this->getPeople($sql);
         foreach ($result as $person) {
+            if ($person['guest_id'] === NULL) {
+                $person['type'] = People::TYPE_HOST;
+            }
+            if ($person['host_id'] === NULL) {
+                $person['type'] = People::TYPE_GUEST;
+            }
             try {
-                $deleted = $app['dry'] || $people->setToExpired($person['id']);
-                if ($deleted) {
-                    $this->counters['DELETE']++;
+                $expired = $app['dry'] || $people->setToExpired($person['id']);
+                if ($expired) {
+                    $this->counters['EXPIRE']++;
                 }
-                $sent = $app['dry'] || $mailer->sendReactivateUsed($person);
+                if ($person['type'] === People::TYPE_GUEST) {
+                    $sent = $app['dry'] || $mailer->sendGuestExpired($person);
+                } else {
+                    $sent = $app['dry'] || $mailer->sendHostExpired($person);
+                }
                 if ($sent) {
                     $this->counters['EMAIL']++;
                     $this->app->verbose("Sent mail to [{$person['id']}] {$person['name']}");
@@ -69,6 +84,48 @@ class PurgeUsed
                     $this->counters['PURGE']++;
                 }
                 $this->app->verbose("Person [{$person['id']}] {$person['name']} - Purged");
+            } catch (\app\Exception $e) {
+                $app->error("ERROR! " . $e->getMessage());
+                $this->counters['ERROR']++;
+            } catch (\Exception $e) {
+                error_log("Failed to handle person {$person['id']} : " . $e->getMessage());
+                $app->verbose(" ");
+                $this->counters['ERROR']++;
+                $this->counters['TOTAL']++;
+                break;
+            }
+            $app->verbose(" ");
+            $this->counters['TOTAL']++;
+        }
+
+        // Get all used users that hasnt been updated in the last 60 days
+        $sql = "SELECT p.*, g.id as `guest_id`, h.id as `host_id` FROM people AS p".
+            "LEFT JOIN guests AS g ON (p.id = g.user_id) ".
+            "LEFT JOIN hosts  AS h ON (p.id = h.user_id) ".
+            "WHERE p.updated < DATE_ADD(CURDATE(), INTERVAL - 60 DAY) AND p.status = 2 ORDER BY p.id ASC";
+        $result = $this->getPeople($sql);
+        foreach ($result as $person) {
+            if ($person['guest_id'] === NULL) {
+                $person['type'] = People::TYPE_HOST;
+            }
+            if ($person['host_id'] === NULL) {
+                $person['type'] = People::TYPE_GUEST;
+            }
+            try {
+                $expired = $app['dry'] || $people->setToExpired($person['id']);
+                if ($expired) {
+                    $this->counters['EXPIRE']++;
+                }
+                if ($person['type'] == People::TYPE_GUEST) {
+                    $sent = $app['dry'] || $mailer->sendReactivateUsedGuest($person);
+                } else {
+                    $sent = $app['dry'] || $mailer->sendReactivateUsedHost($person);
+                }
+                if ($sent) {
+                    $this->counters['EMAIL']++;
+                    $this->app->verbose("Sent mail to [{$person['id']}] {$person['name']}");
+                }
+                $this->app->verbose("Person [{$person['id']}] {$person['name']} - Soft deleted");
             } catch (\app\Exception $e) {
                 $app->error("ERROR! " . $e->getMessage());
                 $this->counters['ERROR']++;

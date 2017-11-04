@@ -228,21 +228,75 @@ class Mailer implements \Pimple\ServiceProviderInterface
         return $sent;
     }
 
-    public function sendReactivateUsed(array $person) : bool
+    public function sendGuestExpired(array $host) : bool
+    {
+        if (empty($this->client)) return false;
+        $to = $host['email'];
+        $email_data = [
+            'user_id' => $host['id'],
+            'type' => Purge::EXPIRED_GUEST
+        ];
+        try {
+            $templater = new Purge($this);
+            $body = $templater->buildExpiredGuestText($host);
+            $this->client->sendMessage($this->domain, [
+                'from'    => $this->from,
+                'to'      => $to,
+                'subject' => $this->prefix . 'Vil du fortsatt delta på middag? Gi oss beskjed!',
+                'html'    => $body
+            ]);
+            $sent = true;
+        } catch (\Exception $e) {
+            error_log("Failed to mail : " . $e->getMessage());
+            $email_data['status'] = Emails::STATUS_FAILED;
+            $sent = false;
+        }
+        $this->app['emails']->insert($email_data);
+        return $sent;
+    }
+
+    public function sendReactivateUsedHost(array $person) : bool
     {
         if (empty($this->client)) return false;
         $to = $person['email'];
         $email_data = [
             'user_id' => $person['id'],
-            'type' => Purge::REACTIVATE_PERSON
+            'type' => Purge::REACTIVATE_HOST
         ];
         try {
             $templater = new Purge($this);
-            $body = $templater->buildReactivateUsedText($person);
+            $body = $templater->buildReactivateUsedHostText($person);
             $this->client->sendMessage($this->domain, [
                 'from'    => $this->from,
                 'to'      => $to,
-                'subject' => $this->prefix . 'Vil du på en ny Kom inn-middag?',
+                'subject' => $this->prefix . 'Vil du invitere på en ny Kom Inn-middag?',
+                'html'    => $body
+            ]);
+            $sent = true;
+        } catch (\Exception $e) {
+            error_log("Failed to mail : " . $e->getMessage());
+            $email_data['status'] = Emails::STATUS_FAILED;
+            $sent = false;
+        }
+        $this->app['emails']->insert($email_data);
+        return $sent;
+    }
+
+    public function sendReactivateUsedGuest(array $person) : bool
+    {
+        if (empty($this->client)) return false;
+        $to = $person['email'];
+        $email_data = [
+            'user_id' => $person['id'],
+            'type' => Purge::REACTIVATE_GUEST
+        ];
+        try {
+            $templater = new Purge($this);
+            $body = $templater->buildReactivateUsedGuestText($person);
+            $this->client->sendMessage($this->domain, [
+                'from'    => $this->from,
+                'to'      => $to,
+                'subject' => $this->prefix . 'Vil du delta på en ny Kom Inn-middag?',
                 'html'    => $body
             ]);
             $sent = true;
