@@ -7,6 +7,8 @@ export default class ThankYou extends React.Component {
     renderHost() {
         return (
             <div>
+                <h2>{translate('Takk for at du har meldt deg på!')}</h2>
+                <br />
                 <h3>{translate('Hva skjer nå?')}</h3>
                 <p>
                     {translate(
@@ -41,6 +43,8 @@ export default class ThankYou extends React.Component {
     renderGuest() {
         return (
             <div className="nextSteps">
+                <h2>{translate('Takk for at du har meldt deg på!')}</h2>
+                <br />
                 <h3>{translate('Hva skjer nå?')}</h3>
                 <p>
                     {translate(
@@ -55,6 +59,7 @@ export default class ThankYou extends React.Component {
                         'Sammen blir dere enige om når du kommer til huset til middag'
                     )}
                 </p>
+                <br />
                 <h3>{translate('For flere detaljer')}</h3>
                 <p>
                     {translate('Les mer på')}{' '}

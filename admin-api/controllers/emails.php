@@ -75,7 +75,17 @@ $app->post('/email/{template}/render', function($template) use ($app) {
             $host = $app['people']->get((int) $id);
             $content = $templater->buildExpiredHostText($host);
             break;
-        case 'reactivate_used':
+        case 'expired_guest':
+            $templater = new Purge($mailer);
+            $guest = $app['people']->get((int) $id);
+            $content = $templater->buildExpiredGuestText($guest);
+            break;
+        case 'reactivate_used_host':
+            $templater = new Purge($mailer);
+            $person = $app['people']->get((int) $id);
+            $content = $templater->buildReactivateUsedHostText($person);
+            break;
+        case 'reactivate_used_guest':
             $templater = new Purge($mailer);
             $person = $app['people']->get((int) $id);
             $content = $templater->buildReactivateUsedGuestText($person);

@@ -46,7 +46,7 @@ class People implements \Pimple\ServiceProviderInterface
     }
 
     /**
-     * Returns a single person, with host or guest data as approriate
+     * Returns a single person, with host or guest data as appropriate
      *
      * @param int $id
      * @return array|false
@@ -96,7 +96,7 @@ class People implements \Pimple\ServiceProviderInterface
             $args = [$status];
             $sql .= "WHERE status = ?";
         } else {
-            $args = [People::STATUS_DELETED];
+            $args = [People::STATUS_PURGED];
             $sql .= "WHERE status != ?";
         }
         $sql .= " ORDER BY updated DESC LIMIT {$offset}, {$limit}";

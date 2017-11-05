@@ -15,22 +15,21 @@ $app->post('/reactivate', function(Request $request) use ($app) {
         throw new ApiException('Missing required field');
     }
 
-    // @TODO ideally id should be person id and not match id
-    $match = $app['matches']->get($id, true, false);
+    $person = $app['people']->get($id, true, false);
 
-    $hash = $app['mailer']->createHashCode($match['host']['email']);
+    $hash = $app['mailer']->createHashCode($person['email']);
     if ($hash != $code) {
         $this->app['monolog']->warning("Feedback request with invalid code [{$code}] != [{$hash}] for person [{$match['host']['id']}]");
         throw new ApiException('Invalid code!');
     }
 
-    if (((int) $match['host']['status']) !== \app\models\People::STATUS_USED) {
+    if (((int) $person['status']) !== \app\models\People::STATUS_USED
+        && ((int) $person['status']) !== \app\models\People::STATUS_DELETED) {
         throw new ApiException('Not able to reactivate this Person');
     }
 
-    $host_id = $match['host_id'];
     $data = ['status' => People::STATUS_ACTIVE];
-    $result = $app['people']->update($host_id, $data);
+    $result = $app['people']->update($id, $data);
     if (!$result) {
         throw new ServiceException('Could not update person');
     }

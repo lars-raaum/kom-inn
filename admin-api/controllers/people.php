@@ -80,6 +80,8 @@ $app->get('/people', function() use ($app) {
     $status = false;
     if (isset($_GET['status'])) {
         $status = (int) $_GET['status'];
+    } else {
+        $status = false;
     }
     $limit = (int) ($_GET['limit'] ?? 10);
     if (isset($_GET['page'])) {
