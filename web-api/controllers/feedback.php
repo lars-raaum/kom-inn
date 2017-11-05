@@ -15,7 +15,7 @@ $app->post('/reactivate', function(Request $request) use ($app) {
         throw new ApiException('Missing required field');
     }
 
-    $person = $app['people']->get($id, true, false);
+    $person = $app['people']->get($id);
 
     $hash = $app['mailer']->createHashCode($person['email']);
     if ($hash != $code) {
@@ -24,7 +24,9 @@ $app->post('/reactivate', function(Request $request) use ($app) {
     }
 
     if (((int) $person['status']) !== \app\models\People::STATUS_USED
-        && ((int) $person['status']) !== \app\models\People::STATUS_DELETED) {
+        && ((int) $person['status']) !== \app\models\People::STATUS_DELETED
+        && ((int) $person['status']) !== \app\models\People::STATUS_EXPIRED
+    ) {
         throw new ApiException('Not able to reactivate this Person');
     }
 
