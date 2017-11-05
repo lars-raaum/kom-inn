@@ -37,7 +37,8 @@ class UpdatePeople
         $sql = "SELECT p.*, g.id as `guest_id`, h.id as `host_id` FROM people AS p ".
             "LEFT JOIN guests AS g ON (p.id = g.user_id) ".
             "LEFT JOIN hosts  AS h ON (p.id = h.user_id) ".
-            "WHERE p.updated < DATE_ADD(CURDATE(), INTERVAL - 60 DAY) AND p.status = 1 ORDER BY p.id ASC";
+            "WHERE p.updated < DATE_ADD(CURDATE(), INTERVAL - 60 DAY) AND p.status = 1 ".
+            "ORDER BY p.id ASC LIMIT 50";
         $result = $this->getPeople($sql);
         foreach ($result as $person) {
             if ($person['guest_id'] === NULL) {
@@ -105,7 +106,8 @@ class UpdatePeople
         $sql = "SELECT p.*, g.id as `guest_id`, h.id as `host_id` FROM people AS p ".
             "LEFT JOIN guests AS g ON (p.id = g.user_id) ".
             "LEFT JOIN hosts  AS h ON (p.id = h.user_id) ".
-            "WHERE p.updated < DATE_ADD(CURDATE(), INTERVAL - 60 DAY) AND p.status = 2 ORDER BY p.id ASC";
+            "WHERE p.updated < DATE_ADD(CURDATE(), INTERVAL - 60 DAY) AND p.status = 2 ".
+            "ORDER BY p.id ASC LIMIT 50";
         $result = $this->getPeople($sql);
         foreach ($result as $person) {
             if ($person['guest_id'] === NULL) {
