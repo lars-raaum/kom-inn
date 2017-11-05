@@ -25,7 +25,7 @@ class UpdatePeople
      * Set all people unused for 60 days to expired and send them an "reactiviate mail".
      * Also delete all people that have been expired for 30 days
      */
-    public function task() : void
+    public function task()
     {
         $app = $this->app;
         /* @var $mailer \app\Mailer */
@@ -165,7 +165,7 @@ class UpdatePeople
         return $people;
     }
 
-    protected function outputResults() : void
+    protected function outputResults()
     {
         $app = $this->app;
         $app->verbose(" ", " Handled: " . $this->counters['TOTAL']);
