@@ -1,7 +1,7 @@
 import React from 'react';
 import Person from '../common/person';
 import { deletePerson } from '../../actions/person';
-import { deleteMatch, updateMatch } from '../../actions/match';
+import { deleteMatch, updateMatch, nagHost } from '../../actions/match';
 
 export default class Match extends React.Component {
     constructor() {
