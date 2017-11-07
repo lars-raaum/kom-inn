@@ -68,7 +68,7 @@ export default class Matches extends React.Component {
                         <h1>Matched hosts and guests</h1>
                         <ul>
                             {this.state.matches.map(match => {
-                                return <Match key={match.id} match={match} optimisticRemoveMatch={this.optimisticRemoveMatch} fetchMatches={this.fetchMatches} />
+                                return <Match key={match.id} match={match} optimisticRemoveMatch={this.optimisticRemoveMatch} optimisticUpdateMatch={this.optimisticUpdateMatch} fetchMatches={this.fetchMatches} />
                             })}
                         </ul>
                     </div>
