@@ -60,7 +60,7 @@ $app->delete('/person/{id}', function ($id) use ($app) {
     if ($person['status'] == People::STATUS_DELETED) {
         throw new ApiException("Person $id is already deleted");
     }
-    $result = $app['people']->delete($id);
+    $result = $app['people']->setToSoftDeleted($id);
     return $app->json($result);
 });
 

@@ -26,8 +26,9 @@ export default class Person extends React.Component {
 
     statusText(c) {
         const t = {
-            "-2" : "purged",
-            "-1" : "expired",
+            "-3" : "purged",
+            "-2" : "expired",
+            "-1" : "deleted",
             "0" : "new",
             "1" : "active",
             "2" : "used"
@@ -49,11 +50,11 @@ export default class Person extends React.Component {
                 <span className="address">{person.address} {person.zipcode}</span> <br />
                 <span className="bringing">{person.bringing || <i>No people description</i>}</span> <br />
                 <span className="freetext">{person.freetext || <i>No description</i>}</span> <br />
-                {this.props.convertPerson ?
+                {this.props.convertPerson && person.status > 0 ?
                     <a href="#" onClick={() => this.props.convertPerson(person.id)}>Change person to other type</a> : null
                 }
                 <br />
-                {this.props.removePerson ?
+                {this.props.removePerson && person.status > 0 ?
                     <a href="#" onClick={() => this.props.removePerson(person.id)}>Remove person from database</a> : null
                 }
             </div>
