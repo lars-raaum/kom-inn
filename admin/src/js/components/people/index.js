@@ -12,15 +12,20 @@ export default class People extends React.Component {
                 page: 1,
                 offset: 0,
                 total: 0,
-                limit: 10
+                limit: 150,
             }
-            // ,
-            // status: '1'
+            ,
+            status: '1'
         };
         this.fetchPeople = this.fetchPeople.bind(this);
         this.nextPage = this.nextPage.bind(this);
         this.prevPage = this.prevPage.bind(this);
         this.gotoPage = this.gotoPage.bind(this);
+        this.setStatusAll = this.setStatusAll.bind(this);
+        this.setStatusExpired = this.setStatusExpired.bind(this);
+        this.setStatusDeleted = this.setStatusDeleted.bind(this);
+        this.setStatusActive = this.setStatusActive.bind(this);
+        this.setStatusUsed = this.setStatusUsed.bind(this);
         this.removePerson = this.removePerson.bind(this);
         this.convertPerson = this.convertPerson.bind(this);
     }
@@ -31,7 +36,7 @@ export default class People extends React.Component {
 
     fetchPeople() {
         this.setState({ loading: true });
-        return fetchPeople({ page: this.state.meta.page }).then(({ response, headers }) => {
+        return fetchPeople({ page: this.state.meta.page, limit: this.state.meta.limit, status: this.state.status }).then(({ response, headers }) => {
             this.setState({
                 loading: false,
                 people: response,
@@ -46,10 +51,10 @@ export default class People extends React.Component {
         });
     }
 
-    setPage(page) {
-        if (page === this.state.meta.page) {
-            return;
-        }
+    setPage(page = this.state.meta.page) {
+        // if (page === this.state.meta.page) {
+        //     return;
+        // }
 
         this.setState({
             meta: Object.assign(this.state.meta, {
@@ -95,6 +100,36 @@ export default class People extends React.Component {
         return convertPerson({ id }).then(() => this.fetchPeople());
     }
 
+    setStatusAll(e) {
+        e.preventDefault();
+        this.state.status = null;
+        this.setPage();
+    }
+
+    setStatusDeleted(e) {
+        e.preventDefault();
+        this.state.status = '-1';
+        this.setPage();
+    }
+
+    setStatusExpired(e) {
+        e.preventDefault();
+        this.state.status = '-2';
+        this.setPage();
+    }
+
+    setStatusActive(e) {
+        e.preventDefault();
+        this.state.status = '1';
+        this.setPage();
+    }
+
+    setStatusUsed(e) {
+        e.preventDefault();
+        this.state.status = '2';
+        this.setPage();
+    }
+
     render() {
         if (this.state.loading) {
             return <div className="loading-gif">
@@ -130,6 +165,15 @@ export default class People extends React.Component {
                     </li>
                 </ul>
                 <p>Showing {this.state.meta.count} of {this.state.meta.total}, page {this.state.meta.page}</p>
+            </div>
+            <div className="pagination">
+                <ul>
+                    <li><button name="active" onClick={this.setStatusAll}>All users</button></li>
+                    <li><button name="active" onClick={this.setStatusActive}>Active users</button></li>
+                    <li><button name="active" onClick={this.setStatusUsed}>Used users</button></li>
+                    <li><button name="active" onClick={this.setStatusExpired}>Expired users</button></li>
+                    <li><button name="active" onClick={this.setStatusDeleted}>Deleted users</button></li>
+                </ul>
             </div>
         </div>
 

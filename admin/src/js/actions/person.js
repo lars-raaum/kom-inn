@@ -1,7 +1,11 @@
 import apiRequest from '../utils/api-request';
 
-export function fetchPeople({ page, offset = 0 }) {
-    return apiRequest(`/api/people?page=${page}&offset=${offset}`);
+export function fetchPeople({ page, offset = 0, limit = 150, status = null }) {
+    if (status === null) {
+        return apiRequest(`/api/people?page=${page}&offset=${offset}&limit=${limit}`);
+    } else {
+        return apiRequest(`/api/people?page=${page}&offset=${offset}&limit=${limit}&status=${status}`);
+    }
 }
 
 export function deletePerson({ id }) {

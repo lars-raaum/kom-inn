@@ -127,12 +127,13 @@ class People implements \Pimple\ServiceProviderInterface
      */
     public function total($status) : int
     {
+        $sql = "SELECT COUNT(1) FROM people ";
         if ($status !== false) {
             $args = [$status];
-            $sql = "SELECT COUNT(1) FROM people WHERE status = ?";
+            $sql .= "WHERE status = ?";
         } else {
-            $args = [People::STATUS_DELETED];
-            $sql = "SELECT COUNT(1) FROM people WHERE status != ?";
+            $args = [People::STATUS_PURGED];
+            $sql .= "WHERE status != ?";
         }
         $this->app['logger']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $total = $this->app['db']->fetchColumn($sql, $args, 0);
