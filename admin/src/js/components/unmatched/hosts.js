@@ -50,6 +50,7 @@ export default class Hosts extends React.Component {
 
         return <div className="map-view">
             <Map key={guest.id + '-' + query + '-' + distance} google={window.google}
+                clickableIcons={true}
                 style={{width: '100%', height: '400px'}}
                 className={'map'}
                 zoom={12}
