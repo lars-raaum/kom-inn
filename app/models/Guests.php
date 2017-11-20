@@ -101,15 +101,25 @@ class Guests implements \Pimple\ServiceProviderInterface
 
         foreach ($guests as &$guest) {
             $now     = new DateTime();
-            $updated = new DateTime($guest['created']);
+            $updated = new DateTime($guest['updated']);
             if ($updated->diff($now)->days == 0) {
-                $guest['waited'] = "Added today";
+                $guest['waited'] = "Today";
             } else if ($updated->diff($now)->days == 1) {
-                $guest['waited'] = $updated->diff($now)->days . " day";
+                $guest['waited'] = $updated->diff($now)->days . " day ago";
             } else {
-                $guest['waited'] = $updated->diff($now)->days . " days";
+                $guest['waited'] = $updated->diff($now)->days . " days ago";
+            }
+
+            $created = new DateTime($guest['created']);
+            if ($created->diff($now)->days == 0) {
+                $guest['joined'] = "Today";
+            } else if ($created->diff($now)->days == 1) {
+                $guest['joined'] = $created->diff($now)->days . " day ago";
+            } else {
+                $guest['joined'] = $created->diff($now)->days . " days ago";
             }
         }
+
         return $guests;
     }
 

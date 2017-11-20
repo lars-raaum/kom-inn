@@ -27,6 +27,10 @@ export default class Person extends React.Component {
         const { person, selected } = this.props;
 
         const className = cs({ selected });
+        let changes = "Joined: " + person.joined;
+        if (person.waited !== person.joined) {
+            changes = "Updated: " + person.waited + "  -  " + changes;
+        }
 
         return <li className={className} onClick={() => this.props.onClick(person)}>
             <b>{this.getAdults()} adults. {person.children} children.</b>
@@ -39,7 +43,7 @@ export default class Person extends React.Component {
             </div>
             <div className="freetext">{person.freetext || <i>No description</i>}</div>
             {this.renderDistance()}
-            <div className="updated">{person.waited}</div>
+            <div className="updated">{changes}</div>
         </li>
     }
 }

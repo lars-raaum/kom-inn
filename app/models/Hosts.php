@@ -168,13 +168,22 @@ class Hosts implements \Pimple\ServiceProviderInterface
         }
         foreach ($hosts as &$host) {
             $now     = new DateTime();
-            $updated = new DateTime($host['created']);
+            $updated = new DateTime($host['updated']);
             if ($updated->diff($now)->days == 0) {
-                $host['waited'] = "Added today";
+                $host['waited'] = "Today";
             } else if ($updated->diff($now)->days == 1) {
-                $host['waited'] = $updated->diff($now)->days . " day";
+                $host['waited'] = $updated->diff($now)->days . " day ago";
             } else {
-                $host['waited'] = $updated->diff($now)->days . " days";
+                $host['waited'] = $updated->diff($now)->days . " days ago";
+            }
+
+            $created = new DateTime($host['created']);
+            if ($created->diff($now)->days == 0) {
+                $host['joined'] = "Today";
+            } else if ($created->diff($now)->days == 1) {
+                $host['joined'] = $created->diff($now)->days . " day ago";
+            } else {
+                $host['joined'] = $created->diff($now)->days . " days ago";
             }
         }
         return $hosts;
