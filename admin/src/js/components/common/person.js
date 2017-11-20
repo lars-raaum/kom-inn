@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 export default class Person extends React.Component {
     constructor(props) {
@@ -38,6 +39,11 @@ export default class Person extends React.Component {
 
     render() {
         const { person, handleRemove } = this.props;
+        let geo = '';
+        if (person.loc_long === null || person.loc_lat === null) {
+            geo = <span className="warning">BAD GEO</span>;
+        }
+        const edit_url = "/people/" + person.id;
 
         return <div className="person">
             <span className="title">{this.getAdults()} adults. {person.children} children.</span>
@@ -47,7 +53,7 @@ export default class Person extends React.Component {
                 <span className="info">{person.age} år. {person.adults_f} females. {person.adults_m} males. {person.children} children. {this.getType()}.</span>
                 <span className="origin">{person.origin}.</span> <br />
                 <span className="phone">Phone: <a href={`tel:${person.phone}`}>{person.phone}</a></span> <span className="email">Email <a href={`mailto:${person.email}`}>{person.email}</a></span> <br />
-                <span className="address">{person.address} {person.zipcode}</span> <br />
+                <span className="address">{person.address} {person.zipcode}</span> {geo} <br />
                 <span className="bringing">{person.bringing || <i>No people description</i>}</span> <br />
                 <span className="freetext">{person.freetext || <i>No description</i>}</span> <br />
                 {this.props.convertPerson && person.status > 0 ?
@@ -57,6 +63,8 @@ export default class Person extends React.Component {
                 {this.props.removePerson && person.status > 0 ?
                     <a href="#" onClick={() => this.props.removePerson(person.id)}>Remove person from database</a> : null
                 }
+                <br />
+                <Link to={edit_url} activeClassName="selected">Edit</Link>
             </div>
         </div>
     }

@@ -19,3 +19,12 @@ export function convertPerson({ id }) {
         method: 'POST'
     });
 }
+
+export function fetchPerson({ id }) {
+    if (id === undefined) {
+        throw new Error("id passed to fetchPerson is undefined!");
+    }
+    return apiRequest(`/api/person/${id}`, {
+        method: 'GET'
+    })
+}

@@ -55,3 +55,28 @@
         }
     }
 }
+
+.warning {
+    color: red;
+    font-size: 75%;
+}
+
+.edit-person {
+    label {
+        display: block;
+        margin-top: 1rem;
+
+    }
+    .radio {
+        label {
+            display: inline-block;
+        }
+    }
+    input[type=text], input[type=email] {
+        width: 90%;
+    }
+    textarea {
+        width: 90%;
+        height: 4rem;
+    }
+}
