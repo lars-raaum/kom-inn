@@ -130,6 +130,18 @@ export default class People extends React.Component {
         this.setPage();
     }
 
+    // How to do this as after rerender?
+    static resetStatusSelectors(disableName) {
+        for (let s of window.document.getElementsByClassName("status-selector")) {
+            console.log(s);
+            s.removeAttribute('disabled');
+        }
+        for (let s of window.document.getElementsByClassName(disableName)) {
+            console.log(s);
+            s.setAttribute('disabled', 'disabled');
+        }
+    }
+
     render() {
         if (this.state.loading) {
             return <div className="loading-gif">
@@ -140,40 +152,62 @@ export default class People extends React.Component {
         const N = Math.ceil(this.state.meta.total / this.state.meta.limit);
         const pages = [...Array(N).keys()]; // + 1
 
+        // Also set the current status selector to disabled
+        let status_description;
+        switch (this.state.status) {
+            case '-2':
+                status_description  = "Expired users";
+                break;
+            case '-1':
+                status_description  = "Delete users";
+                break;
+            case '1':
+                status_description  = "Active users";
+                break;
+            case '2':
+                status_description  = "Used users";
+                break;
+            case null:
+            default:
+                status_description  = "All users";
+                break;
+
+        }
+
+        const pagination = <div className="pagination">
+            <ul>
+                <li><button className="status-selector status-all" name="status-all" onClick={this.setStatusAll}>All users</button></li>
+                <li><button className="status-selector status-active" name="status-active" onClick={this.setStatusActive} >Active users</button></li>
+                <li><button className="status-selector status-used" name="status-used" onClick={this.setStatusUsed}>Used users</button></li>
+                <li><button className="status-selector status-expired" name="status-expired" onClick={this.setStatusExpired}>Expired users</button></li>
+                <li><button className="status-selector status-deleted" name="status-deleted" onClick={this.setStatusDeleted}>Deleted users</button></li>
+            </ul>
+            <p><strong>{status_description}</strong>, Showing {this.state.meta.count} of {this.state.meta.total} , page {this.state.meta.page}</p>
+            <ul>
+                <li>
+                    <button name="prev" onClick={this.prevPage}>Previous</button>
+                </li>
+                {pages.map((p) => {
+                    p = p + 1;
+                    return (<li key={p}>
+                        <button data-page={p} onClick={this.gotoPage}> {p} </button>
+                    </li>)
+                })}
+                <li>
+                    <button name="next" onClick={this.nextPage}>Next</button>
+                </li>
+            </ul>
+        </div>;
+
         return <div>
             <div className="people">
-                <h1> People are strange </h1>
+                {pagination}
                 <div>
                     {this.state.people.map(person => {
                         return <Person key={person.id} person={person} removePerson={this.removePerson} convertPerson={this.convertPerson} />
                     })}
                 </div>
-            </div>
-            <div  className="pagination">
-                <ul>
-                    <li>
-                        <button name="prev" onClick={this.prevPage}>Previous</button>
-                    </li>
-                    {pages.map((p) => {
-                         p = p + 1;
-                        return (<li key={p}>
-                            <button data-page={p} onClick={this.gotoPage}> {p} </button>
-                        </li>)
-                    })}
-                    <li>
-                        <button name="next" onClick={this.nextPage}>Next</button>
-                    </li>
-                </ul>
-                <p>Showing {this.state.meta.count} of {this.state.meta.total}, page {this.state.meta.page}</p>
-            </div>
-            <div className="pagination">
-                <ul>
-                    <li><button name="active" onClick={this.setStatusAll}>All users</button></li>
-                    <li><button name="active" onClick={this.setStatusActive}>Active users</button></li>
-                    <li><button name="active" onClick={this.setStatusUsed}>Used users</button></li>
-                    <li><button name="active" onClick={this.setStatusExpired}>Expired users</button></li>
-                    <li><button name="active" onClick={this.setStatusDeleted}>Deleted users</button></li>
-                </ul>
+                {pagination}
             </div>
         </div>
 
