@@ -104,7 +104,7 @@ export default class Unmatched extends React.Component {
             query.push(`distance=${distance}`);
         }
 
-        console.log(distance, query)
+        // console.log(distance, query);
 
         const queryString = query.join('&');
         return fetch(`/api/hosts?${queryString}`, {

@@ -36,7 +36,7 @@ export default class Hosts extends React.Component {
     renderMap() {
         const { guest, hosts, filters, distance } = this.props;
 
-        console.log(guest);
+        // console.log(guest);
 
         const guestPosition = {};
         if (guest.loc_lat && guest.loc_long) {
