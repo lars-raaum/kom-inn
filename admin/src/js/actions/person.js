@@ -20,10 +20,14 @@ export function convertPerson({ id }) {
     });
 }
 
+export function updatePerson({ id, data}) {
+    return apiRequest(`/api/person/${id}`, {
+        method: 'POST',
+        body: JSON.stringify(data)
+    });
+}
+
 export function fetchPerson({ id }) {
-    if (id === undefined) {
-        throw new Error("id passed to fetchPerson is undefined!");
-    }
     return apiRequest(`/api/person/${id}`, {
         method: 'GET'
     })

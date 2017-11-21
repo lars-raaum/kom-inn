@@ -28,9 +28,20 @@ $app->post('/person/{id}', function($id, Request $request) use ($app) {
         'zipcode'   => $r->get('zipcode'),
         'address'   => $r->get('address'),
         'status'    => $r->get('status'),
-        'visits'    => $r->get('visits'),
         'freetext'  => $r->get('freetext'),
     ];
+
+    foreach ($data as $key => $value) {
+        if ($person[$key] === $value) {
+            unset($data[$key]);
+        }
+    }
+    if (isset($data['address']) && !isset($data['zipcode'])) {
+        $data['zipcode'] = $person['zipcode'];
+    }
+    if (!isset($data['address']) && isset($data['zipcode'])) {
+        $data['address'] = $person['address'];
+    }
 
     $saved = $app['people']->update($id, $data);
 

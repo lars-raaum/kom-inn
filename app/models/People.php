@@ -77,6 +77,26 @@ class People implements \Pimple\ServiceProviderInterface
             unset($person['host_id']);
             $person['type'] = People::TYPE_GUEST;
         }
+
+        $now     = new DateTime();
+        $updated = new DateTime($person['updated']);
+        if ($updated->diff($now)->days == 0) {
+            $person['waited'] = "Today";
+        } else if ($updated->diff($now)->days == 1) {
+            $person['waited'] = $updated->diff($now)->days . " day ago";
+        } else {
+            $person['waited'] = $updated->diff($now)->days . " days ago";
+        }
+
+        $created = new DateTime($person['created']);
+        if ($created->diff($now)->days == 0) {
+            $person['joined'] = "Today";
+        } else if ($created->diff($now)->days == 1) {
+            $person['joined'] = $created->diff($now)->days . " day ago";
+        } else {
+            $person['joined'] = $created->diff($now)->days . " days ago";
+        }
+
         return $person;
     }
 
@@ -113,6 +133,24 @@ class People implements \Pimple\ServiceProviderInterface
             if ($person['host_id'] === NULL) {
                 unset($person['host_id']);
                 $person['type'] = People::TYPE_GUEST;
+            }
+            $now     = new DateTime();
+            $updated = new DateTime($person['updated']);
+            if ($updated->diff($now)->days == 0) {
+                $person['waited'] = "Today";
+            } else if ($updated->diff($now)->days == 1) {
+                $person['waited'] = $updated->diff($now)->days . " day ago";
+            } else {
+                $person['waited'] = $updated->diff($now)->days . " days ago";
+            }
+
+            $created = new DateTime($person['created']);
+            if ($created->diff($now)->days == 0) {
+                $person['joined'] = "Today";
+            } else if ($created->diff($now)->days == 1) {
+                $person['joined'] = $created->diff($now)->days . " day ago";
+            } else {
+                $person['joined'] = $created->diff($now)->days . " days ago";
             }
         }
 
@@ -192,6 +230,18 @@ class People implements \Pimple\ServiceProviderInterface
 
         $types = ['updated' => Type::getType('datetime')];
         $data['updated'] = new DateTime('now');
+
+
+        if (!empty($data['address']) && !empty($data['zipcode'])) {
+            $geo = new Geo();
+            try {
+                $coords = $geo->getCoords($data);
+                $data['loc_long'] = $coords->getLongitude();
+                $data['loc_lat'] = $coords->getLatitude();
+            } catch (\Exception $e) {
+                error_log($e->getMessage());
+            }
+        }
 
         $this->app['logger']->info("UPDATE person {$id} - by [{$this->app['PHP_AUTH_USER']}]");
         $result = $this->app['db']->update('people', $data, ['id' => $id], $types);

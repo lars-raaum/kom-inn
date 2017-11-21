@@ -1,6 +1,6 @@
 import React from 'react';
 import Person from '../common/person';
-import {fetchPerson} from "../../actions/person";
+import {fetchPerson, updatePerson} from "../../actions/person";
 
 export default class People extends React.Component {
     constructor(props) {
@@ -12,11 +12,16 @@ export default class People extends React.Component {
             gender: null,
             error: null,
             success: false,
-            pending: false
+            pending: false,
+            geo: null,
         };
         this.fetchPerson = this.fetchPerson.bind(this);
-        this.updatePerson = this.updatePerson.bind(this);
+        this.refresh = this.refresh.bind(this);
         this.submit = this.submit.bind(this);
+    }
+
+    componentDidMount() {
+        this.fetchPerson()
     }
 
     getFormData() {
@@ -34,51 +39,56 @@ export default class People extends React.Component {
             food_concerns: this.form.food_concerns ? this.form.food_concerns.value : null,
             address: this.form.address.value,
             zipcode: this.form.zipcode.value,
-            freetext: this.form.freetext.value
+            freetext: this.form.freetext.value,
         };
     }
 
     fetchPerson() {
         this.setState({ loading: true });
-        return fetchPerson({ id: this.props.params.id }).then(({ response, headers }) => {
-            console.log(response);
-            this.setState({
-                loading: false,
-                person: response,
-                gender: response.gender
-            });
-            this.form.name.value = this.state.person.name;
-            this.form.email.value = this.state.person.email;
-            this.form.phone.value = this.state.person.phone;
-            this.form.age.value = this.state.person.age;
-            this.form.children.value = this.state.person.children;
-            this.form.adults_male.value = this.state.person.adults_m;
-            this.form.adults_female.value = this.state.person.adults_f;
-            this.form.bringing.value = this.state.person.bringing;
-            this.form.origin.value = this.state.person.origin;
-            this.form.address.value = this.state.person.address;
-            this.form.zipcode.value = this.state.person.zipcode;
-            this.form.freetext.value = this.state.person.freetext;
-            if (this.state.person.type === 'GUEST') {
-                this.form.food_concerns.value = this.state.person.food_concerns || '';
-            }
-        });
+        return fetchPerson({ id: this.props.params.id }).then(this.refresh);
     }
 
-    updatePerson() {
-
+    refresh({ response }) {
+        this.setState({
+              loading: false,
+              person: response,
+              gender: response.gender
+        });
+        this.form.name.value = this.state.person.name;
+        this.form.email.value = this.state.person.email;
+        this.form.phone.value = this.state.person.phone;
+        this.form.age.value = this.state.person.age;
+        this.form.children.value = this.state.person.children;
+        this.form.adults_male.value = this.state.person.adults_m;
+        this.form.adults_female.value = this.state.person.adults_f;
+        this.form.bringing.value = this.state.person.bringing;
+        this.form.origin.value = this.state.person.origin;
+        this.form.address.value = this.state.person.address;
+        this.form.zipcode.value = this.state.person.zipcode;
+        this.form.freetext.value = this.state.person.freetext;
+        if (this.state.person.type === 'GUEST') {
+            this.form.food_concerns.value = this.state.person.food_concerns || '';
+        }
+        if (this.state.person.loc_lat !== null && this.state.person.loc_long !== null) {
+            this.setState({
+                geo: {long: this.state.person.loc_long, lat: this.state.person.loc_lat}
+            });
+        }
+        console.log(this.state);
     }
 
     submit(e) {
         e.preventDefault();
-        this.setState({pending: true});
+        const id = this.props.params.id;
         const data = this.getFormData();
-        console.log(data);
+        this.setState({pending: true});
+        const res = updatePerson({id, data});
+        res.then(({response, headers}) => {
+            this.refresh({response});
+            alert("Person updated");
+        });
     }
 
-    componentDidMount() {
-        this.fetchPerson()
-    }
     render() {
         if (this.state.loading) {
             return <div className="loading-gif">
@@ -95,10 +105,17 @@ export default class People extends React.Component {
                 </div>
             </div>;
         }
+        let geo = '';
+        if (this.state.geo) {
+            geo = <div><input value={this.state.geo.long} disabled="disabled" /> <input value={this.state.geo.lat} disabled="disabled" /></div>;
+        } else {
+            geo = <span className="warning">No Valid Geo coord.</span>
+        }
 
         return <div>
             <div className="edit-person people">
                 <h2>{this.state.person.name}</h2>
+                <h4>Updated: {this.state.person.updated} - Joined: {this.state.person.joined}</h4>
                 <form onSubmit={this.submit}>
 
                     <div className="form-group">
@@ -167,6 +184,13 @@ export default class People extends React.Component {
 
                     <div className="form-group">
                         <div className="input-field col-1-1">
+                            <label>Geo Coordinates</label>
+                            {geo}
+                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <div className="input-field col-1-1">
                             <label className="input-header" htmlFor="address">Address</label>
                             <input type="text" id="address" ref={(c) => this.form.address = c} required />
                         </div>
@@ -191,6 +215,8 @@ export default class People extends React.Component {
                     <div className="submit">
                         <button type="submit">Save</button>
                     </div>
+
+                    <br /><br />
 
                 </form>
             </div>
