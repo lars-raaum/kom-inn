@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS `people` (
   `loc_long` float NULL DEFAULT NULL,
   `loc_lat` float NULL DEFAULT NULL,
   `visits` tinyint(4) NOT NULL DEFAULT '0',
+  `admin_comment` TEXT NULL DEFAULT NULL,
   `updated` datetime NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`),

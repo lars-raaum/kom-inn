@@ -40,6 +40,7 @@ export default class People extends React.Component {
             address: this.form.address.value,
             zipcode: this.form.zipcode.value,
             freetext: this.form.freetext.value,
+            admin_comment: this.form.admin_comment.value,
         };
     }
 
@@ -66,6 +67,7 @@ export default class People extends React.Component {
         this.form.address.value = this.state.person.address;
         this.form.zipcode.value = this.state.person.zipcode;
         this.form.freetext.value = this.state.person.freetext;
+        this.form.admin_comment.value = this.state.person.admin_comment;
         if (this.state.person.type === 'GUEST') {
             this.form.food_concerns.value = this.state.person.food_concerns || '';
         }
@@ -74,7 +76,6 @@ export default class People extends React.Component {
                 geo: {long: this.state.person.loc_long, lat: this.state.person.loc_lat}
             });
         }
-        console.log(this.state);
     }
 
     submit(e) {
@@ -209,6 +210,13 @@ export default class People extends React.Component {
                         <div className="input-field col-1-1 no-height">
                             <label className="input-header" htmlFor="freetext">Other</label>
                             <textarea id="freetext" ref={(c) => this.form.freetext = c} ></textarea>
+                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <div className="input-field col-1-1 no-height">
+                            <label className="input-header" htmlFor="freetext">Admin Comment</label>
+                            <textarea id="freetext" ref={(c) => this.form.admin_comment = c} ></textarea>
                         </div>
                     </div>
 

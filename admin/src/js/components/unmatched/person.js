@@ -42,6 +42,7 @@ export default class Person extends React.Component {
                 <span className="address">{person.address} {person.zipcode}</span>
             </div>
             <div className="freetext">{person.freetext || <i>No description</i>}</div>
+            <div className="admin-comment">{person.admin_comment || ''}</div>
             {this.renderDistance()}
             <div className="updated">{changes}</div>
         </li>

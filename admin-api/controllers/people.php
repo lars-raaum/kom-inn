@@ -29,6 +29,7 @@ $app->post('/person/{id}', function($id, Request $request) use ($app) {
         'address'   => $r->get('address'),
         'status'    => $r->get('status'),
         'freetext'  => $r->get('freetext'),
+        'admin_comment'  => $r->get('admin_comment'),
     ];
 
     foreach ($data as $key => $value) {

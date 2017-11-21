@@ -56,6 +56,7 @@ export default class Person extends React.Component {
                 <span className="address">{person.address} {person.zipcode}</span> {geo} <br />
                 <span className="bringing">{person.bringing || <i>No people description</i>}</span> <br />
                 <span className="freetext">{person.freetext || <i>No description</i>}</span> <br />
+                <span className="admin-comment">{person.admin_comment || ''}</span> <br />
                 {this.props.convertPerson && person.status > 0 ?
                     <a href="#" onClick={() => this.props.convertPerson(person.id)}>Change person to other type</a> : null
                 }
