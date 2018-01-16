@@ -17,10 +17,11 @@
   - name: setup ssl certificates
     shell: chmod --recursive 755 /etc/letsencrypt
     notify: restart apache
-  - name: cronjob path
-    cron: name="PATH" minute="PATH=/root/bin:/root/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/snap/bin" hour="" day="" month="" weekday="" job=""
   - name: setup cronjob for letsencrypt renewal
-    cron: name="update certificates" minute="4" hour="0" user="root" job="letsencrypt renew --verbose > /var/log/letsencrypt-renewal.log && systemctl reload apache2"
+    template: src=../templates/letsencrypt-cron.tpl dest=/etc/cron.d/letsencrypt owner=root
+    notify: restart cron
   handlers:
   - name: restart apache
     service: name=apache2 state=restarted
+  - name: restart cron
+    service: name=cron state=restarted

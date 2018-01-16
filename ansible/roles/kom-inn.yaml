@@ -4,6 +4,7 @@
   - pro
   roles:
     - apache.yaml
+  become: true
   tasks:
   - name: Deploy
     git: repo=https://github.com/lars-raaum/kom-inn dest=/services/kom-inn force=True version=0.11.2
@@ -19,7 +20,9 @@
     shell: composer install
     args:
       chdir: /services/kom-inn/crons/
-  - name: setup cronjob for looking for stale matches
-    cron: name="emails" minute="0" hour="8" user="deploy" job="php /services/kom-inn/crons/stale_matches.php -v > /var/log/kom-inn/stale_matches.log"
-  - name: setup cronjob for updating/purging people
-    cron: name="emails" minute="0" hour="18" user="deploy" job="php /services/kom-inn/crons/update_people.php -v > /var/log/kom-inn/update_people.log"
+  - name: setup cronjobs
+    template: src=../templates/kom-inn-cron.tpl dest=/etc/cron.d/kom-inn owner=root
+    notify: restart cron
+  handlers:
+  - name: restart cron
+    service: name=cron state=restarted
