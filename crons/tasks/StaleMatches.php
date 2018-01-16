@@ -78,7 +78,9 @@ class StaleMatches {
         $created = $match['ago'];
         if ($created < 2) { // It is new, do nothing
             $this->counters['SKIP']++;
-        } elseif ($created > 9) {// Match is too old, lets cancel it
+        } elseif ($created > 40) { // forgotten
+            $this->sendReminder($match, Reminders::NEUTRAL);
+        } elseif ($created > 9) { // Match is too old, lets cancel it
             $this->cancelMatch($match);
         } elseif ($created >= 2 && $created <= 3) {
             $this->sendReminder($match, Reminders::FIRST);
