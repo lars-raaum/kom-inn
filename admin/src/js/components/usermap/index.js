@@ -148,37 +148,39 @@ export default class UserMap extends Component {
         guestPosition.lat = 59.9035576;
         guestPosition.lng = 10.7354951;
         return (
-            <div>
-                <Map key="waawawlsdfa" google={window.google}
-                    style={{width: '100%', height: '800px'}}
-                    className={'map'}
-                    zoom={12}
-                    initialCenter={guestPosition}>
-                        {this.state.hosts.filter(host => {
-                            return host.loc_lat && host.loc_long;
-                            }).map((host, index) => {
-                                    const position = {
-                                        lat: parseFloat(host.loc_lat, 10),
-                                        lng: parseFloat(host.loc_long, 10)
-                                    };
+            <div className="user-map">
+                <div className="map-view">
+                    <Map key="waawawlsdfa" google={window.google}
+                        style={{width: '99%', height: '780px'}}
+                        className={'map'}
+                        zoom={12}
+                        initialCenter={guestPosition}>
+                            {this.state.hosts.filter(host => {
+                                return host.loc_lat && host.loc_long;
+                                }).map((host, index) => {
+                                        const position = {
+                                            lat: parseFloat(host.loc_lat, 10),
+                                            lng: parseFloat(host.loc_long, 10)
+                                        };
+
+                                    return (
+                                        <Marker key={index} position={position} title={host.name} color='e41a1c'/>
+                                );
+                            })}
+                            {this.state.guests.filter(guest => {
+                                return guest.loc_lat && guest.loc_long;
+                            }).map((guest, index) => {
+                                const position = {
+                                    lat: parseFloat(guest.loc_lat, 10),
+                                    lng: parseFloat(guest.loc_long, 10)
+                                };
 
                                 return (
-                                    <Marker key={index} position={position} title={host.name} color='e41a1c'/>
+                                    <Marker key={index} position={position} title={guest.name} opacity='50' color='377eb8' />
                             );
-                        })}
-                        {this.state.guests.filter(guest => {
-                            return guest.loc_lat && guest.loc_long;
-                        }).map((guest, index) => {
-                            const position = {
-                                lat: parseFloat(guest.loc_lat, 10),
-                                lng: parseFloat(guest.loc_long, 10)
-                            };
-
-                            return (
-                                <Marker key={index} position={position} title={guest.name} opacity='50' color='377eb8' />
-                        );
-                        })}
-                </Map>
+                            })}
+                    </Map>
+                </div>
             </div>
         );
     }
