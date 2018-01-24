@@ -25,8 +25,9 @@ $app->post('/register', function(Request $request) use ($app) {
         'freetext'  => $r->get('freetext') ?: null,
     ];
 
-    $data['adults_m'] += $data['gender'] == 'male' ? 1 : 0;
-    $data['adults_f'] += $data['gender'] == 'female' ? 1 : 0;
+    // Done in frontend
+//    $data['adults_m'] += $data['gender'] == 'male' ? 1 : 0;
+//    $data['adults_f'] += $data['gender'] == 'female' ? 1 : 0;
 
     // validation
     if (!$type || !in_array($type, ['host', 'guest'])) {
