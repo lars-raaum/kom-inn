@@ -47,9 +47,11 @@
 			}
 			.icon {
 				background-repeat: no-repeat;
-				height: 60px;
+				background-position: center;
 				width: 30px;
+				height: 60px;
 				display: block;
+				box-sizing: border-box;
 			}
 			.icon.icon-adults_female {
 				background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 28 73" style="enable-background:new 0 0 28 73;" xml:space="preserve"> <g id="woman"> <g> <path style="fill:#4B91AD;" d="M27.881,55.728l-8.124-34.299C19.18,18.993,16.649,17,14.132,17h-0.265 c-2.516,0-5.048,1.993-5.625,4.429L0.119,55.728c-0.577,2.436,1.01,4.429,3.526,4.429h4.937L11.38,73h5.241l2.798-12.842h4.937 C26.872,60.158,28.459,58.165,27.881,55.728z"/> </g> <g> <circle style="fill:#4B91AD;" cx="14" cy="7" r="7"/> </g> </g> </svg>');
@@ -69,17 +71,19 @@
 			}
 			.icon.icon-children {
 				background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 15.89 55" style="enable-background:new 0 0 15.89 55;" xml:space="preserve"> <g id="child"> <g> <path style="fill:#4B91AD;" d="M15.855,34.935l-2.04-16.412C13.506,16.035,11.201,14,8.692,14H7.197 c-2.508,0-4.814,2.035-5.123,4.523l-2.04,16.412c-0.309,2.488,1.49,4.523,3.999,4.523L5.333,55h5.224l1.3-15.542 C14.365,39.458,16.164,37.422,15.855,34.935z"/> </g> <g> <circle style="fill:#4B91AD;" cx="7.945" cy="6" r="6"/> </g> </g> </svg>');
+				margin: 3px 0;
 				height: 55px;
 			}
 			.icon.icon_children_outline {
-				background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 15.89 55" style="enable-background:new 0 0 15.89 55;" xml:space="preserve"> <g id="child"> <g> <path style="fill:#AEAEAE;" d="M15.855,34.935l-2.04-16.412C13.506,16.035,11.201,14,8.692,14H7.197 c-2.508,0-4.814,2.035-5.123,4.523l-2.04,16.412c-0.309,2.488,1.49,4.523,3.999,4.523L5.333,55h5.224l1.3-15.542 C14.365,39.458,16.164,37.422,15.855,34.935z"/> </g> <g> <circle style="fill:#AEAEAE;" cx="7.945" cy="6" r="6"/> </g> </g> </svg>');
+				background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 15.89 55" style="enable-background:new 0 0 15.89 55;" xml:space="preserve"> <g id="child"> <g> <path style="fill:#AEAEAE;" d="M8.692,15.5c1.754,0,3.418,1.469,3.634,3.208l2.04,16.412c0.096,0.77-0.109,1.485-0.577,2.015 c-0.469,0.531-1.155,0.823-1.933,0.823h-1.38l-0.115,1.375L9.177,53.5H6.713L5.528,39.333l-0.115-1.375h-1.38 c-0.778,0-1.464-0.292-1.933-0.823c-0.468-0.53-0.673-1.245-0.577-2.015l2.04-16.412c0.216-1.739,1.88-3.208,3.634-3.208H8.692 M8.692,14H7.197c-2.508,0-4.814,2.035-5.123,4.523l-2.04,16.412c-0.309,2.488,1.49,4.523,3.999,4.523L5.333,55h5.224l1.3-15.542 c2.508,0,4.308-2.035,3.999-4.523l-2.04-16.412C13.506,16.035,11.201,14,8.692,14L8.692,14z"/> </g> <g> <path style="fill:#AEAEAE;" d="M7.945,1.5c2.481,0,4.5,2.019,4.5,4.5s-2.019,4.5-4.5,4.5s-4.5-2.019-4.5-4.5S5.464,1.5,7.945,1.5 M7.945,0c-3.314,0-6,2.686-6,6s2.686,6,6,6s6-2.686,6-6S11.259,0,7.945,0L7.945,0z"/> </g> </g> </svg>');
+				margin: 3px 0;
 				height: 55px;
 			}
 			.add-one, .remove-one {
 			    width: 30px;
 			    text-align: center;
 				height: 30px;
-				margin: 24px 5px;
+				margin: 24px 10px;
                 font-size: 30px;
 				line-height: 30px;
 			    color: #4B91AD;
