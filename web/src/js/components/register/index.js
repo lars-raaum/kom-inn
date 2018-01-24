@@ -1,12 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router'
 
+const MAX_PEOPLE = 9;
+
 export default class Register extends React.Component {
     constructor() {
         super()
         this.form = {};
 
-        this.state = { gender: null, type: null, error: null, success: false, pending: false };
+        this.state = { gender: null, type: null, error: null, success: false, pending: false, peoples: { adults_male: 0, adults_female: 0, children: 0 } };
 
         this.submit = this.submit.bind(this);
     }
@@ -29,6 +31,10 @@ export default class Register extends React.Component {
             zipcode: this.form.zipcode.value,
             freetext: this.form.freetext.value
         };
+
+        if (this.form.childrenAge && this.form.childrenAge.value) {
+            data.bringing += `\n Alder på barn: ${this.form.childrenAge.value}`
+        }
 
         return data;
     }
@@ -94,8 +100,66 @@ export default class Register extends React.Component {
         return (<div className="main-page">Takk!</div>);
     }
 
+    addPeople(type) {
+        this.setState({
+            peoples: Object.assign(this.state.peoples, { [type]: Math.min(MAX_PEOPLE, this.state.peoples[type] + 1) })
+        });
+    }
+
+    removePeople(type) {
+        this.setState({
+            peoples: Object.assign(this.state.peoples, { [type]: Math.max(0, this.state.peoples[type] - 1) })
+        });
+    }
+
+    getPeopleValue(type) {
+        let nth = this.state.peoples[type];
+        if (document.forms.register && document.forms.register.gender) {
+            const { value } = document.forms.register.gender;
+            if ((value == 'female' && type == 'adults_female') || (value == 'male' && type == 'adults_male')) {
+                nth += 1;
+            }
+        }
+
+        return nth;
+    }
+
+    renderPeopleIcons(type) {
+        const icons = (new Array(this.state.peoples[type])).fill().map((_, i) => <span key={i} className={`icon icon-${type}`}></span>)
+
+        if (document.forms.register && document.forms.register.gender) {
+            const { value } = document.forms.register.gender;
+            if (value == 'female' && type == 'adults_female') {
+                icons.unshift(<span key="you" className={`icon icon_female_outline`}></span>)
+            } else if (value == 'male' && type == 'adults_male') {
+                icons.unshift(<span key="you" className={`icon icon_male_outline`}></span>)
+            }
+        }
+
+        if (icons.length < MAX_PEOPLE) {
+            icons.push(<span key="add-one" className="add-one" onClick={() => this.addPeople(type)}>+</span>)
+        }
+        if (this.state.peoples[type] > 0) {
+            icons.push(<span key="remove-one" className="remove-one" onClick={() => this.removePeople(type)}>−</span>)
+        }
+        return <div className="people-icons">{icons}</div>
+    }
+
+    renderChildrenAgeInput() {
+        if (this.state.peoples.children === 0) {
+            return null;
+        }
+
+        const { translate } = this.context;
+
+        return <div className="input-field col-1-1 no-height">
+            <label className="input-header" htmlFor="childrenAge">{translate('Hvor gamle er barna?')}</label>
+            <input id="childrenAge" placeholder="Fyll inn" ref={(c) => this.form.childrenAge = c} required />
+        </div>
+    }
+
     render() {
-        const translate = this.context.translate;
+        const { translate } = this.context;
 
         if (this.state.pending) {
             return this.renderPending();
@@ -152,10 +216,10 @@ export default class Register extends React.Component {
         }
 
         return (
-            <div className="main-page">
+            <div className="register">
                 {intro}
                 <p>{translate('Du finner mer informasjon på')} <a href="http://www.kom-inn.org">www.kom-inn.org.</a></p>
-                <form onSubmit={this.submit}>
+                <form name="register" onSubmit={this.submit}>
 
                     {typeForm}
 
@@ -173,8 +237,8 @@ export default class Register extends React.Component {
 
                         <div className="radio-field col-1-3">
                             <label className="input-header">{translate('Kjønn')}</label>
-                            <label htmlFor="gender-male"><input type="radio" name="gender" id="gender-male" onChange={() => this.setState({gender: 'male' })} />  {translate('Mann')}</label>
-                            <label htmlFor="gender-female"><input type="radio" name="gender" id="gender-female" onChange={() => this.setState({gender: 'female' })} />  {translate('Kvinne')}</label>
+                            <label htmlFor="gender-male"><input type="radio" name="gender" value="male" id="gender-male" onChange={() => this.setState({gender: 'male' })} required />  {translate('Mann')}</label>
+                            <label htmlFor="gender-female"><input type="radio" name="gender" value="female" id="gender-female" onChange={() => this.setState({gender: 'female' })} required />  {translate('Kvinne')}</label>
                         </div>
                     </div>
 
@@ -185,27 +249,38 @@ export default class Register extends React.Component {
                         </div>
                     </div>
 
-                    <h2>{translate('Hvor mange blir med på middag i tillegg til deg')}?</h2>
+                    <h2>{translate('Hvor mange blir med på middag')}?</h2>
                     <div className="form-group">
-                        <div className="input-field col-1-3">
-                            <label className="input-header" htmlFor="adults_female">{translate('Kvinner')}</label>
-                            <input type="number" placeholder="Fyll inn et tall" max="100" id="adults_female" ref={(c) => this.form.adults_female = c} required />
+                        <div className="col-1-1 people-select-wrapper">
+                            <div className="people-select">
+                                <input type="number" placeholder="Fyll inn et tall" readOnly value={this.getPeopleValue('adults_female')} max="9" id="adults_female" ref={(c) => this.form.adults_female = c} required />
+                                <label htmlFor="adults_female">{translate('Kvinner')}</label>
+                                {this.renderPeopleIcons('adults_female')}
+                            </div>
                         </div>
 
-                        <div className="input-field col-1-3">
-                            <label className="input-header" htmlFor="adults_male">{translate('Menn')}</label>
-                            <input type="number" placeholder="Fyll inn et tall" max="100" id="adults_male" ref={(c) => this.form.adults_male = c} required />
+                        <div className="col-1-1 people-select-wrapper">
+                            <div className="people-select">
+                                <input type="number" placeholder="Fyll inn et tall" readOnly value={this.getPeopleValue('adults_male')} max="9" id="adults_male" ref={(c) => this.form.adults_male = c} required />
+                                <label htmlFor="adults_male">{translate('Menn')}</label>
+                                {this.renderPeopleIcons('adults_male')}
+                            </div>
                         </div>
 
-                        <div className="input-field col-1-3">
-                            <label className="input-header" htmlFor="children">{translate('Barn')} (0-18 {translate('År').toLowerCase()})</label>
-                            <input type="number" placeholder="Fyll inn et tall" max="100" id="children" ref={(c) => this.form.children = c} required />
+                        <div className="col-1-1 people-select-wrapper">
+                            <div className="people-select">
+                                <input type="number" placeholder="Fyll inn et tall" readOnly value={this.getPeopleValue('children')} max="9" id="children" ref={(c) => this.form.children = c} required />
+                                <label htmlFor="children">{translate('Barn')} (0-18 {translate('År').toLowerCase()})</label>
+                                {this.renderPeopleIcons('children')}
+                            </div>
                         </div>
+
+                        {this.renderChildrenAgeInput()}
                     </div>
 
                     <div className="form-group">
                         <div className="input-field col-1-1 no-height">
-                            <label className="input-header" htmlFor="bringing">{translate('Hvem tar du med deg? Vet vi mer er sjansen for at vi finner en god match større. Eksempelvis alder på barna.')}</label>
+                            <label className="input-header" htmlFor="bringing">{translate('Hvem tar du med deg? Vet vi mer er sjansen for at vi finner en god match større.')}</label>
                             <textarea id="bringing" ref={(c) => this.form.bringing = c}></textarea>
                         </div>
                     </div>
