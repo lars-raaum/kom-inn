@@ -5,9 +5,14 @@ export default class Header extends React.Component {
     render() {
         return <div className="header">
             <div className="location">
-                <select disabled>
-                    <option>Oslo</option>
-                </select>
+                <form name="regionForm">
+                    <select name="region" onChange={e => this.props.setRegion(e.target.value)}>
+                        <option value="">Select region</option>
+                        <option value="oslo">Oslo</option>
+                        <option value="norway">Norway</option>
+                        <option value="unknown">Unknown</option>
+                    </select>
+                </form>
             </div>
             <div className="tabs">
                 <IndexLink to="/" activeClassName="selected">

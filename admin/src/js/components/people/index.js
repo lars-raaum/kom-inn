@@ -34,9 +34,21 @@ export default class People extends React.Component {
         this.fetchPeople();
     }
 
-    fetchPeople() {
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        if (this.context.region !== nextContext.region) {
+            this.fetchPeople(nextContext.region);
+            return true;
+        }
+    }
+
+    fetchPeople(region = this.context.region) {
         this.setState({ loading: true });
-        return fetchPeople({ page: this.state.meta.page, limit: this.state.meta.limit, status: this.state.status }).then(({ response, headers }) => {
+        return fetchPeople({
+            page: this.state.meta.page,
+            limit: this.state.meta.limit,
+            status: this.state.status,
+            region: region
+        }).then(({ response, headers }) => {
             this.setState({
                 loading: false,
                 people: response,
@@ -212,4 +224,8 @@ export default class People extends React.Component {
         </div>
 
     }
-}
+};
+
+People.contextTypes = {
+    region: React.PropTypes.string
+};
