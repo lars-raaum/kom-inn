@@ -1,5 +1,4 @@
 {
-  "variables": [],
   "info": {
     "name": "_Kom.inn",
     "_postman_id": "55e2d0c5-9af6-6396-ff3b-5d757513f044",
@@ -11,19 +10,18 @@
       "_postman_id": "247e8bdf-fd1f-6a2c-4800-7e2b821659e9",
       "name": "Register",
       "request": {
-        "url": "{{web-api}}/register",
         "method": "POST",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "description": ""
+            "value": "application/json"
           }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n\"email\"    : \"lina@example.com\",\n\"name\"    : \"Lina\",\n\"phone\"     : \"+4790121212\",\n\"gender\"  : \"female\",\n\"age\"    : 22,\n\"children\"  : 0,\n\"adults_m\"  : 0,\n\"adults_f\"  : 0,\n\"origin\"  : \"Russia\",\n\"zipcode\"  : \"0479\",\n\"address\"  : \"Sigurd Lies gate 17\",\n\"freetext\"  : \"Hey! Bumped value\",\n\"type\"    : \"guest\"\n}"
         },
+        "url": "{{web-api}}/register",
         "description": ""
       },
       "response": []
@@ -44,10 +42,10 @@
         }
       ],
       "request": {
-        "url": "{{admin-api}}/guest/1",
         "method": "GET",
         "header": [],
         "body": {},
+        "url": "{{admin-api}}/guest/1",
         "description": ""
       },
       "response": []
@@ -56,10 +54,10 @@
       "_postman_id": "feedd55a-eb07-6b60-d8f7-1a2498534f36",
       "name": "Get  Host 2",
       "request": {
-        "url": "{{admin-api}}/host/2",
         "method": "GET",
         "header": [],
         "body": {},
+        "url": "{{admin-api}}/host/2",
         "description": ""
       },
       "response": []
@@ -68,10 +66,32 @@
       "_postman_id": "bc1ea86f-e415-2afe-757f-12b5e932b05c",
       "name": "Get  Hosts",
       "request": {
-        "url": "{{admin-api}}/hosts?status=1&children=yes&males=yes",
         "method": "GET",
         "header": [],
         "body": {},
+        "url": {
+          "raw": "{{admin-api}}/hosts?status=1&children=yes&males=yes",
+          "host": [
+            "{{admin-api}}"
+          ],
+          "path": [
+            "hosts"
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "1"
+            },
+            {
+              "key": "children",
+              "value": "yes"
+            },
+            {
+              "key": "males",
+              "value": "yes"
+            }
+          ]
+        },
         "description": ""
       },
       "response": []
@@ -80,10 +100,32 @@
       "_postman_id": "370f3113-5fba-42e1-fd9a-7726e85c4825",
       "name": "Get  Guests",
       "request": {
-        "url": "{{admin-api}}/guests?status=1&children=yes&women=yes",
         "method": "GET",
         "header": [],
         "body": {},
+        "url": {
+          "raw": "{{admin-api}}/guests?status=1&children=yes&women=yes",
+          "host": [
+            "{{admin-api}}"
+          ],
+          "path": [
+            "guests"
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "1"
+            },
+            {
+              "key": "children",
+              "value": "yes"
+            },
+            {
+              "key": "women",
+              "value": "yes"
+            }
+          ]
+        },
         "description": ""
       },
       "response": []
@@ -92,19 +134,18 @@
       "_postman_id": "32d34459-1062-a257-2587-57fdcebaa577",
       "name": "Post Match",
       "request": {
-        "url": "{{admin-api}}/match",
         "method": "POST",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "description": ""
+            "value": "application/json"
           }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n\t\"guest_id\": \"399\",\n\t\"host_id\": \"419\",\n\t\"comment\": \"Kos dere!\"\n}"
         },
+        "url": "{{admin-api}}/match",
         "description": ""
       },
       "response": []
@@ -113,10 +154,10 @@
       "_postman_id": "95d8a9a2-c7dd-96a8-8946-c5d05cc78a9b",
       "name": "Get  Matches",
       "request": {
-        "url": "{{admin-api}}/matches",
         "method": "GET",
         "header": [],
         "body": {},
+        "url": "{{admin-api}}/matches",
         "description": ""
       },
       "response": []
@@ -125,10 +166,10 @@
       "_postman_id": "780250f1-7d7e-31ad-024b-d7b532eac035",
       "name": "Get  People",
       "request": {
-        "url": "{{admin-api}}/people",
         "method": "GET",
         "header": [],
         "body": {},
+        "url": "{{admin-api}}/people",
         "description": ""
       },
       "response": []
@@ -137,10 +178,32 @@
       "_postman_id": "f11fc79b-80f2-271d-78dd-870c7c14a230",
       "name": "Get  People By Regio",
       "request": {
-        "url": "{{admin-api}}/people?region=Bergen&limit=2&page=2",
         "method": "GET",
         "header": [],
         "body": {},
+        "url": {
+          "raw": "{{admin-api}}/people?region=Bergen&limit=2&page=2",
+          "host": [
+            "{{admin-api}}"
+          ],
+          "path": [
+            "people"
+          ],
+          "query": [
+            {
+              "key": "region",
+              "value": "Bergen"
+            },
+            {
+              "key": "limit",
+              "value": "2"
+            },
+            {
+              "key": "page",
+              "value": "2"
+            }
+          ]
+        },
         "description": ""
       },
       "response": []
@@ -149,16 +212,15 @@
       "_postman_id": "287ff963-8f46-28f3-26f5-51ad68715c43",
       "name": "Get Person 1",
       "request": {
-        "url": "{{admin-api}}/person/400",
         "method": "GET",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "description": ""
+            "value": "application/json"
           }
         ],
         "body": {},
+        "url": "{{admin-api}}/person/400",
         "description": ""
       },
       "response": []
@@ -167,19 +229,18 @@
       "_postman_id": "00c0f15a-5ea1-5d0a-6f5b-2210fabdb080",
       "name": "Update Person",
       "request": {
-        "url": "{{admin-api}}/person/12",
         "method": "POST",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "description": ""
+            "value": "application/json"
           }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n\t\n\t\"status\": -1\n}"
         },
+        "url": "{{admin-api}}/person/12",
         "description": ""
       },
       "response": []
@@ -188,19 +249,18 @@
       "_postman_id": "512fa5db-90d9-f8b9-6900-668cba6d19fc",
       "name": "Get Match 1",
       "request": {
-        "url": "{{admin-api}}/match/1",
         "method": "GET",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "description": ""
+            "value": "application/json"
           }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n\t\n\t\"status\": -1\n}"
         },
+        "url": "{{admin-api}}/match/1",
         "description": ""
       },
       "response": []
@@ -209,19 +269,18 @@
       "_postman_id": "680bed52-cf93-5125-e856-af3f77027230",
       "name": "Update Match 1",
       "request": {
-        "url": "{{admin-api}}/match/1",
         "method": "POST",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "description": ""
+            "value": "application/json"
           }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n\t\"comment\": \"Changed back!\",\n\t\"status\": 0\n}"
         },
+        "url": "{{admin-api}}/match/1",
         "description": ""
       },
       "response": []
@@ -230,19 +289,18 @@
       "_postman_id": "9f5b2e46-e1ed-2328-7f72-4ab6a422736a",
       "name": "Delete Match 20",
       "request": {
-        "url": "{{admin-api}}/match/20",
         "method": "DELETE",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "description": ""
+            "value": "application/json"
           }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n\t\n\t\"status\": -1\n}"
         },
+        "url": "{{admin-api}}/match/20",
         "description": ""
       },
       "response": []
@@ -251,19 +309,18 @@
       "_postman_id": "c2b3dc98-2283-ffd5-fcf3-24b0b61c0450",
       "name": "Email Host Inform Match ",
       "request": {
-        "url": "{{admin-api}}/match/1/email/host_inform",
         "method": "POST",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "description": ""
+            "value": "application/json"
           }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n\t\"guest_id\": \"399\",\n\t\"host_id\": \"419\",\n\t\"comment\": \"Kos dere!\"\n}"
         },
+        "url": "{{admin-api}}/match/1/email/host_inform",
         "description": ""
       },
       "response": []
@@ -272,19 +329,18 @@
       "_postman_id": "78716bc0-926d-b696-0aee-c3b372054510",
       "name": "Feedback",
       "request": {
-        "url": "{{web-api}}/feedback",
         "method": "POST",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "description": ""
+            "value": "application/json"
           }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n\t\"id\": 2,\n\t\"code\": \"a41a7751a1b8d8f7aad942942609b10dbb76a6ed\",\n\t\"status\": 2\n}"
         },
+        "url": "{{web-api}}/feedback",
         "description": ""
       },
       "response": []
@@ -293,19 +349,18 @@
       "_postman_id": "7df54871-c7ce-41d2-41d4-1010d84151f9",
       "name": "Email Host Nag Match ",
       "request": {
-        "url": "{{admin-api}}/match/71/email/reminder",
         "method": "POST",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "description": ""
+            "value": "application/json"
           }
         ],
         "body": {
           "mode": "raw",
           "raw": ""
         },
+        "url": "{{admin-api}}/match/71/email/reminder",
         "description": ""
       },
       "response": []
@@ -314,19 +369,18 @@
       "_postman_id": "ffb5cf88-bf3b-2dcb-cfd7-abe9f2c2dc32",
       "name": "Reactivate",
       "request": {
-        "url": "{{web-api}}/reactivate",
         "method": "POST",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "description": ""
+            "value": "application/json"
           }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n\t\"id\": 16,\n\t\"code\": \"8b5673740e964378ff5989cdd5ff9cd791db327f\"\n}"
         },
+        "url": "{{web-api}}/reactivate",
         "description": ""
       },
       "response": []
@@ -335,10 +389,40 @@
       "_postman_id": "53e71a1f-548a-e37c-8917-25d6f5289a76",
       "name": "Get  Hosts for Guest",
       "request": {
-        "url": "{{admin-api}}/hosts?guest_id=1&distance=20&children=yes&men=no&women=yes",
         "method": "GET",
         "header": [],
         "body": {},
+        "url": {
+          "raw": "{{admin-api}}/hosts?guest_id=1&distance=20&children=yes&men=no&women=yes",
+          "host": [
+            "{{admin-api}}"
+          ],
+          "path": [
+            "hosts"
+          ],
+          "query": [
+            {
+              "key": "guest_id",
+              "value": "1"
+            },
+            {
+              "key": "distance",
+              "value": "20"
+            },
+            {
+              "key": "children",
+              "value": "yes"
+            },
+            {
+              "key": "men",
+              "value": "no"
+            },
+            {
+              "key": "women",
+              "value": "yes"
+            }
+          ]
+        },
         "description": ""
       },
       "response": []
@@ -347,16 +431,15 @@
       "_postman_id": "5dee3c38-c3a9-3bef-3016-05080ce4f08c",
       "name": "Delete Person {id}",
       "request": {
-        "url": "{{admin-api}}/person/400",
         "method": "DELETE",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "description": ""
+            "value": "application/json"
           }
         ],
         "body": {},
+        "url": "{{admin-api}}/person/400",
         "description": ""
       },
       "response": []
@@ -365,16 +448,15 @@
       "_postman_id": "d38ae654-170c-cb3b-2357-7d3fab913642",
       "name": "Change Type Person X",
       "request": {
-        "url": "{{admin-api}}/person/45/convert",
         "method": "POST",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "description": ""
+            "value": "application/json"
           }
         ],
         "body": {},
+        "url": "{{admin-api}}/person/45/convert",
         "description": ""
       },
       "response": []
@@ -383,18 +465,35 @@
       "_postman_id": "9ac05048-4686-8fa4-c907-45808dc02db6",
       "name": "Email content testing",
       "request": {
-        "url": "{{admin-api}}/match/71/email/reminder/render?type=SECOND",
         "method": "POST",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "description": ""
+            "value": "application/json"
           }
         ],
         "body": {
           "mode": "raw",
           "raw": ""
+        },
+        "url": {
+          "raw": "{{admin-api}}/match/71/email/reminder/render?type=SECOND",
+          "host": [
+            "{{admin-api}}"
+          ],
+          "path": [
+            "match",
+            "71",
+            "email",
+            "reminder",
+            "render"
+          ],
+          "query": [
+            {
+              "key": "type",
+              "value": "SECOND"
+            }
+          ]
         },
         "description": ""
       },
@@ -404,20 +503,39 @@
       "_postman_id": "47ebcdbb-8250-7ec9-4541-283a349d2ced",
       "name": "Email content rendering",
       "request": {
-        "url": "{{admin-api}}/email/expired_host/render",
         "method": "POST",
         "header": [
           {
             "key": "Content-Type",
-            "value": "application/json",
-            "description": ""
+            "value": "application/json"
           }
         ],
         "body": {
           "mode": "raw",
           "raw": ""
         },
+        "url": "{{admin-api}}/email/expired_host/render",
         "description": ""
+      },
+      "response": []
+    },
+    {
+      "_postman_id": "6f067740-4693-29f7-72a6-b1d3ceaf2bf9",
+      "name": "Sorry Delete",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": "{{admin-api}}/person/6/sorry",
+        "description": null
       },
       "response": []
     }
