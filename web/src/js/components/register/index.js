@@ -136,12 +136,8 @@ export default class Register extends React.Component {
             }
         }
 
-        if (icons.length < MAX_PEOPLE) {
-            icons.push(<span key="add-one" className="add-one" onClick={() => this.addPeople(type)}>+</span>)
-        }
-        if (this.state.peoples[type] > 0) {
-            icons.push(<span key="remove-one" className="remove-one" onClick={() => this.removePeople(type)}>−</span>)
-        }
+        icons.unshift(<span key="add-one" className="add-one" onClick={() => this.addPeople(type)}>+</span>)
+        icons.unshift(<span key="remove-one" className="remove-one" onClick={() => this.removePeople(type)}>−</span>)
         return <div className="people-icons">{icons}</div>
     }
 
