@@ -54,6 +54,7 @@ class Guests implements \Pimple\ServiceProviderInterface
      * @param int $status
      * @param array $filters
      * @return array
+     * @throws \Error
      */
     public function find(int $status, array $filters = []) : array
     {
@@ -91,6 +92,24 @@ class Guests implements \Pimple\ServiceProviderInterface
             } elseif ($women == 'no') {
                 $sql .= ' AND people.adults_f = ?';
                 $args[] = 0;
+            }
+        }
+
+        $region = isset($filters['region']) ? $filters['region'] : null;
+        if ($region !== null) {
+            $region = strtoupper(trim($region));
+            switch ($region) {
+                case People::REGION_OSLO:
+                    $sql .= " AND loc_long IS NOT NULL AND (loc_long - 10.9)*(loc_long - 10.9) + (loc_lat - 59.9)*(loc_lat - 59.9) <= " . People::REGION_RANGE;
+                    break;
+                case People::REGION_NORWAY:
+                    $sql .= " AND loc_long IS NOT NULL AND (loc_long - 10.9)*(loc_long - 10.9) + (loc_lat - 59.9)*(loc_lat - 59.9) > " . People::REGION_RANGE;
+                    break;
+                case People::REGION_UNKNOWN:
+                    $sql .= " AND loc_long IS NULL";
+                    break;
+                default:
+                    throw new \Error("Bad region specified. $region is unacceptable!");
             }
         }
 

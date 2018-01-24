@@ -35,8 +35,9 @@ export default class Unmatched extends React.Component {
     shouldComponentUpdate(nextProps, nextState, nextContext) {
         if (this.context.region !== nextContext.region) {
             this.fetchGuests(nextContext.region);
-            return true;
         }
+
+        return true;
     }
 
     setFilter(filter, val) {

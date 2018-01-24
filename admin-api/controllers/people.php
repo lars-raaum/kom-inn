@@ -117,6 +117,22 @@ $app->get('/people', function() use ($app) {
     } else {
         $status = false;
     }
+
+    if (isset($_GET['region'])) {
+        $reg = strtoupper(trim($_GET['region']));
+        switch ($reg) {
+            case People::REGION_NORWAY:
+            case People::REGION_UNKNOWN:
+            case People::REGION_OSLO:
+                $region = $reg;
+                break;
+            default:
+                return $app->json(null, 400, ['X-Error-Message' => 'Bad region, support OSLO, NORWAY, UNKNOWN']);
+        }
+    } else {
+        $region = null;
+    }
+
     $limit = (int) ($_GET['limit'] ?? 10);
     if (isset($_GET['page'])) {
         $page = (int) $_GET['page'];
@@ -124,9 +140,9 @@ $app->get('/people', function() use ($app) {
     } else {
         $page = 1;
     }
-
-    $people = $app['people']->find($status, $limit, $offset);
-    $total = $app['people']->total($status);
+    /** @var People $app['people'] */
+    $people = $app['people']->find($status, $limit, $offset, $region);
+    $total = $app['people']->total($status, $region);
 
     $count = count($people);
 
