@@ -20,9 +20,3 @@
     shell: composer install
     args:
       chdir: /services/kom-inn/crons/
-  - name: setup cronjobs
-    template: src=../templates/kom-inn-cron.tpl dest=/etc/cron.d/kom-inn owner=root
-    notify: restart cron
-  handlers:
-  - name: restart cron
-    service: name=cron state=restarted
