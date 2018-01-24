@@ -94,7 +94,7 @@ class StaleMatches {
         $app = $this->app;
         if ($app['dry'] == false) {
             $app['matches']->delete($match['id']);
-            $app['people']->delete($match['host_id']);
+            $app['people']->setToSoftDeleted($match['host_id']);
             $app['people']->setToActive($match['guest_id']);
             $app['mailer']->sendAdminRegistrationNotice(); // Does potentially send duplicates yes.
         }
