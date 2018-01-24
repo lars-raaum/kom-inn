@@ -37,8 +37,9 @@ export default class People extends React.Component {
     shouldComponentUpdate(nextProps, nextState, nextContext) {
         if (this.context.region !== nextContext.region) {
             this.fetchPeople(nextContext.region);
-            return true;
         }
+
+        return true;
     }
 
     fetchPeople(region = this.context.region) {
@@ -186,6 +187,12 @@ export default class People extends React.Component {
 
         }
 
+        let region = '';
+        console.log(this.context.region)
+        if (this.context.region && this.context.region.length) {
+            region = `in ${this.context.region}`;
+        }
+
         const pagination = <div className="pagination">
             <ul>
                 <li><button className="status-selector status-all" name="status-all" onClick={this.setStatusAll}>All users</button></li>
@@ -194,7 +201,7 @@ export default class People extends React.Component {
                 <li><button className="status-selector status-expired" name="status-expired" onClick={this.setStatusExpired}>Expired users</button></li>
                 <li><button className="status-selector status-deleted" name="status-deleted" onClick={this.setStatusDeleted}>Deleted users</button></li>
             </ul>
-            <p><strong>{status_description}</strong>, Showing {this.state.meta.count} of {this.state.meta.total} , page {this.state.meta.page}</p>
+            <p><strong>{status_description} {region}</strong>, Showing {this.state.meta.count} of {this.state.meta.total} , page {this.state.meta.page}</p>
             <ul>
                 <li>
                     <button name="prev" onClick={this.prevPage}>Previous</button>
