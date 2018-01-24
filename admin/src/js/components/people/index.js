@@ -1,6 +1,6 @@
 import React from 'react';
 import Person from '../common/person'
-import { deletePerson, fetchPeople, convertPerson } from '../../actions/person';
+import { deletePerson, fetchPeople, convertPerson, sorryPerson } from '../../actions/person';
 
 export default class People extends React.Component {
     constructor(props) {
@@ -27,6 +27,7 @@ export default class People extends React.Component {
         this.setStatusActive = this.setStatusActive.bind(this);
         this.setStatusUsed = this.setStatusUsed.bind(this);
         this.removePerson = this.removePerson.bind(this);
+        this.sorryPerson = this.sorryPerson.bind(this);
         this.convertPerson = this.convertPerson.bind(this);
     }
 
@@ -34,9 +35,21 @@ export default class People extends React.Component {
         this.fetchPeople();
     }
 
-    fetchPeople() {
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        if (this.context.region !== nextContext.region) {
+            this.fetchPeople(nextContext.region);
+            return true;
+        }
+    }
+
+    fetchPeople(region = this.context.region) {
         this.setState({ loading: true });
-        return fetchPeople({ page: this.state.meta.page, limit: this.state.meta.limit, status: this.state.status }).then(({ response, headers }) => {
+        return fetchPeople({
+            page: this.state.meta.page,
+            limit: this.state.meta.limit,
+            status: this.state.status,
+            region: region
+        }).then(({ response, headers }) => {
             this.setState({
                 loading: false,
                 people: response,
@@ -94,6 +107,10 @@ export default class People extends React.Component {
 
     removePerson(id) {
         return deletePerson({ id }).then(() => this.fetchPeople());
+    }
+
+    sorryPerson(id) {
+        return sorryPerson({ id }).then(() => this.fetchPeople());
     }
 
     convertPerson(id) {
@@ -204,7 +221,7 @@ export default class People extends React.Component {
                 {pagination}
                 <div>
                     {this.state.people.map(person => {
-                        return <Person key={person.id} person={person} removePerson={this.removePerson} convertPerson={this.convertPerson} />
+                        return <Person key={person.id} person={person} removePerson={this.removePerson} sorryPerson={this.sorryPerson} convertPerson={this.convertPerson} />
                     })}
                 </div>
                 {pagination}
@@ -212,4 +229,8 @@ export default class People extends React.Component {
         </div>
 
     }
-}
+};
+
+People.contextTypes = {
+    region: React.PropTypes.string
+};

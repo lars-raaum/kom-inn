@@ -2,7 +2,9 @@
 
 namespace app;
 
+use app\Exception;
 use app\mails\Purge;
+use app\mails\Sorry;
 use app\models\Emails;
 use InvalidArgumentException;
 use Mailgun\Mailgun;
@@ -109,18 +111,59 @@ class Mailer implements \Pimple\ServiceProviderInterface
     }
 
     /**
+     * @param array $person
+     * @return bool
+     * @throws Exception if emailing isnt configured
+     */
+    public function sendSorryMail(array $person) : bool
+    {
+        if (empty($this->client)) {
+            throw new Exception("Emailing is not configured");
+        }
+
+        $to = $person['email'];
+        $type = Sorry::SORRY_NEUTRAL;
+        // @TODO select person type specific mail
+
+        $templater = new Sorry($this);
+        $body = $templater->buildSorryNeutralText($person);
+
+        $email_data = [
+            'user_id' => $person['id'],
+            'type' => $type,
+        ];
+        try {
+            $this->client->sendMessage($this->domain, [
+                'from'    => $this->from,
+                'to'      => $to,
+                'subject' => $this->prefix . 'Kom inn: beklager men vi har ikke funnet noe',
+                'html'    => $body
+            ]);
+            $sent = true;
+            $this->app['logger']->debug("SENT {$type} email to person {$person['id']}");
+        } catch (\Exception $e) {
+            error_log("Failed to mail : " . $e->getMessage());
+            $this->app['logger']->error("FAILED to send {$type} email to person {$person['id']}");
+            $email_data['status'] = Emails::STATUS_FAILED;
+            $sent = false;
+        }
+        $this->app['emails']->insert($email_data);
+        return $sent;
+    }
+
+    /**
      * Send update request mail to host after match has been verified some time ago
      *
      * @param array $match
      * @param string $type
      * @return bool
-     * @throws \app\Exception if email is not configured
+     * @throws Exception if email is not configured
      * @throws InvalidArgumentException if $type is not a valid type
      */
     public function sendReminderMail(array $match, string $type = Reminders::NEUTRAL)
     {
         if (empty($this->client)) {
-            throw new \app\Exception("Emailing is not configured");
+            throw new Exception("Emailing is not configured");
         }
         if (!in_array($type, Reminders::$TYPES)) {
             throw new InvalidArgumentException("Type $type is not valid Reminder type");

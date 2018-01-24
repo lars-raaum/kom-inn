@@ -21,7 +21,7 @@ const browserSupport = [
 ];
 
 var webpackConfig = {
-    devtool: 'cheap-module-source-map',
+    devtool: 'source-map',
     entry: {
         app: './src/js/app.js',
         style: './src/scss/main.scss'
@@ -42,7 +42,7 @@ var webpackConfig = {
         loaders: [
             {
                 test: /\.js$/,
-                loaders: ['babel?cacheDirectory'],
+                loaders: ['babel'],
                 include: path.join(__dirname, 'src', 'js'),
                 exclude: /node_modules/
             },
@@ -69,8 +69,8 @@ var webpackConfig = {
 };
 
 if (isProd) {
-    const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
     const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+    const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
 
     webpackConfig.plugins.push(new DedupePlugin());
     /* eslint-disable */
@@ -105,7 +105,7 @@ if (isProd) {
             index: 'index.html'
         },
         stats: 'errors-only'
-    }
+    };
 }
 
 module.exports = webpackConfig;

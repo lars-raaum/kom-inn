@@ -2,6 +2,7 @@
 
 use app\mails\HostInform;
 use app\mails\Purge;
+use app\mails\Sorry;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -94,6 +95,21 @@ $app->post('/email/{template}/render', function($template) use ($app) {
             $templater = new HostInform($mailer);
             $match = $app['matches']->get((int) $id, true, true);
             $content = $templater->buildHostInformText($match);
+            break;
+        case 'sorry_host':
+            $templater = new Sorry($mailer);
+            $person = $app['people']->get((int) $id);
+            $content = $templater->buildSorryHostText($person);
+            break;
+        case 'sorry_guest':
+            $templater = new Sorry($mailer);
+            $person = $app['people']->get((int) $id);
+            $content = $templater->buildSorryGuestText($person);
+            break;
+        case 'sorry_neutral':
+            $templater = new Sorry($mailer);
+            $person = $app['people']->get((int) $id);
+            $content = $templater->buildSorryNeutralText($person);
             break;
         default:
             throw new \app\exceptions\ApiException("Email type [$template] not supported");
