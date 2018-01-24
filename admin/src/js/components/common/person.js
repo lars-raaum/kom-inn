@@ -65,6 +65,10 @@ export default class Person extends React.Component {
                     <a href="#" onClick={() => this.props.removePerson(person.id)}>Remove person from database</a> : null
                 }
                 <br />
+                {this.props.sorryPerson && person.status == 1 ?
+                    <a href="#" onClick={() => this.props.sorryPerson(person.id)}>Delete person and send sorry mail</a> : null
+                }
+                <br />
                 <Link to={edit_url} activeClassName="selected">Edit</Link>
             </div>
         </div>

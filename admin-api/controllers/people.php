@@ -10,6 +10,28 @@ $app->get('/person/{id}', function($id, Request $request) use ($app) {
     return $app->json($app['people']->get((int) $id));
 });
 
+$app->post('/person/{id}/sorry', function($id, Request $request) use ($app) {
+    $person = $app['people']->get((int) $id);
+    if (!$person) {
+        return $app->json(null, 404);
+    }
+
+    if ($person['status'] != People::STATUS_ACTIVE) {
+
+        return $app->json(null, 400, ['X-Error-Message' => 'Only Active users may be deleted!']);
+    }
+
+    /** @var People $people */
+    $people = $app['people'];
+    $people->setToSoftDeleted($id);
+    /** @var \app\Mailer $mailer */
+    $mailer = $app['mailer'];
+    $sent = $mailer->sendSorryMail($person);
+    if ($sent == false) {
+        throw new ApiException('Failed to send email', 500);
+    }
+    return $app->json(["sent" => true]);
+});
 
 $app->post('/person/{id}', function($id, Request $request) use ($app) {
     $person = $app['people']->get((int) $id);

@@ -14,6 +14,12 @@ export function deletePerson({ id }) {
     });
 }
 
+export function sorryPerson({ id }) {
+    return apiRequest(`/api/person/${id}/sorry`, {
+        'method': 'POST'
+    });
+}
+
 export function convertPerson({ id }) {
     return apiRequest(`/api/person/${id}/convert`, {
         method: 'POST'
