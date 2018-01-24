@@ -130,12 +130,31 @@ export default class Register extends React.Component {
         if (document.forms.register && document.forms.register.gender) {
             const { value } = document.forms.register.gender;
             if (value == 'female' && type == 'adults_female') {
-                icons.unshift(<span key="you" className={`icon icon_female_outline`}></span>)
+                icons.unshift(<span key="you" className={`icon icon-adults_female`}></span>)
             } else if (value == 'male' && type == 'adults_male') {
-                icons.unshift(<span key="you" className={`icon icon_male_outline`}></span>)
+                icons.unshift(<span key="you" className={`icon icon-adults_male`}></span>)
+            } else {
+                if (this.state.peoples[type] == 0) {
+                    if (type == 'adults_female') {
+                        icons.unshift(<span key="you" className={`icon icon_female_outline`}></span>)
+                    } else if (type == 'adults_male') {
+                        icons.unshift(<span key="you" className={`icon icon_male_outline`}></span>)
+                    } else if (type == 'children') {
+                        icons.unshift(<span key="you" className={`icon icon_children_outline`}></span>)
+                    }
+                }
+            }
+        } else {
+            if (this.state.peoples[type] == 0) {
+                if (type == 'adults_female') {
+                    icons.unshift(<span key="you" className={`icon icon_female_outline`}></span>)
+                } else if (type == 'adults_male') {
+                    icons.unshift(<span key="you" className={`icon icon_male_outline`}></span>)
+                } else if (type == 'children') {
+                    icons.unshift(<span key="you" className={`icon icon_children_outline`}></span>)
+                }
             }
         }
-
         icons.unshift(<span key="add-one" className="add-one" onClick={() => this.addPeople(type)}>+</span>)
         icons.unshift(<span key="remove-one" className="remove-one" onClick={() => this.removePeople(type)}>−</span>)
         return <div className="people-icons">{icons}</div>
