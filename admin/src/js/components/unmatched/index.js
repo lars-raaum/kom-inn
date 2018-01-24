@@ -29,7 +29,14 @@ export default class Unmatched extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchGuests();
+        this.fetchGuests(this.context.region);
+    }
+
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        if (this.context.region !== nextContext.region) {
+            this.fetchGuests(nextContext.region);
+            return true;
+        }
     }
 
     setFilter(filter, val) {
@@ -63,9 +70,7 @@ export default class Unmatched extends React.Component {
                 selectedHost: null
             });
 
-            return Promise.all([
-                this.fetchGuests()
-            ])
+            return this.fetchGuests(this.context.region)
         });
     }
 
@@ -74,14 +79,20 @@ export default class Unmatched extends React.Component {
         this.fetchHosts(guest);
     }
 
-    fetchGuests() {
-        return fetch('/api/guests', {
+    fetchGuests(region) {
+        let url = '/api/guests';
+        if (region && region.length) {
+            url += `?region=${region}`;
+        }
+        return fetch(url, {
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then(res => res.json()).then(guests => {
-            this.setState({ guests })
+            if (Array.isArray(guests)) {
+                this.setState({ guests })
+            }
         });
     }
 
@@ -155,7 +166,7 @@ export default class Unmatched extends React.Component {
                     <div className="col-sm-6">
                         <h1>Unmatched guests</h1>
                         <ul>
-                            {this.state.guests.map(guest => {
+                            {(this.state.guests || []).map(guest => {
                                 const selected = this.state.selectedGuest && this.state.selectedGuest.id === guest.id;
                                 return <Person key={guest.id + '-' + (selected ? 1 : 0)}
                                     person={guest}
@@ -172,4 +183,9 @@ export default class Unmatched extends React.Component {
             </div>
         )
     }
-}
+};
+
+Unmatched.contextTypes = {
+    region: React.PropTypes.string
+};
+
