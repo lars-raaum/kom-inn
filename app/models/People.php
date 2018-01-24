@@ -29,6 +29,12 @@ class People implements \Pimple\ServiceProviderInterface
     const TYPE_GUEST = 'GUEST';
     const TYPE_HOST = 'HOST';
 
+    const REGION_OSLO = 'OSLO';
+    const REGION_NORWAY = 'NORWAY';
+    const REGION_UNKNOWN = 'UNKNOWN';
+
+    const REGION_RANGE = '0.39683650294981';
+
     /**
      * @var \Silex\Application
      */
@@ -106,9 +112,11 @@ class People implements \Pimple\ServiceProviderInterface
      * @param int|boolean $status if false, all users that is not deleted will be returned
      * @param int $limit
      * @param int $offset
+     * @param null $region
      * @return array
+     * @throws \Error if $region is not an acceptable value
      */
-    public function find($status, int $limit = 10, int $offset = 0) : array
+    public function find($status, int $limit = 10, int $offset = 0, $region = null) : array
     {
         $sql = "SELECT p.*, g.id as `guest_id`, g.food_concerns, h.id as `host_id` ".
                "FROM people AS p LEFT JOIN guests AS g ON (p.id = g.user_id) LEFT JOIN hosts  AS h ON (p.id = h.user_id) ";
@@ -119,6 +127,23 @@ class People implements \Pimple\ServiceProviderInterface
             $args = [People::STATUS_PURGED];
             $sql .= "WHERE status != ?";
         }
+
+        if ($region) {
+            switch ($region) {
+                case People::REGION_OSLO:
+                    $sql .= " AND loc_long IS NOT NULL AND (loc_long - 10.9)*(loc_long - 10.9) + (loc_lat - 59.9)*(loc_lat - 59.9) <= " . People::REGION_RANGE;
+                    break;
+                case People::REGION_NORWAY:
+                    $sql .= " AND loc_long IS NOT NULL AND (loc_long - 10.9)*(loc_long - 10.9) + (loc_lat - 59.9)*(loc_lat - 59.9) > " . People::REGION_RANGE;
+                    break;
+                case People::REGION_UNKNOWN:
+                    $sql .= " AND loc_long IS NULL";
+                    break;
+                default:
+                    throw new \Error("Bad region specified. $region is unacceptable!");
+            }
+        }
+
         $sql .= " ORDER BY updated DESC LIMIT {$offset}, {$limit}";
 
         $this->app['logger']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
@@ -162,8 +187,9 @@ class People implements \Pimple\ServiceProviderInterface
      *
      * @param int|boolean $status
      * @return int
+     * @throws \Error
      */
-    public function total($status) : int
+    public function total($status, $region = null) : int
     {
         $sql = "SELECT COUNT(1) FROM people ";
         if ($status !== false) {
@@ -173,6 +199,23 @@ class People implements \Pimple\ServiceProviderInterface
             $args = [People::STATUS_PURGED];
             $sql .= "WHERE status != ?";
         }
+
+        if ($region) {
+            switch ($region) {
+                case People::REGION_OSLO:
+                    $sql .= " AND loc_long IS NOT NULL AND (loc_long - 10.9)*(loc_long - 10.9) + (loc_lat - 59.9)*(loc_lat - 59.9) <= " . People::REGION_RANGE;
+                    break;
+                case People::REGION_NORWAY:
+                    $sql .= " AND loc_long IS NOT NULL AND (loc_long - 10.9)*(loc_long - 10.9) + (loc_lat - 59.9)*(loc_lat - 59.9) > " . People::REGION_RANGE;
+                    break;
+                case People::REGION_UNKNOWN:
+                    $sql .= " AND loc_long IS NULL";
+                    break;
+                default:
+                    throw new \Error("Bad region specified. $region is unacceptable!");
+            }
+        }
+
         $this->app['logger']->info("SQL [ $sql ] [" . join(', ', $args) . "] - by [{$this->app['PHP_AUTH_USER']}]");
         $total = $this->app['db']->fetchColumn($sql, $args, 0);
 
