@@ -369,6 +369,8 @@ class People implements \Pimple\ServiceProviderInterface
             'address'   => '#DELETED#',
             'freetext'  => NULL,
             'bringing'  => NULL,
+            'loc_lat'   => NULL,
+            'loc_long'  => NULL,
             'status'    => People::STATUS_PURGED,
             'updated'   => new DateTime('now')
         ];
