@@ -1,6 +1,10 @@
 #!/bin/bash
-
 set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "${DIR}/.."
+WORKING_DIR=$(pwd)
+
 
 if [ $# -lt 1 ]
   then
@@ -34,7 +38,7 @@ if [ -z $(git tag | grep $VERSION) ]; then
 
     echo " - Building version ${VERSION}"
     sleep 1
-    NODE_ENV="production" ./build.sh
+    NODE_ENV="production" bin/build.sh
     echo " - Built"
 
     echo " - Updating ansible version"
