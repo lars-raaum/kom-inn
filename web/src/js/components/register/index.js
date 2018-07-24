@@ -207,7 +207,7 @@ export default class Register extends React.Component {
                 <p>{translate("Vil du heller invitere noen på middag,")} <a href="/som/vert">{translate("gå til skjema for vert.")}</a></p>
                 <p>{translate("Gjestene er noen som har nylig kommet til Norge, og de fleste melder seg på etter at Kom inn har blitt presentert på Voksenopplæringene i Oslo. Vertene er noen som snakker norsk flytende. Alle som deltar har meldt seg på via denne nettsiden. Våre frivillige prøver å sette sammen en hyggeligst mulig middag. Når vi finner en match setter vi dere i kontakt, slik at dere selv kan avtale detaljene.")}</p>
                 <p>{translate("Det er ingen forpliktelser ved å melde seg på utover å møtes til én middag. De fleste gjester inviterer likevel tilbake og noen har kontakt i lang tid. Det er helt opp til dere, deltakelse er helt frivillig og på eget ansvar.")}</p>
-                <p>{translate("Du kan lese mer på ")}<a href="http://www.kom-inn.org/#eat-together">kom-inn.org</a></p>
+                <p>{translate("Du kan lese mer på") + ' '}<a href="http://www.kom-inn.org/#eat-together">kom-inn.org</a></p>
                 </div>
             )
         } else if (this.props.params.type == 'vert') {

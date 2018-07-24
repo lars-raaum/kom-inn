@@ -46,10 +46,19 @@ module.exports = {
         'Do you wish to practise speaking Norwegian? The concept behind Kom inn is to match people that speak norwegian with those who wish to practice and do so over dinner.',
     'Vil du hjelpe noen å lære norsk? Ideen bak Kom inn er at mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk.':
         'Do you wish to help someone learn Norwegian? The concept behind Kom inn is to match people that speak norwegian with those who wish to practice and do so over dinner.',
-    'Registrer deg nedenfor dersom du vil komme på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match ber vi verten ta kontakt for å avtale tidspunkt.':
-        'Register below if you wish to be invited to a Norwegian dinner. To find a match we need to know a little bit about you and where you live. When we find a match we, a host will contact you with an invitation.',
-    'Registrer deg nedenfor dersom du vil invitere noen på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match setter vi dere i kontakt for å avtale tidspunkt.':
-        'Register below if you wish to invite someone over for dinner. To find a match we need to know a little bit about you and where you live. When we find a match we will ask you to contact the guest with an invitation.',
+
+    'Registrer deg nedenfor dersom du vil komme på middag.': 'Register in the form beneath if you want to be invited for dinner',
+
+    'Registrer deg nedenfor dersom du vil invitere noen på middag.': 'Register in the form beneath if you would like to invite someone for dinner',
+
+    'Gjestene er noen som har nylig kommet til Norge, og de fleste melder seg på etter at Kom inn har blitt presentert på Voksenopplæringene i Oslo. Vertene er noen som snakker norsk flytende. Alle som deltar har meldt seg på via denne nettsiden. Våre frivillige prøver å sette sammen en hyggeligst mulig middag. Når vi finner en match setter vi dere i kontakt, slik at dere selv kan avtale detaljene.':
+        'The guests are someone who recently arrived in Norway, and most of them register after having attended the adult education course in Oslo. The hosts are someone who speaks fluent Norwegian. All have registered through this site. Our volunteers tries to create connection so that the attendees get the best experience. When they find a match we will connect you, so you can arrange the details of the dinner yourselves.',
+
+    'Det er ingen forpliktelser ved å melde seg på utover å møtes til én middag. De fleste gjester inviterer likevel tilbake og noen har kontakt i lang tid. Det er helt opp til dere, deltakelse er helt frivillig og på eget ansvar.':
+        'The only obligation by registrering is to meet for one dinner. Most guest do however invite back, and keep in touch later, this is up to you. Registration is optional, and at your own risk.',    
+
+    'Du kan lese mer på': 'You can read more on',
+
     'Hvor mange blir med på middag i tillegg til deg': 'How many guests are you bringing with you in addition to yourself',
     'Kan du fortelle litt mer om deg selv': 'Can you tell us a bit more about yourself',
     'Er det noe annet vi trenger å vite om deg/dere': 'Is there anything else we should know about you',
