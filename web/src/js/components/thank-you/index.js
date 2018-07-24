@@ -25,6 +25,7 @@ export default class ThankYou extends React.Component {
                         'For deg som bor utenfor Oslo : Kom inn er enda ikke etablert over hele landet. Vi håper å få til dette i løpet av ikke så lang tid. Vi tar kontakt med deg når vi har gjester i ditt området!'
                     )}
                 </p>
+                <br /><br />
                 <h3>{translate('Har du andre spørsmål?')}</h3>
                 <p>
                     {translate('Les mer på')}{' '}
