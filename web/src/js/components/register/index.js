@@ -47,7 +47,7 @@ export default class Register extends React.Component {
         return <div className="form-group">
             <div className="input-field col-1-1 no-height">
                 <label className="input-header" htmlFor="food_concerns">{this.context.translate('Er det noe mat du/dere ikke spiser')}?</label><br />
-                <input type="text" placeholder="Fyll inn" id="food_concerns" ref={(c) => this.form.food_concerns = c} />
+                <input type="text" placeholder={this.context.translate('Fyll inn')} id="food_concerns" ref={(c) => this.form.food_concerns = c} />
             </div>
         </div>
     }
@@ -169,7 +169,7 @@ export default class Register extends React.Component {
 
         return <div className="input-field col-1-1 no-height">
             <label className="input-header" htmlFor="childrenAge">{translate('Hvor gamle er barna?')}</label>
-            <input id="childrenAge" placeholder="Fyll inn" ref={(c) => this.form.childrenAge = c} required />
+            <input id="childrenAge" placeholder={translate('Fyll inn')} ref={(c) => this.form.childrenAge = c} required />
         </div>
     }
 
@@ -246,12 +246,12 @@ export default class Register extends React.Component {
                     <div className="form-group">
                         <div className="input-field col-1-3">
                             <label className="input-header" htmlFor="name">{translate('Hva er navnet ditt')}</label>
-                            <input type="text" placeholder="Fyll inn" id="name" ref={(c) => this.form.name = c} required />
+                            <input type="text" placeholder={translate('Fyll inn')} id="name" ref={(c) => this.form.name = c} required />
                         </div>
 
                         <div className="input-field col-1-3">
                             <label className="input-header" htmlFor="age">{translate('Alder')}</label>
-                            <input type="number" placeholder="Fyll inn et tall" max="120" id="age" ref={(c) => this.form.age = c} required />
+                            <input type="number" placeholder={translate("Fyll inn et tall")} max="120" id="age" ref={(c) => this.form.age = c} required />
                         </div>
 
                         <div className="radio-field col-1-3">
@@ -264,7 +264,7 @@ export default class Register extends React.Component {
                     <div className="form-group">
                         <div className="input-field col-1-1">
                             <label className="input-header" htmlFor="origin">{translate('Hvor er du fra')}</label>
-                            <input type="text" placeholder="Fyll inn" id="origin" ref={(c) => this.form.origin = c} required />
+                            <input type="text" placeholder={translate('Fyll inn')} id="origin" ref={(c) => this.form.origin = c} required />
                         </div>
                     </div>
 
@@ -308,14 +308,14 @@ export default class Register extends React.Component {
                     <div className="form-group">
                         <div className="input-field col-1-1">
                             <label className="input-header" htmlFor="email">{translate('Hva er e-postadressen din')}?</label>
-                            <input type="email" placeholder="Fyll inn" id="email" ref={(c) => this.form.email = c} required />
+                            <input type="email" placeholder={translate('Fyll inn')} id="email" ref={(c) => this.form.email = c} required />
                         </div>
                     </div>
 
                     <div className="form-group">
                         <div className="input-field col-1-1">
                             <label className="input-header" htmlFor="phone">{translate('Hva er telefonnummeret ditt')}?</label>
-                            <input type="phone" placeholder="Fyll inn" id="phone" ref={(c) => this.form.phone = c} required />
+                            <input type="phone" placeholder={translate('Fyll inn')} id="phone" ref={(c) => this.form.phone = c} required />
                         </div>
                     </div>
 
@@ -323,14 +323,14 @@ export default class Register extends React.Component {
                     <div className="form-group">
                         <div className="input-field col-1-1">
                             <label className="input-header" htmlFor="address">{translate('Adresse')}</label>
-                            <input type="text" placeholder="Fyll inn" id="address" ref={(c) => this.form.address = c} required />
+                            <input type="text" placeholder={translate('Fyll inn')} id="address" ref={(c) => this.form.address = c} required />
                         </div>
                     </div>
 
                     <div className="form-group">
                         <div className="input-field col-1-1">
                             <label className="input-header" htmlFor="zipcode">{translate('Postnummer')}</label>
-                            <input type="text" placeholder="Fyll inn" id="zipcode" ref={(c) => this.form.zipcode = c} required />
+                            <input type="text" placeholder={translate('Fyll inn')} id="zipcode" ref={(c) => this.form.zipcode = c} required />
                         </div>
                     </div>
 
