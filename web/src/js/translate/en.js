@@ -14,16 +14,18 @@ module.exports = {
     'Kjønn': 'Gender',
     'Mann': 'Male',
     'Kvinne': 'Female',
-    'Menn': 'Males',
-    'Kvinner': 'Females',
+    'Menn': 'Men',
+    'Kvinner': 'Women',
     'Barn': 'Children',
     'Alder': 'Age',
+    'Fyll inn': 'Enter',
+    'Fyll inn et tall': 'Enter a number',
     'År': 'Years',
     'Antall barn': 'Children',
     'Antall voksne menn': 'Male adults',
     'Antall voksne kvinner': 'Female adults',
     'Hvor er du fra': 'Where are you from',
-    'Hvor mange blir med på middag': 'How many people are you bringing',
+    'Hvor mange blir med på middag': 'How many is coming to dinner',
     'Er det noe mat du/dere ikke spiser': 'Is there any food you don\'t eat',
     'Adresse': 'Address',
     'Dette er ikke et gyldig navn':'This is not a valid name',
@@ -46,10 +48,19 @@ module.exports = {
         'Do you wish to practise speaking Norwegian? The concept behind Kom inn is to match people that speak norwegian with those who wish to practice and do so over dinner.',
     'Vil du hjelpe noen å lære norsk? Ideen bak Kom inn er at mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk.':
         'Do you wish to help someone learn Norwegian? The concept behind Kom inn is to match people that speak norwegian with those who wish to practice and do so over dinner.',
-    'Registrer deg nedenfor dersom du vil komme på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match ber vi verten ta kontakt for å avtale tidspunkt.':
-        'Register below if you wish to be invited to a Norwegian dinner. To find a match we need to know a little bit about you and where you live. When we find a match we, a host will contact you with an invitation.',
-    'Registrer deg nedenfor dersom du vil invitere noen på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match setter vi dere i kontakt for å avtale tidspunkt.':
-        'Register below if you wish to invite someone over for dinner. To find a match we need to know a little bit about you and where you live. When we find a match we will ask you to contact the guest with an invitation.',
+
+    'Registrer deg nedenfor dersom du vil komme på middag.': 'Register in the form beneath if you want to be invited for dinner',
+
+    'Registrer deg nedenfor dersom du vil invitere noen på middag.': 'Register in the form beneath if you would like to invite someone for dinner',
+
+    'Gjestene er noen som har nylig kommet til Norge, og de fleste melder seg på etter at Kom inn har blitt presentert på Voksenopplæringene i Oslo. Vertene er noen som snakker norsk flytende. Alle som deltar har meldt seg på via denne nettsiden. Våre frivillige prøver å sette sammen en hyggeligst mulig middag. Når vi finner en match setter vi dere i kontakt, slik at dere selv kan avtale detaljene.':
+        'The guests are someone who recently arrived in Norway, and most of them register after having attended the adult education course in Oslo. The hosts are someone who speaks fluent Norwegian. All have registered through this site. Our volunteers tries to create connection so that the attendees get the best experience. When they find a match we will connect you, so you can arrange the details of the dinner yourselves.',
+
+    'Det er ingen forpliktelser ved å melde seg på utover å møtes til én middag. De fleste gjester inviterer likevel tilbake og noen har kontakt i lang tid. Det er helt opp til dere, deltakelse er helt frivillig og på eget ansvar.':
+        'The only obligation by registrering is to meet for one dinner. Most guest do however invite back, and keep in touch later, this is up to you. Registration is optional, and at your own risk.',    
+
+    'Du kan lese mer på': 'You can read more on',
+
     'Hvor mange blir med på middag i tillegg til deg': 'How many guests are you bringing with you in addition to yourself',
     'Kan du fortelle litt mer om deg selv': 'Can you tell us a bit more about yourself',
     'Er det noe annet vi trenger å vite om deg/dere': 'Is there anything else we should know about you',
@@ -75,5 +86,6 @@ module.exports = {
     'Del på Facebook': 'Share on Facebook',
     'Takk skal du ha': 'Thank you',
     'vær så snill å fikse uthevede feil': 'Please fix highlighted errors',
-    'vennligst velg kjønn': 'Please select gender'
+    'vennligst velg kjønn': 'Please select gender',
+    'Dette gjør vi med det du registrerer: En av våre frivillige prøver å finne en middagsgjest eller middagsvert som passer for deg, og gir gjestens informasjon videre til verten, slik at dere kan kan prate sammen og avtale en middag. Etter en stund vil du få e-post fra oss hvor vi spør deg om du fortsatt vil være registrert. Vi sletter informasjonen om deg automatisk etter 90 dager, hvis du ikke sier ja til å fortsatt være registrert. Ønsker du å slette opplysningene dine før, kan du alltids sende oss en e-post på': 'How we handle your information: One of our volunteers looks at your information and finds a suitable dinner guest or host. We send the guest’s information to the host, so that you can communicate. You will receive emails from us asking you if you still want to be registered. If you don’t take any action, your information will be deleted automatically after a maximum of 90 days. If you want to delete your information earlier, send us an email on'
 }

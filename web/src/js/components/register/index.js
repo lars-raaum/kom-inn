@@ -47,7 +47,7 @@ export default class Register extends React.Component {
         return <div className="form-group">
             <div className="input-field col-1-1 no-height">
                 <label className="input-header" htmlFor="food_concerns">{this.context.translate('Er det noe mat du/dere ikke spiser')}?</label><br />
-                <input type="text" placeholder="Fyll inn" id="food_concerns" ref={(c) => this.form.food_concerns = c} />
+                <input type="text" placeholder={this.context.translate('Fyll inn')} id="food_concerns" ref={(c) => this.form.food_concerns = c} />
             </div>
         </div>
     }
@@ -169,7 +169,7 @@ export default class Register extends React.Component {
 
         return <div className="input-field col-1-1 no-height">
             <label className="input-header" htmlFor="childrenAge">{translate('Hvor gamle er barna?')}</label>
-            <input id="childrenAge" placeholder="Fyll inn" ref={(c) => this.form.childrenAge = c} required />
+            <input id="childrenAge" placeholder={translate('Fyll inn')} ref={(c) => this.form.childrenAge = c} required />
         </div>
     }
 
@@ -203,8 +203,11 @@ export default class Register extends React.Component {
             intro = (<div>
                 <h1>{translate("Jeg vil komme på middag!")}</h1>
                 <p>{translate("Vil du øve på å snakke norsk? Ideen bak Kom inn er at mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk.")}</p>
-                <p>{translate("Registrer deg nedenfor dersom du vil komme på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match setter vi dere i kontakt for å avtale tidspunkt.")}</p>
+                <p>{translate("Registrer deg nedenfor dersom du vil komme på middag.")}</p>
                 <p>{translate("Vil du heller invitere noen på middag,")} <a href="/som/vert">{translate("gå til skjema for vert.")}</a></p>
+                <p>{translate("Gjestene er noen som har nylig kommet til Norge, og de fleste melder seg på etter at Kom inn har blitt presentert på Voksenopplæringene i Oslo. Vertene er noen som snakker norsk flytende. Alle som deltar har meldt seg på via denne nettsiden. Våre frivillige prøver å sette sammen en hyggeligst mulig middag. Når vi finner en match setter vi dere i kontakt, slik at dere selv kan avtale detaljene.")}</p>
+                <p>{translate("Det er ingen forpliktelser ved å melde seg på utover å møtes til én middag. De fleste gjester inviterer likevel tilbake og noen har kontakt i lang tid. Det er helt opp til dere, deltakelse er helt frivillig og på eget ansvar.")}</p>
+                <p>{translate("Du kan lese mer på") + ' '}<a href="http://www.kom-inn.org/#eat-together">kom-inn.org</a></p>
                 </div>
             )
         } else if (this.props.params.type == 'vert') {
@@ -212,8 +215,11 @@ export default class Register extends React.Component {
             intro = ( <div>
                 <h1>{translate("Jeg vil invitere noen på middag!")}</h1>
                 <p>{translate("Vil du hjelpe noen å lære norsk? Ideen bak Kom inn er at mennesker som snakker norsk inviterer noen som lærer seg norsk på middagsbesøk.")}</p>
-                <p>{translate("Registrer deg nedenfor dersom du vil invitere noen på middag. For å koble dere trenger vi å vite litt om hvem dere er og hvor dere bor. Når vi finner en match setter vi dere i kontakt for å avtale tidspunkt.")}</p>
+                <p>{translate("Registrer deg nedenfor dersom du vil invitere noen på middag.")}</p>
                 <p>{translate("Vil du heller bli invitert på middag,")} <a href="/som/gjest">{translate("gå til skjema for gjest.")}</a></p>
+                <p>{translate("Gjestene er noen som har nylig kommet til Norge, og de fleste melder seg på etter at Kom inn har blitt presentert på Voksenopplæringene i Oslo. Vertene er noen som snakker norsk flytende. Alle som deltar har meldt seg på via denne nettsiden. Våre frivillige prøver å sette sammen en hyggeligst mulig middag. Når vi finner en match setter vi dere i kontakt, slik at dere selv kan avtale detaljene.")}</p>
+                <p>{translate("Det er ingen forpliktelser ved å melde seg på utover å møtes til én middag. De fleste gjester inviterer likevel tilbake og noen har kontakt i lang tid. Det er helt opp til dere, deltakelse er helt frivillig og på eget ansvar.")}</p>
+                <p>{translate("Du kan lese mer på ")}<a href="http://www.kom-inn.org/#eat-together">kom-inn.org</a></p>
                 </div>
             )
         } else {
@@ -229,11 +235,9 @@ export default class Register extends React.Component {
                 </div>
             )
         }
-
         return (
             <div className="register">
                 {intro}
-                <p>{translate('Du finner mer informasjon på')} <a href="http://www.kom-inn.org">www.kom-inn.org.</a></p>
                 <form name="register" onSubmit={this.submit}>
 
                     {typeForm}
@@ -242,12 +246,12 @@ export default class Register extends React.Component {
                     <div className="form-group">
                         <div className="input-field col-1-3">
                             <label className="input-header" htmlFor="name">{translate('Hva er navnet ditt')}</label>
-                            <input type="text" placeholder="Fyll inn" id="name" ref={(c) => this.form.name = c} required />
+                            <input type="text" placeholder={translate('Fyll inn')} id="name" ref={(c) => this.form.name = c} required />
                         </div>
 
                         <div className="input-field col-1-3">
                             <label className="input-header" htmlFor="age">{translate('Alder')}</label>
-                            <input type="number" placeholder="Fyll inn et tall" max="120" id="age" ref={(c) => this.form.age = c} required />
+                            <input type="number" placeholder={translate("Fyll inn et tall")} max="120" id="age" ref={(c) => this.form.age = c} required />
                         </div>
 
                         <div className="radio-field col-1-3">
@@ -260,7 +264,7 @@ export default class Register extends React.Component {
                     <div className="form-group">
                         <div className="input-field col-1-1">
                             <label className="input-header" htmlFor="origin">{translate('Hvor er du fra')}</label>
-                            <input type="text" placeholder="Fyll inn" id="origin" ref={(c) => this.form.origin = c} required />
+                            <input type="text" placeholder={translate('Fyll inn')} id="origin" ref={(c) => this.form.origin = c} required />
                         </div>
                     </div>
 
@@ -304,14 +308,14 @@ export default class Register extends React.Component {
                     <div className="form-group">
                         <div className="input-field col-1-1">
                             <label className="input-header" htmlFor="email">{translate('Hva er e-postadressen din')}?</label>
-                            <input type="email" placeholder="Fyll inn" id="email" ref={(c) => this.form.email = c} required />
+                            <input type="email" placeholder={translate('Fyll inn')} id="email" ref={(c) => this.form.email = c} required />
                         </div>
                     </div>
 
                     <div className="form-group">
                         <div className="input-field col-1-1">
                             <label className="input-header" htmlFor="phone">{translate('Hva er telefonnummeret ditt')}?</label>
-                            <input type="phone" placeholder="Fyll inn" id="phone" ref={(c) => this.form.phone = c} required />
+                            <input type="phone" placeholder={translate('Fyll inn')} id="phone" ref={(c) => this.form.phone = c} required />
                         </div>
                     </div>
 
@@ -319,14 +323,14 @@ export default class Register extends React.Component {
                     <div className="form-group">
                         <div className="input-field col-1-1">
                             <label className="input-header" htmlFor="address">{translate('Adresse')}</label>
-                            <input type="text" placeholder="Fyll inn" id="address" ref={(c) => this.form.address = c} required />
+                            <input type="text" placeholder={translate('Fyll inn')} id="address" ref={(c) => this.form.address = c} required />
                         </div>
                     </div>
 
                     <div className="form-group">
                         <div className="input-field col-1-1">
                             <label className="input-header" htmlFor="zipcode">{translate('Postnummer')}</label>
-                            <input type="text" placeholder="Fyll inn" id="zipcode" ref={(c) => this.form.zipcode = c} required />
+                            <input type="text" placeholder={translate('Fyll inn')} id="zipcode" ref={(c) => this.form.zipcode = c} required />
                         </div>
                     </div>
 
@@ -339,6 +343,12 @@ export default class Register extends React.Component {
                             <label className="input-header" htmlFor="freetext">{translate('Er det noe annet vi trenger å vite om deg/dere')}?</label>
                             <textarea id="freetext" ref={(c) => this.form.freetext = c} ></textarea>
                         </div>
+                    </div>
+
+                    <div>
+                        <p>{translate("Dette gjør vi med det du registrerer: En av våre frivillige prøver å finne en middagsgjest eller middagsvert som passer for deg, og gir gjestens informasjon videre til verten, slik at dere kan kan prate sammen og avtale en middag. Etter en stund vil du få e-post fra oss hvor vi spør deg om du fortsatt vil være registrert. Vi sletter informasjonen om deg automatisk etter 90 dager, hvis du ikke sier ja til å fortsatt være registrert. Ønsker du å slette opplysningene dine før, kan du alltids sende oss en e-post på") + ' '}
+                        <a href="mailto:kominnoslo@gmail.com">kominnoslo@gmail.com</a></p>
+                        <br />
                     </div>
 
                     <div className="submit">
