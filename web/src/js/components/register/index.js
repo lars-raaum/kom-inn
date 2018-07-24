@@ -346,7 +346,7 @@ export default class Register extends React.Component {
                     </div>
 
                     <div>
-                        <p>{translate("Dette gjør vi med det du registrerer: En av våre frivillige prøver å finne en middagsgjest eller middagsvert som passer for deg, og gir gjestens informasjon videre til verten, slik at dere kan kan prate sammen og avtale en middag. Etter en stund vil du få e-post fra oss hvor vi spør deg om du fortsatt vil være registrert. Vi sletter informasjonen om deg automatisk etter 90 dager, hvis du ikke sier ja til å fortsatt være registrert. Ønsker du å slette opplysningene dine før, kan du alltids sende oss en e-post på ")}
+                        <p>{translate("Dette gjør vi med det du registrerer: En av våre frivillige prøver å finne en middagsgjest eller middagsvert som passer for deg, og gir gjestens informasjon videre til verten, slik at dere kan kan prate sammen og avtale en middag. Etter en stund vil du få e-post fra oss hvor vi spør deg om du fortsatt vil være registrert. Vi sletter informasjonen om deg automatisk etter 90 dager, hvis du ikke sier ja til å fortsatt være registrert. Ønsker du å slette opplysningene dine før, kan du alltids sende oss en e-post på") + ' '}
                         <a href="mailto:kominnoslo@gmail.com">kominnoslo@gmail.com</a></p>
                         <br />
                     </div>

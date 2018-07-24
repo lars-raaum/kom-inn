@@ -75,5 +75,6 @@ module.exports = {
     'Del på Facebook': 'Share on Facebook',
     'Takk skal du ha': 'Thank you',
     'vær så snill å fikse uthevede feil': 'Please fix highlighted errors',
-    'vennligst velg kjønn': 'Please select gender'
+    'vennligst velg kjønn': 'Please select gender',
+    'Dette gjør vi med det du registrerer: En av våre frivillige prøver å finne en middagsgjest eller middagsvert som passer for deg, og gir gjestens informasjon videre til verten, slik at dere kan kan prate sammen og avtale en middag. Etter en stund vil du få e-post fra oss hvor vi spør deg om du fortsatt vil være registrert. Vi sletter informasjonen om deg automatisk etter 90 dager, hvis du ikke sier ja til å fortsatt være registrert. Ønsker du å slette opplysningene dine før, kan du alltids sende oss en e-post på': 'How we handle your information: One of our volunteers looks at your information and finds a suitable dinner guest or host. We send the guest’s information to the host, so that you can communicate. You will receive emails from us asking you if you still want to be registered. If you don’t take any action, your information will be deleted automatically after a maximum of 90 days. If you want to delete your information earlier, send us an email on'
 }
