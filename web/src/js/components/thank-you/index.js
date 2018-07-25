@@ -57,7 +57,7 @@ export default class ThankYou extends React.Component {
                     )}
                     {' '}
                     {translate(
-                        'Sammen blir dere enige om når du kommer til huset til middag'
+                        'Sammen blir dere enige om når du kommer til huset til middag.'
                     )}
                 </p>
                 <br />

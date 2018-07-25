@@ -53,9 +53,9 @@ module.exports = {
 
     'Registrer deg nedenfor dersom du vil invitere noen på middag.': 'Register in the form beneath if you would like to invite someone for dinner',
 
-    'Gjestene er noen som har nylig kommet til Norge, og de fleste melder seg på etter at Kom inn har blitt presentert på Voksenopplæringene i Oslo. Vertene er noen som snakker norsk flytende. Alle som deltar har meldt seg på via denne nettsiden. Våre frivillige prøver å sette sammen en hyggeligst mulig middag. Når vi finner en match setter vi dere i kontakt, slik at dere selv kan avtale detaljene.': 'The guests are someone who recently arrived in Norway, and most of them register after having attended the adult education course in Oslo. The hosts are someone who speaks fluent Norwegian. All have registered through this site. Our volunteers tries to create connection so that the attendees get the best experience. When they find a match we will connect you, so you can arrange the details of the dinner yourselves.',
+    'Gjestene er noen som har nylig kommet til Norge, og de fleste melder seg på etter at Kom inn har blitt presentert på Voksenopplæringene i Oslo. Vertene er noen som snakker norsk flytende. Alle som deltar har meldt seg på via denne nettsiden. Våre frivillige prøver å sette sammen en hyggeligst mulig middag. Når vi finner en match setter vi dere i kontakt, slik at dere selv kan avtale detaljene.': 'The guests are someone who are new to Norway and most of them register after hearing about Kom inn at the "Voksenopplæring" in Oslo. The hosts are someone who speaks fluent Norwegian. All have registered through this site. Our volunteers try to find the best matches possible. When we find a match we will connect you, so you can arrange the details of the dinner yourselves.',
     'Har du andre spørsmål?': 'Do you have any other questions?',
-    'Det er ingen forpliktelser ved å melde seg på utover å møtes til én middag. De fleste gjester inviterer likevel tilbake og noen har kontakt i lang tid. Det er helt opp til dere, deltakelse er helt frivillig og på eget ansvar.': 'The only obligation by registrering is to meet for one dinner. Most guest do however invite back, and keep in touch later, this is up to you. Registration is optional, and at your own risk.',
+    'Det er ingen forpliktelser ved å melde seg på utover å møtes til én middag. De fleste gjester inviterer likevel tilbake og noen har kontakt i lang tid. Det er helt opp til dere, deltakelse er helt frivillig og på eget ansvar.': 'The only obligation by registrering is to meet for one dinner. Most guests do invite back, and keep in touch later. However, it is up to you to decide. Participation in Kom inn is completely voluntary and at your own risk.',
     'For deg som bor utenfor Oslo : Kom inn er enda ikke etablert over hele landet. Vi håper å få til dette i løpet av ikke så lang tid. Vi tar kontakt med deg når vi har gjester i ditt området!': 'If you live outside of Oslo: Kom inn is only established in Oslo so far. We hope to grow our coverage soon. We will contact you when we have guests in your area!',
     'Du kan lese mer på': 'You can read more on',
     'Vi vil prøve å finne noen du kan invitere på middag så fort så mulig. Når vi har funnet passende gjester - hører du fra oss!': 'We will try to find someone for you to invite as quickly as possible. You will hear from us when we have found some guests for you!',
@@ -73,8 +73,8 @@ module.exports = {
     'Takk': 'Thanks',
     'Hva skjer nå?': 'What happens now?',
     'Vi vil nå matche deg med noen som ønsker å invitere deg, vanligvis innen to uker.': 'We\'ll now match you with someone who wants to invite you, usually within two weeks.',
-    'Du vil da motta en invitasjon via SMS fra verten': 'You will then receive an invitation by SMS from the host',
-    'Sammen er du enige om når du kommer til huset til middag': 'Together you agree on when you will come to their house for dinner',
+    'Du vil da motta en invitasjon via SMS fra verten.': 'You will receive an invitation via SMS from the host.',
+    'Sammen blir dere enige om når du kommer til huset til middag.': 'Together you decide when to meet for dinner.',
     'Les mer på': 'Read more at',
     'eller send en epost til': 'Or send an email to',
     'For flere detaljer': 'For more details',
